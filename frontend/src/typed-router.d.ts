@@ -29,7 +29,8 @@ declare module 'vue-router/auto-routes' {
     '/notifications': RouteRecordInfo<'/notifications', '/notifications', Record<never, never>, Record<never, never>>,
     '/photo/[id]': RouteRecordInfo<'/photo/[id]', '/photo/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/profile': RouteRecordInfo<'/profile', '/profile', Record<never, never>, Record<never, never>>,
-    '/profiles': RouteRecordInfo<'/profiles', '/profiles', Record<never, never>, Record<never, never>>,
+    '/profiles/': RouteRecordInfo<'/profiles/', '/profiles', Record<never, never>, Record<never, never>>,
+    '/profiles/[id]': RouteRecordInfo<'/profiles/[id]', '/profiles/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
     '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
   }
