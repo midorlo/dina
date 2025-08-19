@@ -15,6 +15,13 @@
     </v-navigation-drawer>
 
     <v-app-bar absolute flat height="56">
+      <v-progress-linear
+        absolute
+        :active="loading"
+        bottom
+        color="primary"
+        :indeterminate="loading"
+      />
       <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
 
       <v-app-bar-title v-if="$vuetify.display.mdAndUp">Application</v-app-bar-title>
@@ -70,11 +77,22 @@
 <script setup>
   import { storeToRefs } from 'pinia'
   import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
   import { useTheme } from 'vuetify'
   import { useNotificationsStore } from '@/stores/notifications'
 
   const drawer = ref(true)
   const theme = useTheme()
+  const loading = ref(false)
+  const router = useRouter()
+
+  router.beforeEach(() => {
+    loading.value = true
+  })
+
+  router.afterEach(() => {
+    loading.value = false
+  })
 
   const notificationsStore = useNotificationsStore()
   const { unreadCount } = storeToRefs(notificationsStore)
