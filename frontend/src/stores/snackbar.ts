@@ -14,6 +14,10 @@ export const useSnackbarStore = defineStore('snackbar', () => {
     visible.value = true
   }
 
+  function showError(msg = 'An unexpected error occurred. Please check the console for details.') {
+    showSnackbar(msg, 'error')
+  }
+
   function hideSnackbar() {
     visible.value = false
   }
@@ -24,6 +28,7 @@ export const useSnackbarStore = defineStore('snackbar', () => {
     visible,
     timeout,
     showSnackbar,
+    showError,
     hideSnackbar,
   }
 })
