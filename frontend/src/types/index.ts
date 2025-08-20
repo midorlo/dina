@@ -57,6 +57,7 @@ export interface Blog {
   id: string
   name: string
   description: string
+  authorHandle: string
   authorAvatarUrl: string
   postCount: number
   createdAt: string
@@ -67,4 +68,11 @@ export interface PostItem {
   title: string
   createdAt: string
   excerpt: string
+}
+
+export interface GalleryItem {
+  id: number
+  src: string
+  lazySrc: string
+  aspectRatio: number
 }

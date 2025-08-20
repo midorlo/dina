@@ -8,84 +8,58 @@
     </v-row>
 
     <v-row>
-      <v-col v-for="blog in blogs" :key="blog.id" cols="12" lg="4" md="6">
-        <v-card
-          border
-          class="pa-3"
-          flat
-          height="100%"
-          rounded="xl"
-          @click="$router.push(`/blogs/${blog.id}`)"
-        >
-          <div class="d-flex align-center mb-3">
-            <v-avatar>
-              <v-img :src="blog.authorAvatarUrl" />
-            </v-avatar>
-            <div class="ml-4">
-              <div class="v-card-title pa-0">{{ blog.name }}</div>
-              <div class="v-card-subtitle pa-0">@{{ blog.authorHandle }}</div>
+      <template v-if="loading">
+        <v-col v-for="n in 3" :key="n" cols="12" lg="4" md="6">
+          <v-skeleton-loader type="card" />
+        </v-col>
+      </template>
+      <template v-else>
+        <v-col v-for="blog in blogs" :key="blog.id" cols="12" lg="4" md="6">
+          <v-card
+            border
+            class="pa-3"
+            flat
+            height="100%"
+            rounded="xl"
+            @click="$router.push(`/blogs/${blog.id}`)"
+          >
+            <div class="d-flex align-center mb-3">
+              <v-avatar>
+                <v-img :src="blog.authorAvatarUrl" />
+              </v-avatar>
+              <div class="ml-4">
+                <div class="v-card-title pa-0">{{ blog.name }}</div>
+                <div class="v-card-subtitle pa-0">@{{ blog.authorHandle }}</div>
+              </div>
             </div>
-          </div>
 
-          <v-card-text class="pb-0">
-            {{ blog.description }}
-          </v-card-text>
+            <v-card-text class="pb-0">
+              {{ blog.description }}
+            </v-card-text>
 
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="primary" :to="`/blogs/${blog.id}`" variant="text"> Blog ansehen </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn color="primary" :to="`/blogs/${blog.id}`" variant="text"> Blog ansehen </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </template>
     </v-row>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { Blog } from '@/types'
+import { onMounted, ref } from 'vue'
+import { fetchBlogs } from '@/services/blogs'
 
-// This now represents a list of blogs, identified by a user/author.
-const blogs = ref([
-  {
-    id: 1,
-    name: 'Annas Gedanken',
-    authorHandle: 'anna',
-    authorAvatarUrl: 'https://randomuser.me/api/portraits/women/26.jpg',
-    description:
-      'Ein Einblick in einen aufgeräumten Lebensstil und wie er zu mehr Klarheit führen kann.',
-  },
-  {
-    id: 2,
-    name: "Markus' Abenteuer",
-    authorHandle: 'markus',
-    authorAvatarUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
-    description:
-      'Atemberaubende Landschaften und unvergessliche Momente auf meinen Reisen durch die Welt.',
-  },
-  {
-    id: 3,
-    name: 'Julias Küche',
-    authorHandle: 'julia',
-    authorAvatarUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
-    description:
-      'Einfache Rezepte, die immer gelingen. Entdecke die Freude am Kochen, Schritt für Schritt.',
-  },
-  {
-    id: 4,
-    name: 'Toms grüner Daumen',
-    authorHandle: 'tom',
-    authorAvatarUrl: 'https://randomuser.me/api/portraits/men/51.jpg',
-    description: 'Wie du auch ohne Garten frisches Gemüse und Kräuter anbauen kannst.',
-  },
-  {
-    id: 5,
-    name: 'Celinas Sternenbilder',
-    authorHandle: 'celina',
-    authorAvatarUrl: 'https://randomuser.me/api/portraits/women/65.jpg',
-    description:
-      'Die Sterne fotografieren: Welche Ausrüstung du brauchst und die besten Tipps für den Anfang.',
-  },
-])
+const blogs = ref<Blog[]>([])
+const loading = ref(true)
+
+onMounted(async () => {
+  blogs.value = await fetchBlogs()
+  loading.value = false
+})
 </script>
 
 <style scoped>
