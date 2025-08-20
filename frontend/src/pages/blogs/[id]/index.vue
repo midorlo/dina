@@ -79,10 +79,13 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { fetchBlog, fetchBlogPosts } from '@/services/blogs'
 import { useAuthStore } from '@/stores/auth'
 import { type Blog, type PostItem, Role } from '@/types'
+import { slugify } from '@/utils/slug'
 
 const route = useRoute()
 const blogId = computed(() => (route.params as any).id as string)

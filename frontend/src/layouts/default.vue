@@ -25,7 +25,7 @@
         color="primary"
         :indeterminate="loading"
       />
-      <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
+      <v-app-bar-nav-icon v-if="!$vuetify.display.mdAndUp" @click="drawer = !drawer" />
 
       <v-breadcrumbs class="ms-2" :items="breadcrumbItems" />
 
@@ -107,7 +107,8 @@
   </v-layout>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { RouteNamedMap } from 'vue-router/auto-routes'
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -116,11 +117,11 @@ import { menu } from '@/config/menu'
 import { loading } from '@/router/loading'
 import { filterMenuByRole, useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
-import { useSnackbarStore } from '@/stores/snackbar' // New import
+import { useSnackbarStore } from '@/stores/snackbar'
 import { Role } from '@/types'
 
-const snackbarStore = useSnackbarStore() // New
-const { message, color, visible, timeout } = storeToRefs(snackbarStore) // New
+const snackbarStore = useSnackbarStore()
+const { message, color, visible, timeout } = storeToRefs(snackbarStore)
 
 const drawer = ref(true)
 const theme = useTheme()
@@ -134,15 +135,17 @@ const breadcrumbItems = computed(() => {
   const records = route.matched.slice(1)
 
   for (const [index, record] of records.entries()) {
-    const segment = record.path.split('/').findLast(Boolean) ?? ''
+    const parts = record.path.split('/').filter(Boolean)
+    const segment = parts.at(-1) ?? ''
     const title =
       (record.meta?.breadcrumb as string | undefined) ??
       segment
         .replace(/[:()*]/g, '')
         .replace(/-/g, ' ')
-        .replace(/^\w/, (c) => c.toUpperCase())
+        .replace(/^\w/, (c: string) => c.toUpperCase())
 
-    const to = router.resolve({ path: record.path, params: route.params }).path
+    const name = record.name as keyof RouteNamedMap | undefined
+    const to = name ? router.resolve({ name, params: route.params as any }).path : record.path
 
     items.push({
       title,
