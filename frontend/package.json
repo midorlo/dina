@@ -6,15 +6,16 @@
   "scripts": {
     "clean": "rimraf dist src/typed-router.d.ts src/auto-imports.d.ts src/components.d.ts",
     "dev": "vite",
+    "prebuild": "npm run clean",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --fix",
-    "lint:check": "eslint .",
-    "format:prettier": "prettier --write .",
-    "format": "npm run format:prettier && npm run lint",
-    "build:ci": "npm run lint:check && npm run build"
+    "lint": "eslint . --fix --quiet",
+    "lint:check": "eslint . --quiet",
+    "format:prettier": "prettier --write . --log-level warn",
+    "format": "run-s -s format:prettier lint",
+    "build:ci": "run-s -s lint:check build"
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.6",
