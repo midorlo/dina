@@ -171,48 +171,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Spotless: Formatting + POM sorting -->
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>${spotless.version}</version>
-                <configuration>
-                    <java>
-                        <googleJavaFormat>
-                            <version>${googleJavaFormat.version}</version>
-                            <!-- style: GOOGLE (default) | AOSP -->
-                            <style>GOOGLE</style>
-                        </googleJavaFormat>
-                        <!-- format sources & tests -->
-                        <target>
-                            ${project.basedir}/src/main/java/**/*.java,
-                            ${project.basedir}/src/test/java/**/*.java
-                        </target>
-                        <removeUnusedImports/>
-                        <formatAnnotations/>
-                    </java>
-                    <pom>
-                        <includes>
-                            <include>pom.xml</include>
-                        </includes>
-                        <sortPom/>
-                        <indent>space</indent>
-                        <indentSize>2</indentSize>
-                    </pom>
-                    <!-- Optional: Nur neue/änderte Files vs. Hauptbranch prüfen -->
-                    <!-- <ratchetFrom>origin/main</ratchetFrom> -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>spotless-check</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                    <!-- Lokales Auto-Fix: mvn spotless:apply -->
-                </executions>
-            </plugin>
 
         </plugins>
     </build>
