@@ -143,7 +143,10 @@ export async function fetchBlog(id: string): Promise<Blog | undefined> {
     const res = await apiFetch(`/api/blogs/${id}`)
     return res.json()
   }
-  return delay(blogs.find((b) => b.id === id), 500)
+  return delay(
+    blogs.find((b) => b.id === id),
+    500
+  )
 }
 
 export async function fetchBlogPosts(blogId: string): Promise<PostItem[]> {

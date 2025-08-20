@@ -90,5 +90,8 @@ export async function fetchPhoto(id: number): Promise<GalleryItem | undefined> {
     const res = await apiFetch(`/api/photos/${id}`)
     return res.json()
   }
-  return delay(items.find((i) => i.id === id), 500)
+  return delay(
+    items.find((i) => i.id === id),
+    500
+  )
 }

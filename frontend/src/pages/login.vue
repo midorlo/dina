@@ -90,7 +90,7 @@
               variant="outlined"
               @click="presetLogin(preset.email)"
             >
-              {{ preset.label }}
+              {{ preset.label }} (ID: {{ preset.id }})
             </v-btn>
           </div>
 
@@ -108,7 +108,9 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
+import { mockUsers } from '@/services/mock-data'
 import { useAuthStore } from '@/stores/auth'
+
 import { useSnackbarStore } from '@/stores/snackbar' // New import
 
 import { Role } from '@/types'
@@ -134,13 +136,11 @@ const emailRules = [
 ]
 const passwordRules = [(v: string) => !!v || 'Password is required']
 
-const presets = [
-  { label: 'User', email: 'user@example.com' },
-  { label: 'Moderator', email: 'moderator@example.com' },
-  { label: 'Administrator', email: 'admin@example.com' },
-  { label: 'Developer', email: 'dev@example.com' },
-  { label: 'Banned', email: 'banned@example.com' },
-]
+const presets = mockUsers.map((mockUser) => ({
+  label: mockUser.user.role,
+  email: mockUser.user.email,
+  id: mockUser.user.id,
+}))
 
 const authStore = useAuthStore()
 

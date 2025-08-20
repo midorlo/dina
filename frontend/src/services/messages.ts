@@ -137,7 +137,10 @@ export async function fetchConversation(id: string | number): Promise<Conversati
     const res = await apiFetch(`/api/conversations/${id}`)
     return res.json()
   }
-  return delay(conversations.find((c) => c.id === Number(id)), 500)
+  return delay(
+    conversations.find((c) => c.id === Number(id)),
+    500
+  )
 }
 
 export async function fetchMessage(conversationId: string | number, messageId: string | number) {
@@ -146,5 +149,8 @@ export async function fetchMessage(conversationId: string | number, messageId: s
     return res.json()
   }
   const conv = conversations.find((c) => c.id === Number(conversationId))
-  return delay(conv?.messages.find((m) => m.id === Number(messageId)), 500)
+  return delay(
+    conv?.messages.find((m) => m.id === Number(messageId)),
+    500
+  )
 }
