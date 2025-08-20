@@ -14,6 +14,21 @@ export interface User {
   email: string
   name: string
   role: Role
+  username: string
+  avatarUrl: string
+}
+
+export interface AuthTokens {
+  accessToken: string
+  accessTokenExpiresAt: number
+  refreshToken: string
+  refreshTokenExpiresAt: number
+}
+
+export interface LoginResponse {
+  user: User
+  tokens: AuthTokens
+  profile: Profile
 }
 
 export interface Profile {

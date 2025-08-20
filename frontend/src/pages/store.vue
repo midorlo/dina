@@ -11,6 +11,9 @@
             <h3>User Profile:</h3>
             <pre>{{ JSON.stringify(userProfile, null, 2) }}</pre>
           </v-card-text>
+          <v-card-actions class="pa-6">
+            <v-btn color="primary" @click="resetStores">Reset Stores</v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -20,9 +23,16 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
+import { useNotificationsStore } from '@/stores/notifications'
 
 const authStore = useAuthStore()
+const notificationsStore = useNotificationsStore()
 const { currentUser, userProfile } = storeToRefs(authStore)
+
+function resetStores() {
+  authStore.reset()
+  notificationsStore.reset()
+}
 </script>
 
 <style scoped>

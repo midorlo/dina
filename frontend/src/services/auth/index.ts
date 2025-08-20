@@ -1,18 +1,51 @@
-import type { User } from '@/types'
+import type { AuthTokens, LoginResponse, Profile, User } from '@/types'
 import { Role } from '@/types'
 
-export async function login(email: string, password: string): Promise<User> {
+export async function login(email: string, password: string): Promise<LoginResponse> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const users: User[] = [
-        { id: 'user-1', email: 'user@example.com', name: 'Regular User', role: Role.User },
-        { id: 'user-2', email: 'admin@example.com', name: 'Admin User', role: Role.Admin },
-        { id: 'user-3', email: 'guest@example.com', name: 'Guest User', role: Role.Guest },
+        {
+          id: 'user-1',
+          email: 'user@example.com',
+          name: 'Regular User',
+          role: Role.User,
+          username: 'regular_user',
+          avatarUrl: 'https://i.pravatar.cc/150?img=1',
+        },
+        {
+          id: 'user-2',
+          email: 'admin@example.com',
+          name: 'Admin User',
+          role: Role.Admin,
+          username: 'admin_user',
+          avatarUrl: 'https://i.pravatar.cc/150?img=2',
+        },
+        {
+          id: 'user-3',
+          email: 'guest@example.com',
+          name: 'Guest User',
+          role: Role.Guest,
+          username: 'guest_user',
+          avatarUrl: 'https://i.pravatar.cc/150?img=3',
+        },
       ]
 
       const foundUser = users.find((u) => u.email === email && password === 'password')
       if (foundUser) {
-        resolve(foundUser)
+        const tokens: AuthTokens = {
+          accessToken: 'mock-access-token',
+          refreshToken: 'mock-refresh-token',
+          accessTokenExpiresAt: Date.now() + 60 * 60 * 1000, // 1 hour
+          refreshTokenExpiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
+        }
+        const profile: Profile = {
+          id: `profile-${foundUser.id}`,
+          userId: foundUser.id,
+          username: foundUser.username,
+          avatarUrl: foundUser.avatarUrl,
+        }
+        resolve({ user: foundUser, tokens, profile })
       } else {
         reject(new Error('Invalid credentials'))
       }

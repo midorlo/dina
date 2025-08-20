@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 export const useNotificationsStore = defineStore('notifications', () => {
   const router = useRouter()
 
-  const items = ref<NotificationItem[]>([
+  const initialItems: NotificationItem[] = [
     {
       id: 1,
       title: 'New follower',
@@ -43,7 +43,9 @@ export const useNotificationsStore = defineStore('notifications', () => {
       link: '/settings',
       read: false,
     },
-  ])
+  ]
+
+  const items = ref<NotificationItem[]>([...initialItems])
 
   const unreadCount = computed(() => items.value.filter((item) => !item.read).length)
 
@@ -55,5 +57,9 @@ export const useNotificationsStore = defineStore('notifications', () => {
     router.push(item.link)
   }
 
-  return { items, unreadCount, handleNotificationClick }
+  function reset() {
+    items.value = [...initialItems]
+  }
+
+  return { items, unreadCount, handleNotificationClick, reset }
 })

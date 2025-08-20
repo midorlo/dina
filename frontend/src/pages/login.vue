@@ -102,11 +102,13 @@ async function login() {
   loginError.value = '' // Clear previous errors
   try {
     const { login } = await import('@/services/auth')
-    const user = await login(email.value, password.value)
-    if (user.id) {
-      authStore.setUser(user)
+    const response = await login(email.value, password.value)
+    if (response.user.id) {
+      authStore.setUser(response.user)
+      authStore.setTokens(response.tokens)
+      authStore.setProfile(response.profile)
       // Redirect to profile or dashboard
-      console.log('Login successful!', user)
+      console.log('Login successful!', response.user)
     } else {
       // This case should ideally not be reached if apiService.login rejects on failure
       loginError.value = 'An unexpected login error occurred.'

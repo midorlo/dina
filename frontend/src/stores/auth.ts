@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Permission, type Profile, Role, type User } from '@/types'
+import { type AuthTokens, Permission, type Profile, Role, type User } from '@/types'
 
 const rolePermissions: Record<Role, Permission[]> = {
   [Role.Guest]: [],
@@ -11,10 +11,21 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     currentUser: null as User | null,
     userProfile: null as Profile | null,
+    tokens: null as AuthTokens | null,
   }),
+  persist: true,
   actions: {
     setUser(user: User | null) {
       this.currentUser = user
+    },
+    setProfile(profile: Profile | null) {
+      this.userProfile = profile
+    },
+    setTokens(tokens: AuthTokens | null) {
+      this.tokens = tokens
+    },
+    reset() {
+      this.$reset()
     },
     hasPermission(role: Role, permission: Permission) {
       return rolePermissions[role]?.includes(permission) ?? false

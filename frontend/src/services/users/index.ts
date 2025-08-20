@@ -1,4 +1,5 @@
 import type { Profile } from '@/types'
+import { getAuthHeaders } from '@/services/api'
 
 export async function fetchProfile(userId: string): Promise<Profile> {
   return new Promise((resolve) => {
@@ -18,9 +19,10 @@ export async function fetchProfile(userId: string): Promise<Profile> {
 }
 
 export async function updateProfile(profile: Profile): Promise<Profile> {
+  const headers = getAuthHeaders()
   return new Promise((resolve) => {
     setTimeout(() => {
-      console.log('Updating profile:', profile)
+      console.log('Updating profile with headers:', headers)
       resolve(profile)
     }, 1000)
   })
