@@ -66,7 +66,7 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { Blog, PostItem } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { fetchBlog, fetchBlogPosts } from '@/services/blogs'

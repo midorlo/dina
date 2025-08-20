@@ -83,9 +83,10 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue'
 import { Role } from '@/types'
+
 definePage({
   meta: { roles: [Role.Guest] },
 })

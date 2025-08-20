@@ -46,7 +46,7 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { Post } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'

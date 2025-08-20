@@ -10,4 +10,5 @@ services/
     index.ts   # user profile related calls
 ```
 
-Only functions required by other modules are exported from each folder. Less frequently used services can be loaded lazily via dynamic `import()` calls.
+Only functions required by other modules are exported from each folder. Less frequently used services can be loaded
+lazily via dynamic `import()` calls.

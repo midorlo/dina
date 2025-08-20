@@ -139,11 +139,12 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { Conversation } from '@/types'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { fetchConversations } from '@/services/messages'
 import { Role } from '@/types'
+
 definePage({
   meta: { roles: [Role.User] },
 })

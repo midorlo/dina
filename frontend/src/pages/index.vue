@@ -29,7 +29,7 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 const links = [
   {
     href: 'https://vuetifyjs.com/',

@@ -28,7 +28,7 @@
   </v-footer>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 const items = [
   {
     title: 'Vuetify Documentation',
@@ -67,7 +67,7 @@ const items = [
 ]
 </script>
 
-<style scoped lang="sass">
+<style lang="sass" scoped>
 .social-link :deep(.v-icon)
   color: rgba(var(--v-theme-on-background), var(--v-disabled-opacity))
   text-decoration: none

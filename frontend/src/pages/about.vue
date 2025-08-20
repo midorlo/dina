@@ -85,6 +85,6 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 // No specific script logic needed for this static page
 </script>

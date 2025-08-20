@@ -79,7 +79,7 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { Profile } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { fetchProfiles } from '@/services/profiles'

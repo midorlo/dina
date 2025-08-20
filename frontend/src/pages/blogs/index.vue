@@ -51,7 +51,7 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { Blog } from '@/types'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'

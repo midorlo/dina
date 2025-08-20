@@ -84,9 +84,10 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
+
 definePage({
   meta: { roles: [Role.Guest] },
 })

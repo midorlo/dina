@@ -15,7 +15,7 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 /* layout: 'empty' */
 //
 </script>

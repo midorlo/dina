@@ -40,11 +40,12 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
 import { Role } from '@/types'
+
 definePage({
   meta: { roles: [Role.Developer] },
 })
