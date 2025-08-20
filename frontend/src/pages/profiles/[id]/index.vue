@@ -29,6 +29,17 @@
               </v-list-item>
             </v-sheet>
 
+            <v-btn
+              v-if="profileId === currentUser?.id"
+              block
+              class="mt-4"
+              color="secondary"
+              rounded="pill"
+              size="large"
+              :to="`/profiles/${profileId}/edit`"
+            >
+              Edit Profile
+            </v-btn>
             <v-btn block class="mt-4" color="primary" rounded="pill" size="large" to="/profiles">
               Go Back
             </v-btn>
@@ -46,6 +57,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchProfile } from '@/services/profiles'
+import { useAuthStore } from '@/stores/auth' // New import
 import { type Profile, Role } from '@/types'
 
 interface ProfileRouteParams {
@@ -61,6 +73,9 @@ const profileId = computed(() => (route.params as ProfileRouteParams).id)
 
 const profile = ref<Profile | null>(null)
 const loading = ref(true)
+
+const authStore = useAuthStore() // New
+const { currentUser } = storeToRefs(authStore) // New
 
 onMounted(async () => {
   profile.value = (await fetchProfile(profileId.value)) || null

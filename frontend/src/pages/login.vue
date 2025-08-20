@@ -107,7 +107,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useSnackbarStore } from '@/stores/snackbar' // New import
+
 import { Role } from '@/types'
 
 definePage({
@@ -140,6 +143,9 @@ const presets = [
 
 const authStore = useAuthStore()
 
+const router = useRouter()
+const snackbarStore = useSnackbarStore() // New
+
 async function login() {
   const isValid = await form.value?.validate()
   if (!isValid) return
@@ -151,6 +157,8 @@ async function login() {
       authStore.setUser(response.user)
       authStore.setTokens(response.tokens)
       authStore.setProfile(response.profile)
+      snackbarStore.showSnackbar('Login successful!', 'success') // New
+      router.push('/')
     }
   } catch (error: any) {
     loginError.value = error.message || 'Login failed. Please check your credentials.'

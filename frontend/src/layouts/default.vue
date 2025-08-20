@@ -92,6 +92,16 @@
       </router-view>
     </v-main>
     <app-footer />
+
+    <v-snackbar
+      v-model="visible"
+      :color="color"
+      location="bottom right"
+      rounded="pill"
+      :timeout="timeout"
+    >
+      {{ message }}
+    </v-snackbar>
   </v-layout>
 </template>
 
@@ -103,7 +113,11 @@ import { useTheme } from 'vuetify'
 import logo from '@/assets/logo.svg'
 import { filterMenuByRole, useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
+import { useSnackbarStore } from '@/stores/snackbar' // New import
 import { Role } from '@/types'
+
+const snackbarStore = useSnackbarStore() // New
+const { message, color, visible, timeout } = storeToRefs(snackbarStore) // New
 
 const drawer = ref(true)
 const theme = useTheme()
