@@ -19,10 +19,13 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    '/401': RouteRecordInfo<'/401', '/401', Record<never, never>, Record<never, never>>,
-    '/403': RouteRecordInfo<'/403', '/403', Record<never, never>, Record<never, never>>,
-    '/404': RouteRecordInfo<'/404', '/404', Record<never, never>, Record<never, never>>,
     '/about': RouteRecordInfo<'/about', '/about', Record<never, never>, Record<never, never>>,
+    '/blogs/': RouteRecordInfo<'/blogs/', '/blogs', Record<never, never>, Record<never, never>>,
+    '/blogs/[id]/': RouteRecordInfo<'/blogs/[id]/', '/blogs/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/blogs/[id]/posts/[postId]': RouteRecordInfo<'/blogs/[id]/posts/[postId]', '/blogs/:id/posts/:postId', { id: ParamValue<true>, postId: ParamValue<true> }, { id: ParamValue<false>, postId: ParamValue<false> }>,
+    '/error/401': RouteRecordInfo<'/error/401', '/error/401', Record<never, never>, Record<never, never>>,
+    '/error/403': RouteRecordInfo<'/error/403', '/error/403', Record<never, never>, Record<never, never>>,
+    '/error/404': RouteRecordInfo<'/error/404', '/error/404', Record<never, never>, Record<never, never>>,
     '/gallery': RouteRecordInfo<'/gallery', '/gallery', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/messages': RouteRecordInfo<'/messages', '/messages', Record<never, never>, Record<never, never>>,

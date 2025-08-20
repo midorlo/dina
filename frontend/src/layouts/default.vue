@@ -24,11 +24,24 @@
       />
       <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
 
-      <v-app-bar-title v-if="$vuetify.display.mdAndUp">Application</v-app-bar-title>
+      <div class="d-flex align-center" style="cursor: pointer;" @click="goToHome">
+        <v-img
+          alt="Logo"
+          class="ms-2"
+          contain
+          height="40"
+          src="@/assets/logo.svg"
+          width="40"
+        />
+      </div>
+
+      <v-breadcrumbs class="ms-2" :items="breadcrumbItems" />
+
+      <v-spacer />
 
       <template #append>
         <v-btn
-          class="text-none me-2"
+          class="app-bar-icon-btn text-none me-2"
           height="48"
           icon
           slim
@@ -38,18 +51,18 @@
         </v-btn>
 
         <v-btn
-          class="text-none me-2"
+          class="app-bar-icon-btn text-none me-2"
           height="48"
           icon
           slim
           to="/notifications"
         >
-          <v-badge color="error" :content="unreadCount" :model-value="unreadCount > 0">
+          <v-badge color="error" :content="unreadCount" :model-value="unreadCount > 0" rounded="pill">
             <v-icon>mdi-bell-outline</v-icon>
           </v-badge>
         </v-btn>
 
-        <v-btn class="text-none me-2" height="48" icon slim>
+        <v-btn class="app-bar-icon-btn text-none me-2" height="48" icon slim>
           <v-avatar color="surface-light" image="https://cdn.vuetifyjs.com/images/john.png" size="32" />
 
           <v-menu activator="parent">
@@ -71,20 +84,52 @@
     <v-main>
       <router-view />
     </v-main>
+    <app-footer />
   </v-layout>
 </template>
 
 <script setup>
   import { storeToRefs } from 'pinia'
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { computed, ref } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
   import { useTheme } from 'vuetify'
   import { useNotificationsStore } from '@/stores/notifications'
 
   const drawer = ref(true)
   const theme = useTheme()
   const loading = ref(false)
+  const route = useRoute()
   const router = useRouter()
+
+  const breadcrumbItems = computed(() => {
+    const crumbs = []
+    if (route.path === '/') {
+      return crumbs
+    }
+
+    crumbs.push({
+      title: 'Home',
+      disabled: false,
+      to: '/',
+    })
+
+    const pathParts = route.path.split('/').filter(Boolean)
+    let currentPath = ''
+    for (const [index, part] of pathParts.entries()) {
+      currentPath += `/${part}`
+      const crumb = {
+        title: part.charAt(0).toUpperCase() + part.slice(1),
+        disabled: index === pathParts.length - 1,
+        to: currentPath,
+      }
+      crumbs.push(crumb)
+    }
+    return crumbs
+  })
+
+  function goToHome () {
+    router.push('/')
+  }
 
   router.beforeEach(() => {
     loading.value = true
@@ -143,6 +188,11 @@
       to: '/gallery',
     },
     {
+      title: 'Blogs',
+      prependIcon: 'mdi-post-outline',
+      to: '/blogs',
+    },
+    {
       title: 'Profiles',
       prependIcon: 'mdi-account-group-outline',
       to: '/profiles',
@@ -155,17 +205,32 @@
     {
       title: 'Error 401',
       prependIcon: 'mdi-alert-circle-outline',
-      to: '/401',
+      to: '/error/401',
     },
     {
       title: 'Error 403',
       prependIcon: 'mdi-alert-octagon-outline',
-      to: '/403',
+      to: '/error/403',
     },
     {
       title: 'Error 404',
       prependIcon: 'mdi-alert-box-outline',
-      to: '/404',
+      to: '/error/404',
     },
   ])
 </script>
+
+<style>
+.v-navigation-drawer__content::-webkit-scrollbar {
+  display: none;
+}
+
+.v-navigation-drawer__content {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.app-bar-icon-btn.v-btn--icon:hover > .v-btn__overlay {
+  border-radius: 50%;
+}
+</style>
