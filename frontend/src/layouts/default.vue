@@ -135,14 +135,21 @@ const breadcrumbItems = computed(() => {
 
   for (const [index, record] of records.entries()) {
     const segment = record.path.split('/').findLast(Boolean) ?? ''
-    const title =
-      (record.meta?.breadcrumb as string | undefined) ??
-      segment
-        .replace(/[:()*]/g, '')
-        .replace(/-/g, ' ')
-        .replace(/^\w/, (c) => c.toUpperCase())
 
-    const to = router.resolve({ path: record.path, params: route.params }).path
+    const paramMatches = [...segment.matchAll(/:([^/-]+)/g)].map((m) => m[1])
+    const slugParam = paramMatches.at(-1)
+    let title =
+      (record.meta?.breadcrumb as string | undefined) ||
+      (slugParam && typeof route.params[slugParam] === 'string'
+        ? (route.params[slugParam] as string)
+        : segment)
+
+    title = title
+      .replace(/[:()*]/g, '')
+      .replace(/-/g, ' ')
+      .replace(/^\w/, (c) => c.toUpperCase())
+
+    const to = router.resolve({ name: record.name!, params: route.params }).path
 
     items.push({
       title,
