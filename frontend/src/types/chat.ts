@@ -1,3 +1,6 @@
+export type ConversationId = number | string
+export type MessageId = number | string
+
 export interface Message {
   id: number
   sender: string

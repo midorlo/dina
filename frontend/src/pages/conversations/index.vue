@@ -142,7 +142,7 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { fetchConversations } from '@/services/messages'
-import { type Conversation, Role } from '@/types'
+import { type Conversation, type Message, Role } from '@/types'
 
 definePage({
   meta: { roles: [Role.User], layout: 'default' },
@@ -168,13 +168,14 @@ function selectConversation(conversation: Conversation) {
 function sendMessage() {
   if (newMessage.value.trim() === '' || !selectedConversation.value) return
 
-  selectedConversation.value.messages.push({
+  const message: Message = {
     id: selectedConversation.value.messages.length + 1,
     sender: 'You',
     text: newMessage.value,
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     read: false,
-  })
+  }
+  selectedConversation.value.messages.push(message)
   selectedConversation.value.lastMessage = newMessage.value
   newMessage.value = ''
 }

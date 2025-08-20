@@ -1,4 +1,4 @@
-import type { Conversation } from '@/types'
+import type { Conversation, ConversationId, Message, MessageId } from '@/types'
 
 const conversations: Conversation[] = [
   {
@@ -128,13 +128,16 @@ export async function fetchConversations(): Promise<Conversation[]> {
   })
 }
 
-export async function fetchConversation(id: string | number): Promise<Conversation | undefined> {
+export async function fetchConversation(id: ConversationId): Promise<Conversation | undefined> {
   return new Promise((resolve) => {
     setTimeout(() => resolve(conversations.find((c) => c.id === Number(id))), 500)
   })
 }
 
-export async function fetchMessage(conversationId: string | number, messageId: string | number) {
+export async function fetchMessage(
+  conversationId: ConversationId,
+  messageId: MessageId
+): Promise<Message | undefined> {
   return new Promise((resolve) => {
     const conv = conversations.find((c) => c.id === Number(conversationId))
     setTimeout(() => resolve(conv?.messages.find((m) => m.id === Number(messageId))), 500)

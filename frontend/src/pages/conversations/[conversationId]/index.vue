@@ -23,15 +23,15 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchConversation } from '@/services/messages'
-import { Role } from '@/types'
+import { type Conversation, type ConversationId, Role } from '@/types'
 
 definePage({
   meta: { roles: [Role.User], layout: 'default' },
 })
 
 const route = useRoute()
-const conversationId = computed(() => (route.params as any).conversationId as string)
-const conversation = ref<any | null>(null)
+const conversationId = computed(() => (route.params as any).conversationId as ConversationId)
+const conversation = ref<Conversation | null>(null)
 const loading = ref(true)
 
 onMounted(async () => {
