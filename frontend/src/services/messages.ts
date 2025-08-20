@@ -127,3 +127,16 @@ export async function fetchConversations(): Promise<Conversation[]> {
     setTimeout(() => resolve(conversations), 500)
   })
 }
+
+export async function fetchConversation(id: string | number): Promise<Conversation | undefined> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(conversations.find((c) => c.id === Number(id))), 500)
+  })
+}
+
+export async function fetchMessage(conversationId: string | number, messageId: string | number) {
+  return new Promise((resolve) => {
+    const conv = conversations.find((c) => c.id === Number(conversationId))
+    setTimeout(() => resolve(conv?.messages.find((m) => m.id === Number(messageId))), 500)
+  })
+}

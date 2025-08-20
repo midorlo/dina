@@ -20,7 +20,7 @@
       :style="{ 'column-count': columnCount }"
     >
       <div v-for="item in items" :key="item.id" class="masonry-item">
-        <router-link :to="`/photos/${item.id}`">
+        <router-link :to="`/photos/${galleryId}/${item.id}`">
           <v-img
             :aspect-ratio="item.aspectRatio"
             class="bg-grey-lighten-2 rounded-lg"
@@ -44,8 +44,15 @@
 <script setup lang="ts">
 import type { GalleryItem } from '@/types'
 import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useDisplay } from 'vuetify'
 import { fetchPhotos } from '@/services/photos'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
+const galleryId = computed(() => (route.params as any).id as string)
 
 const { name } = useDisplay()
 const density = ref('medium') // 'large', 'medium', 'small'
@@ -72,6 +79,10 @@ const items = ref<GalleryItem[]>([])
 const loading = ref(true)
 
 onMounted(async () => {
+  if (galleryId.value !== authStore.currentUser?.id) {
+    router.replace('/error/403')
+    return
+  }
   try {
     items.value = await fetchPhotos()
   } finally {

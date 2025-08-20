@@ -23,16 +23,18 @@ export function hasRole(role: Role, required: Role) {
   return roleHierarchy[role]?.includes(required) ?? false
 }
 
+const guestUser: User = {
+  id: 'guest',
+  email: '',
+  name: 'Guest',
+  role: Role.Guest,
+  username: 'guest',
+  avatarUrl: '',
+}
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    currentUser: {
-      id: 'guest',
-      email: '',
-      name: 'Guest',
-      role: Role.Guest,
-      username: 'guest',
-      avatarUrl: '',
-    } as User,
+    currentUser: null as User | null,
     userProfile: null as Profile | null,
     tokens: null as AuthTokens | null,
   }),
@@ -47,17 +49,16 @@ export const useAuthStore = defineStore('auth', {
     setTokens(tokens: AuthTokens | null) {
       this.tokens = tokens
     },
-    reset() {
-      this.currentUser = {
-        id: 'guest',
-        email: '',
-        name: 'Guest',
-        role: Role.Guest,
-        username: 'guest',
-        avatarUrl: '',
+    init() {
+      if (!this.currentUser) {
+        this.currentUser = { ...guestUser }
       }
+    },
+    reset() {
+      this.currentUser = null
       this.userProfile = null
       this.tokens = null
+      this.init()
     },
     hasPermission(role: Role, permission: Permission) {
       return rolePermissions[role]?.includes(permission) ?? false

@@ -74,7 +74,7 @@
 
           <div class="text-center">
             <span class="text-body-2">Don't have an account? </span>
-            <router-link class="text-decoration-none text-primary" to="/register"
+            <router-link class="text-decoration-none text-primary" to="/auth/register"
               >Register</router-link
             >
           </div>

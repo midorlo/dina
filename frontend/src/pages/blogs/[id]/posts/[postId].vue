@@ -5,11 +5,7 @@
         <v-skeleton-loader v-if="loading" type="image, article, actions" />
         <template v-else-if="post">
           <div class="mb-10">
-            <v-btn
-              prepend-icon="mdi-arrow-left"
-              :to="{ name: '/blogs/[id]/', params: { id: blogId } }"
-              variant="text"
-            >
+            <v-btn prepend-icon="mdi-arrow-left" :to="`/blogs/${blogId}`" variant="text">
               Zurück zu {{ post.blogName }}
             </v-btn>
           </div>
@@ -56,9 +52,9 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchBlogPost } from '@/services/blogs'
 
-const route = useRoute('/blogs/[id]/posts/[postId]')
-const blogId = computed(() => route.params.id as string)
-const postId = computed(() => route.params.postId as string)
+const route = useRoute()
+const blogId = computed(() => (route.params as any).id as string)
+const postId = computed(() => (route.params as any).postId as string)
 
 const post = ref<Post | null>(null)
 const loading = ref(true)

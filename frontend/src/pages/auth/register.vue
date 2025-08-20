@@ -73,7 +73,9 @@
 
           <div class="text-center">
             <span class="text-body-2">Already have an account? </span>
-            <router-link class="text-decoration-none text-primary" to="/login">Login</router-link>
+            <router-link class="text-decoration-none text-primary" to="/auth/login"
+              >Login</router-link
+            >
           </div>
         </v-card>
       </v-col>

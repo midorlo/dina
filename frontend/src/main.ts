@@ -9,6 +9,7 @@ import { createApp } from 'vue'
 
 // Plugins
 import { registerPlugins } from '@/plugins'
+import { useAuthStore } from '@/stores/auth'
 
 // Components
 import App from './App.vue'
@@ -26,5 +27,8 @@ app.config.errorHandler = (err, vm, info) => {
 }
 
 registerPlugins(app)
+
+const auth = useAuthStore()
+if (!auth.currentUser) auth.init()
 
 app.mount('#app')

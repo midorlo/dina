@@ -39,10 +39,7 @@
             class="mb-6 pa-2"
             flat
             rounded="xl"
-            :to="{
-              name: '/blogs/[id]/posts/[postId]',
-              params: { id: currentBlog?.id, postId: String(post.id) },
-            }"
+            :to="`/blogs/${currentBlog?.id}/posts/${post.id}`"
           >
             <v-card-title>{{ post.title }}</v-card-title>
             <v-card-subtitle>{{ post.createdAt }}</v-card-subtitle>
@@ -54,6 +51,15 @@
               </v-btn>
             </v-card-actions>
           </v-card>
+          <v-btn
+            block
+            class="mt-4"
+            color="primary"
+            :to="`/blogs/${currentBlog?.id}/posts`"
+            variant="text"
+          >
+            Alle Beiträge anzeigen
+          </v-btn>
         </v-col>
       </v-row>
     </template>
@@ -65,8 +71,8 @@ import type { Blog, PostItem } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { fetchBlog, fetchBlogPosts } from '@/services/blogs'
 
-const route = useRoute('/blogs/[id]/')
-const blogId = computed(() => route.params.id as string)
+const route = useRoute()
+const blogId = computed(() => (route.params as any).id as string)
 
 const blog = ref<Blog | null>(null)
 const posts = ref<PostItem[]>([])
@@ -74,7 +80,7 @@ const loading = ref(true)
 
 onMounted(async () => {
   blog.value = (await fetchBlog(blogId.value)) || null
-  posts.value = await fetchBlogPosts(blogId.value)
+  posts.value = (await fetchBlogPosts(blogId.value)).slice(0, 3)
   loading.value = false
 })
 

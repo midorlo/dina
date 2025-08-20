@@ -13,7 +13,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
       subtitle: '<strong>John Doe</strong> started following you.',
       avatar: 'https://cdn.vuetifyjs.com/images/avatars/avatar-1.png',
       time: '10m ago',
-      link: '/profile',
+      link: '/profiles/guest/edit',
       read: false,
     },
     {
@@ -22,7 +22,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
       subtitle: '<strong>Jane Smith</strong> liked your <strong>photo.jpg</strong>.',
       avatar: 'https://cdn.vuetifyjs.com/images/avatars/avatar-2.png',
       time: '1h ago',
-      link: '/photos',
+      link: '/photos/guest',
       read: true,
     },
     {
@@ -31,7 +31,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
       subtitle: '<strong>Peter Jones</strong> commented on your <strong>post</strong>.',
       avatar: 'https://cdn.vuetifyjs.com/images/avatars/avatar-3.png',
       time: '2h ago',
-      link: '/messages',
+      link: '/conversations',
       read: false,
     },
     {
@@ -40,7 +40,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
       subtitle: 'Your server has been updated to the latest version.',
       avatar: 'https://cdn.vuetifyjs.com/images/avatars/avatar-4.png',
       time: '1d ago',
-      link: '/settings',
+      link: '/developer/store',
       read: false,
     },
   ]

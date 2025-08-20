@@ -14,7 +14,7 @@
           <v-card-title>Photo {{ photo.id }}</v-card-title>
           <v-card-text>This is the detail page for photo {{ photo.id }}.</v-card-text>
           <v-card-actions>
-            <v-btn to="/photos">Back to Gallery</v-btn>
+            <v-btn :to="`/photos/${galleryId}`">Back to Gallery</v-btn>
           </v-card-actions>
         </v-card>
         <v-empty-state v-else icon="mdi-image-off-outline" title="Photo not found" />
@@ -26,19 +26,23 @@
 <script setup lang="ts">
 import type { GalleryItem } from '@/types'
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { fetchPhoto } from '@/services/photos'
+import { useAuthStore } from '@/stores/auth'
 
-interface PhotoRouteParams {
-  id: string
-}
-
+const authStore = useAuthStore()
 const route = useRoute()
-const photoId = computed(() => (route.params as PhotoRouteParams).id)
+const router = useRouter()
+const galleryId = computed(() => (route.params as any).id as string)
+const photoId = computed(() => (route.params as any).photoId as string)
 const loading = ref(true)
 const photo = ref<GalleryItem | null>(null)
 
 onMounted(async () => {
+  if (galleryId.value !== authStore.currentUser?.id) {
+    router.replace('/error/403')
+    return
+  }
   try {
     photo.value = (await fetchPhoto(Number(photoId.value))) || null
   } finally {

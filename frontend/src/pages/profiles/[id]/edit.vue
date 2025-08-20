@@ -113,6 +113,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
 definePage({
@@ -120,6 +121,9 @@ definePage({
 })
 
 const authStore = useAuthStore()
+const route = useRoute()
+const router = useRouter()
+const profileId = computed(() => (route.params as any).id as string)
 
 const password = reactive({
   current: '',
@@ -131,19 +135,19 @@ const loading = ref(true)
 const user = computed(() => authStore.userProfile)
 
 onMounted(async () => {
+  if (profileId.value !== authStore.currentUser?.id) {
+    router.replace('/error/403')
+    return
+  }
+
   loading.value = true
-  if (authStore.currentUser) {
-    try {
-      const { fetchProfile } = await import('@/services/users')
-      const profile = await fetchProfile(authStore.currentUser.id)
-      authStore.userProfile = profile
-    } catch (error) {
-      console.error('Error fetching profile:', error)
-    } finally {
-      loading.value = false
-    }
-  } else {
-    console.warn('No current user found. Cannot fetch profile.')
+  try {
+    const { fetchProfile } = await import('@/services/users')
+    const profile = await fetchProfile(profileId.value)
+    authStore.userProfile = profile
+  } catch (error) {
+    console.error('Error fetching profile:', error)
+  } finally {
     loading.value = false
   }
 })

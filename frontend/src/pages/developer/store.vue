@@ -44,6 +44,10 @@
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
+import { Role } from '@/types'
+definePage({
+  meta: { roles: [Role.Developer] },
+})
 
 const authStore = useAuthStore()
 const notificationsStore = useNotificationsStore()

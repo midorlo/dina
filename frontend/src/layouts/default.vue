@@ -63,8 +63,13 @@
                 <v-list-item-subtitle>john.doe@example.com</v-list-item-subtitle>
               </v-list-item>
               <v-divider />
-              <v-list-item append-icon="mdi-account" link title="Profile" to="/profile" />
-              <v-list-item append-icon="mdi-cog-outline" link title="Settings" to="/settings" />
+              <v-list-item
+                append-icon="mdi-account"
+                link
+                title="Profile"
+                :to="`/profiles/${currentUser.value?.id}/edit`"
+              />
+              <!-- Settings removed -->
               <v-list-item append-icon="mdi-logout" title="Logout" @click="logout" />
             </v-list>
           </v-menu>
@@ -149,10 +154,10 @@ const { currentUser } = storeToRefs(authStore)
 
 function logout() {
   authStore.reset()
-  router.push('/login')
+  router.push('/auth/login')
 }
 
-const items = ref([
+const items = computed(() => [
   {
     title: 'Home',
     prependAvatar: logo,
@@ -161,30 +166,25 @@ const items = ref([
   {
     title: 'Store',
     prependIcon: 'mdi-store',
-    to: '/store',
+    to: '/developer/store',
+    roles: [Role.Developer],
   },
   {
     title: 'Login',
     prependIcon: 'mdi-login',
-    to: '/login',
+    to: '/auth/login',
     roles: [Role.Guest],
   },
   {
     title: 'Register',
     prependIcon: 'mdi-account-plus',
-    to: '/register',
+    to: '/auth/register',
     roles: [Role.Guest],
   },
   {
     title: 'Profile',
     prependIcon: 'mdi-account',
-    to: '/profile',
-    roles: [Role.User],
-  },
-  {
-    title: 'Settings',
-    prependIcon: 'mdi-cog-outline',
-    to: '/settings',
+    to: `/profiles/${currentUser.value?.id}/edit`,
     roles: [Role.User],
   },
   {
@@ -193,14 +193,14 @@ const items = ref([
     to: '/about',
   },
   {
-    title: 'Messages',
+    title: 'Conversations',
     prependIcon: 'mdi-message-text-outline',
-    to: '/messages',
+    to: '/conversations',
   },
   {
     title: 'Photos',
     prependIcon: 'mdi-image-multiple',
-    to: '/photos',
+    to: `/photos/${currentUser.value?.id}`,
   },
   {
     title: 'Blogs',

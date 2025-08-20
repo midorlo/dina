@@ -143,6 +143,10 @@
 import type { Conversation } from '@/types'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { fetchConversations } from '@/services/messages'
+import { Role } from '@/types'
+definePage({
+  meta: { roles: [Role.User] },
+})
 
 const conversations = ref<Conversation[]>([])
 const selectedConversation = ref<Conversation | null>(null)

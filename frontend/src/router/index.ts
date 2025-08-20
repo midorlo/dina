@@ -20,7 +20,7 @@ router.beforeEach((to) => {
   const auth = useAuthStore()
   const role = auth.currentUser == null ? Role.Guest : auth.currentUser.role
 
-  if (['/login', '/register'].includes(to.path) && role !== Role.Guest) return '/'
+  if (['/auth/login', '/auth/register'].includes(to.path) && role !== Role.Guest) return '/'
 
   const allowedRoles = to.meta.roles as Role[] | undefined
   if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.some((r) => hasRole(role, r))) {
