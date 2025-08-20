@@ -102,10 +102,13 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive } from 'vue'
-import { apiService } from '@/services/api'
-import { useAppStore } from '@/stores/app'
+import { useAuthStore } from '@/stores/auth'
+import { Role } from '@/types'
+definePage({
+  meta: { roles: [Role.User, Role.Admin] },
+})
 
-const appStore = useAppStore()
+const authStore = useAuthStore()
 
 const password = reactive({
   current: '',
@@ -114,14 +117,15 @@ const password = reactive({
 })
 
 const loading = ref(true)
-const user = computed(() => appStore.userProfile)
+const user = computed(() => authStore.userProfile)
 
 onMounted(async () => {
   loading.value = true
-  if (appStore.currentUser) {
+  if (authStore.currentUser) {
     try {
-      const profile = await apiService.fetchProfile(appStore.currentUser.id)
-      appStore.userProfile = profile
+      const { fetchProfile } = await import('@/services/users')
+      const profile = await fetchProfile(authStore.currentUser.id)
+      authStore.userProfile = profile
     } catch (error) {
       console.error('Error fetching profile:', error)
     } finally {
@@ -136,8 +140,9 @@ onMounted(async () => {
 async function saveProfile() {
   if (user.value) {
     try {
-      const updatedProfile = await apiService.updateProfile(user.value)
-      appStore.userProfile = updatedProfile
+      const { updateProfile } = await import('@/services/users')
+      const updatedProfile = await updateProfile(user.value)
+      authStore.userProfile = updatedProfile
       console.log('Profile saved successfully!', updatedProfile)
     } catch (error) {
       console.error('Error saving profile:', error)

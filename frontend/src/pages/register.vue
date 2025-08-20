@@ -83,6 +83,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Role } from '@/types'
+definePage({
+  meta: { roles: [Role.Guest] },
+})
 
 const name = ref('')
 const email = ref('')

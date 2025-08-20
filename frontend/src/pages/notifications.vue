@@ -24,6 +24,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useNotificationsStore } from '@/stores/notifications'
+import { Role } from '@/types'
+definePage({
+  meta: { roles: [Role.User, Role.Admin] },
+})
 
 const notificationsStore = useNotificationsStore()
 const { items } = storeToRefs(notificationsStore)

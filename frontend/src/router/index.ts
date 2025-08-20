@@ -8,10 +8,27 @@ import { setupLayouts } from 'virtual:generated-layouts'
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
+import { useAuthStore } from '@/stores/auth'
+import { Role } from '@/types'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routes),
+})
+
+router.beforeEach((to) => {
+  const auth = useAuthStore()
+  const role = auth.currentUser?.role || Role.Guest
+
+  if (auth.currentUser && to.path === '/login') {
+    return '/'
+  }
+
+  const allowedRoles = to.meta.roles as Role[] | undefined
+  if (allowedRoles && allowedRoles.length > 0) {
+    if (!auth.currentUser) return '/error/401'
+    if (!allowedRoles.includes(role)) return '/error/403'
+  }
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804

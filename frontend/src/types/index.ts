@@ -1,10 +1,12 @@
 export enum Role {
-  User = 'user',
   Guest = 'guest',
-  Banned = 'banned',
-  Moderator = 'moderator',
-  Administrator = 'administrator',
-  Developer = 'developer',
+  User = 'user',
+  Admin = 'admin',
+}
+
+export enum Permission {
+  ViewDashboard = 'view_dashboard',
+  ManageUsers = 'manage_users',
 }
 
 export interface User {

@@ -19,10 +19,10 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/stores/app'
+import { useAuthStore } from '@/stores/auth'
 
-const appStore = useAppStore()
-const { currentUser, userProfile } = storeToRefs(appStore)
+const authStore = useAuthStore()
+const { currentUser, userProfile } = storeToRefs(authStore)
 </script>
 
 <style scoped>

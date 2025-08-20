@@ -9,7 +9,7 @@
       :rail="$vuetify.display.mdAndUp"
       width="256"
     >
-      <v-list item-props :items="items" nav />
+      <v-list item-props :items="filteredItems" nav />
 
       <template #append />
     </v-navigation-drawer>
@@ -83,7 +83,9 @@ import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
+import { filterMenuByRole, useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
+import { Role } from '@/types'
 
 const drawer = ref(true)
 const theme = useTheme()
@@ -136,6 +138,9 @@ function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
 
+const authStore = useAuthStore()
+const { currentUser } = storeToRefs(authStore)
+
 const items = ref([
   {
     title: 'Home',
@@ -151,21 +156,25 @@ const items = ref([
     title: 'Login',
     prependIcon: 'mdi-login',
     to: '/login',
+    roles: [Role.Guest],
   },
   {
     title: 'Register',
     prependIcon: 'mdi-account-plus',
     to: '/register',
+    roles: [Role.Guest],
   },
   {
     title: 'Profile',
     prependIcon: 'mdi-account',
     to: '/profile',
+    roles: [Role.User, Role.Admin],
   },
   {
     title: 'Settings',
     prependIcon: 'mdi-cog-outline',
     to: '/settings',
+    roles: [Role.User, Role.Admin],
   },
   {
     title: 'About',
@@ -196,6 +205,7 @@ const items = ref([
     title: 'Notifications',
     prependIcon: 'mdi-bell-outline',
     to: '/notifications',
+    roles: [Role.User, Role.Admin],
   },
   {
     title: 'Error 401',
@@ -213,6 +223,10 @@ const items = ref([
     to: '/error/404',
   },
 ])
+
+const filteredItems = computed(() =>
+  filterMenuByRole(items.value, currentUser.value?.role || Role.Guest)
+)
 </script>
 
 <style>

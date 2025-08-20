@@ -85,22 +85,26 @@
 </template>
 
 <script setup lang="ts">
-import { apiService } from '@/services/api'
-import { useAppStore } from '@/stores/app'
+import { useAuthStore } from '@/stores/auth'
+import { Role } from '@/types'
+definePage({
+  meta: { roles: [Role.Guest] },
+})
 
 const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
 const loginError = ref('')
 
-const appStore = useAppStore()
+const authStore = useAuthStore()
 
 async function login() {
   loginError.value = '' // Clear previous errors
   try {
-    const user = await apiService.login(email.value, password.value)
+    const { login } = await import('@/services/auth')
+    const user = await login(email.value, password.value)
     if (user.id) {
-      appStore.currentUser = user
+      authStore.setUser(user)
       // Redirect to profile or dashboard
       console.log('Login successful!', user)
     } else {
