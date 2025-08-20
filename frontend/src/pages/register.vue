@@ -90,6 +90,7 @@ definePage({
   meta: {
     roles: [Role.Guest],
     layout: 'empty',
+    requiresGuest: true,
   },
 })
 
