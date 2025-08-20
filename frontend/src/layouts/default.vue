@@ -28,7 +28,7 @@
         color="primary"
         :indeterminate="loading"
       />
-      <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
+      <v-app-bar-nav-icon v-if="showAppBarNavIcon" @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-breadcrumbs class="ms-2" :items="breadcrumbItems" />
 
@@ -142,17 +142,15 @@ const breadcrumbItems = computed(() => {
     const paramMatches = [...segment.matchAll(/:([^/-]+)/g)].map((m) => m[1])
     const slugParam = paramMatches.at(-1)
     let title =
-      (record.meta?.breadcrumb as string | undefined) ||
-      (slugParam && typeof route.params[slugParam] === 'string'
-        ? (route.params[slugParam] as string)
-        : segment)
+      record.meta?.breadcrumb ||
+      (slugParam && typeof route.params[slugParam] === 'string' ? route.params[slugParam] : segment)
 
     title = title
       .replace(/[:()*]/g, '')
       .replace(/-/g, ' ')
       .replace(/^\w/, (c) => c.toUpperCase())
 
-    const to = router.resolve({ name: record.name!, params: route.params }).path
+    const to = router.resolve({ name: record.name, params: route.params }).path
 
     items.push({
       title,
@@ -163,6 +161,8 @@ const breadcrumbItems = computed(() => {
 
   return items
 })
+
+const showAppBarNavIcon = computed(() => !$vuetify.display.mdAndUp)
 
 const notificationsStore = useNotificationsStore()
 const { unreadCount } = storeToRefs(notificationsStore)

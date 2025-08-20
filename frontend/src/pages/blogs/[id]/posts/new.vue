@@ -38,5 +38,5 @@ function create() {
 <route lang="yaml">
 path: /blogs/:id-:slug/posts/new
 alias:
-  - /blogs/:id/posts/new
+  - /blogs/:id-:slug?/posts/new
 </route>

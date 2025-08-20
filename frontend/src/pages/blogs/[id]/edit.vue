@@ -46,7 +46,7 @@ async function save() {
 </script>
 
 <route lang="yaml">
-path: /blogs/:id/edit
+path: /blogs/:id-:slug?/edit
 alias:
   - /blogs/:id-:slug/edit
 </route>

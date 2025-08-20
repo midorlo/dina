@@ -9,8 +9,8 @@ const blogs: Blog[] = [
   {
     id: '1',
     name: 'Johns Gedanken',
-    authorHandle: john.username,
-    authorAvatarUrl: john.avatarUrl,
+    authorHandle: john.username ?? '',
+    authorAvatarUrl: john.avatarUrl ?? '',
     description:
       'Ein Einblick in einen aufgeräumten Lebensstil und wie er zu mehr Klarheit führen kann.',
     postCount: 3,
@@ -19,8 +19,8 @@ const blogs: Blog[] = [
   {
     id: '2',
     name: 'Janes Abenteuer',
-    authorHandle: jane.username,
-    authorAvatarUrl: jane.avatarUrl,
+    authorHandle: jane.username ?? '',
+    authorAvatarUrl: jane.avatarUrl ?? '',
     description:
       'Atemberaubende Landschaften und unvergessliche Momente auf meinen Reisen durch die Welt.',
     postCount: 2,
@@ -29,8 +29,8 @@ const blogs: Blog[] = [
   {
     id: '3',
     name: 'Peters Küche',
-    authorHandle: peter.username,
-    authorAvatarUrl: peter.avatarUrl,
+    authorHandle: peter.username ?? '',
+    authorAvatarUrl: peter.avatarUrl ?? '',
     description:
       'Einfache Rezepte, die immer gelingen. Entdecke die Freude am Kochen, Schritt für Schritt.',
     postCount: 1,
@@ -39,8 +39,8 @@ const blogs: Blog[] = [
   {
     id: '4',
     name: 'Marys grüner Daumen',
-    authorHandle: mary.username,
-    authorAvatarUrl: mary.avatarUrl,
+    authorHandle: mary.username ?? '',
+    authorAvatarUrl: mary.avatarUrl ?? '',
     description: 'Wie du auch ohne Garten frisches Gemüse und Kräuter anbauen kannst.',
     postCount: 1,
     createdAt: '12. März 2024',
@@ -48,8 +48,8 @@ const blogs: Blog[] = [
   {
     id: '5',
     name: 'Davids Sternenbilder',
-    authorHandle: david.username,
-    authorAvatarUrl: david.avatarUrl,
+    authorHandle: david.username ?? '',
+    authorAvatarUrl: david.avatarUrl ?? '',
     description:
       'Die Sterne fotografieren: Welche Ausrüstung du brauchst und die besten Tipps für den Anfang.',
     postCount: 1,
@@ -129,8 +129,8 @@ const postDetails: Record<string, Post> = {
     blogId: '1',
     blogName: 'Johns Gedanken',
     title: 'Mein Weg zum Minimalismus',
-    author: john.name,
-    authorAvatarUrl: john.avatarUrl,
+    author: john.name ?? '',
+    authorAvatarUrl: john.avatarUrl ?? '',
     date: '15. August 2025',
     category: 'Lebensstil',
     imageUrl:
@@ -145,8 +145,8 @@ const postDetails: Record<string, Post> = {
     blogId: '1',
     blogName: 'Johns Gedanken',
     title: 'Die 5-Minuten-Regel für mehr Ordnung',
-    author: john.name,
-    authorAvatarUrl: john.avatarUrl,
+    author: john.name ?? '',
+    authorAvatarUrl: john.avatarUrl ?? '',
     date: '02. Juli 2025',
     category: 'Organisation',
     imageUrl:
@@ -160,8 +160,8 @@ const postDetails: Record<string, Post> = {
     blogId: '1',
     blogName: 'Johns Gedanken',
     title: 'Digital Detox: Erfahrungen & Tipps',
-    author: john.name,
-    authorAvatarUrl: john.avatarUrl,
+    author: john.name ?? '',
+    authorAvatarUrl: john.avatarUrl ?? '',
     date: '21. Juni 2025',
     category: 'Digitales',
     imageUrl:
@@ -175,8 +175,8 @@ const postDetails: Record<string, Post> = {
     blogId: '2',
     blogName: 'Janes Abenteuer',
     title: 'Wanderung zur Zugspitze',
-    author: jane.name,
-    authorAvatarUrl: jane.avatarUrl,
+    author: jane.name ?? '',
+    authorAvatarUrl: jane.avatarUrl ?? '',
     date: '10. August 2025',
     category: 'Reisen',
     imageUrl:
@@ -190,8 +190,8 @@ const postDetails: Record<string, Post> = {
     blogId: '2',
     blogName: 'Janes Abenteuer',
     title: 'Mit dem Rucksack durch Vietnam',
-    author: jane.name,
-    authorAvatarUrl: jane.avatarUrl,
+    author: jane.name ?? '',
+    authorAvatarUrl: jane.avatarUrl ?? '',
     date: '15. März 2025',
     category: 'Reisen',
     imageUrl:
@@ -205,8 +205,8 @@ const postDetails: Record<string, Post> = {
     blogId: '3',
     blogName: 'Peters Küche',
     title: 'Mein Lieblingsrezept',
-    author: peter.name,
-    authorAvatarUrl: peter.avatarUrl,
+    author: peter.name ?? '',
+    authorAvatarUrl: peter.avatarUrl ?? '',
     date: '05. Mai 2025',
     category: 'Kochen',
     imageUrl:
@@ -218,8 +218,8 @@ const postDetails: Record<string, Post> = {
     blogId: '4',
     blogName: 'Marys grüner Daumen',
     title: 'Urban Gardening für Anfänger',
-    author: mary.name,
-    authorAvatarUrl: mary.avatarUrl,
+    author: mary.name ?? '',
+    authorAvatarUrl: mary.avatarUrl ?? '',
     date: '18. April 2025',
     category: 'Garten',
     imageUrl:
@@ -231,8 +231,8 @@ const postDetails: Record<string, Post> = {
     blogId: '5',
     blogName: 'Davids Sternenbilder',
     title: 'Die Milchstraße fotografieren',
-    author: david.name,
-    authorAvatarUrl: david.avatarUrl,
+    author: david.name ?? '',
+    authorAvatarUrl: david.avatarUrl ?? '',
     date: '11. Juni 2025',
     category: 'Fotografie',
     imageUrl:

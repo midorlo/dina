@@ -114,5 +114,5 @@ const canEdit = computed(() => currentUser.value?.username === currentBlog.value
 <route lang="yaml">
 path: /blogs/:id-:slug
 alias:
-  - /blogs/:id
+  - /blogs/:id-:slug?
 </route>
