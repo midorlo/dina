@@ -112,7 +112,5 @@ const canEdit = computed(() => currentUser.value?.username === currentBlog.value
 </script>
 
 <route lang="yaml">
-path: /blogs/:id-:slug
-alias:
-  - /blogs/:id-:slug?
+path: /blogs/:id-:slug?
 </route>

@@ -97,7 +97,5 @@ const canEdit = computed(
 </script>
 
 <route lang="yaml">
-path: /blogs/:id-:blogSlug/posts/:postId-:postSlug
-alias:
-  - /blogs/:id-:blogSlug?/posts/:postId-:postSlug?
+path: /blogs/:id-:slug?/posts/:postId-:postSlug?
 </route>

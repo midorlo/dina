@@ -60,7 +60,5 @@ onMounted(async () => {
 </script>
 
 <route lang="yaml">
-path: /blogs/:id-:slug/posts
-alias:
-  - /blogs/:id-:slug?/posts
+path: /blogs/:id-:slug?/posts
 </route>

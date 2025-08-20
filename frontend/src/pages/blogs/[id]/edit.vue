@@ -47,6 +47,4 @@ async function save() {
 
 <route lang="yaml">
 path: /blogs/:id-:slug?/edit
-alias:
-  - /blogs/:id-:slug/edit
 </route>
