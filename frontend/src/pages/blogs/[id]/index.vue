@@ -30,7 +30,10 @@
           class="mb-6 pa-2"
           flat
           rounded="xl"
-          :to="`/blogs/${currentBlog.id}/posts/${String(post.id)}`"
+          :to="{
+            name: '/blogs/[id]/posts/[postId]',
+            params: { id: currentBlog.id, postId: String(post.id) },
+          }"
         >
           <v-card-title>{{ post.title }}</v-card-title>
           <v-card-subtitle>{{ post.createdAt }}</v-card-subtitle>
@@ -50,12 +53,8 @@
 <script setup lang="ts">
 import type { Blog, PostItem } from '@/types'
 
-interface BlogRouteParams {
-  id: string;
-}
-
-const route = useRoute()
-const blogId = computed(() => (route.params as BlogRouteParams).id)
+const route = useRoute('/blogs/[id]/')
+const blogId = computed(() => route.params.id)
 
 // In a real app, you would fetch this data based on blogId.value
 const blog = ref<Blog>({

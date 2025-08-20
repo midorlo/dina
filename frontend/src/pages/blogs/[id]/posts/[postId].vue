@@ -3,7 +3,11 @@
     <v-row justify="center">
       <v-col cols="12" lg="8" md="10">
         <div class="mb-10">
-          <v-btn prepend-icon="mdi-arrow-left" :to="`/blogs/${blogId}`" variant="text">
+          <v-btn
+            prepend-icon="mdi-arrow-left"
+            :to="{ name: '/blogs/[id]/', params: { id: blogId } }"
+            variant="text"
+          >
             Zurück zu {{ currentPost.blogName }}
           </v-btn>
         </div>
@@ -44,30 +48,25 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
 
-interface PostRouteParams {
-  id: string;
-  postId: string;
-}
-
-const route = useRoute()
-const blogId = computed(() => (route.params as PostRouteParams).id)
-const postId = computed(() => (route.params as PostRouteParams).postId)
+const route = useRoute('/blogs/[id]/posts/[postId]')
+const blogId = computed(() => route.params.id)
+const postId = computed(() => route.params.postId)
 
 // In a real app, you would fetch this data based on blogId and postId
 const post = ref<{
-  id: string;
-  blogId: string;
-  blogName: string;
-  title: string;
-  author: string;
-  authorAvatarUrl: string;
-  date: string;
-  category: string;
-  imageUrl: string;
-  content: string[];
-}>({ id: postId.value,
+  id: string
+  blogId: string
+  blogName: string
+  title: string
+  author: string
+  authorAvatarUrl: string
+  date: string
+  category: string
+  imageUrl: string
+  content: string[]
+}>({
+  id: postId.value,
   blogId: blogId.value,
   blogName: 'Annas Gedanken',
   title: 'Mein Weg zum Minimalismus',
