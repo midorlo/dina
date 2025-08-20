@@ -10,8 +10,9 @@ import router from '../router'
 import pinia from '../stores'
 
 // Plugins
+import errorHandling from './errorHandling'
 import vuetify from './vuetify'
 
 export function registerPlugins(app: App) {
-  app.use(vuetify).use(router).use(pinia)
+  app.use(vuetify).use(router).use(pinia).use(errorHandling)
 }
