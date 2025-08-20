@@ -1,5 +1,5 @@
-import logo from ' @/assets/logo.svg'
-import { Role } from ' @/types'
+import logo from '@/assets/logo.svg'
+import { Role } from '@/types'
 
 export interface MenuItem {
   title: string

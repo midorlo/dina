@@ -1,6 +1,6 @@
-import type { NotificationItem } from ' @/types'
-import { apiFetch } from ' @/services/api'
-import { delay, useMocks } from ' @/services/mock'
+import type { NotificationItem } from '@/types'
+import { apiFetch } from '@/services/api'
+import { delay, useMocks } from '@/services/mock'
 
 const mockNotifications: NotificationItem[] = [
   {

@@ -1,7 +1,6 @@
-import type { AuthTokens, LoginResponse, Profile, User } from '@/types'
-import { Role } from ' @/types'
-import { apiFetch } from ' @/services/api'
-import { useMocks } from ' @/services/mock'
+import { apiFetch } from '@/services/api'
+import { useMocks } from '@/services/mock'
+import { type AuthTokens, type LoginResponse, type Profile, Role, type User } from '@/types'
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
   if (!useMocks) {

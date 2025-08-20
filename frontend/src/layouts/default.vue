@@ -112,7 +112,7 @@ import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
-import { menu } from ' @/config/menu'
+import { menu } from '@/config/menu'
 import { loading } from '@/router/loading'
 import { filterMenuByRole, useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
@@ -174,8 +174,6 @@ const filteredItems = computed(() =>
     to: typeof item.to === 'function' ? item.to(currentUser.value?.id) : item.to,
   }))
 )
-
-
 </script>
 
 <style>

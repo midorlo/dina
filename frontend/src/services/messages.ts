@@ -1,6 +1,6 @@
-import type { Conversation } from ' @/types'
-import { apiFetch } from ' @/services/api'
-import { delay, useMocks } from ' @/services/mock'
+import type { Conversation } from '@/types'
+import { apiFetch } from '@/services/api'
+import { delay, useMocks } from '@/services/mock'
 
 const conversations: Conversation[] = [
   {

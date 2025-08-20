@@ -1,6 +1,6 @@
-import type { Profile } from ' @/types'
-import { apiFetch } from ' @/services/api'
-import { delay, useMocks } from ' @/services/mock'
+import type { Profile } from '@/types'
+import { apiFetch } from '@/services/api'
+import { delay, useMocks } from '@/services/mock'
 
 const profiles: Profile[] = [
   {

@@ -1,6 +1,6 @@
-import type { Blog, Post, PostItem } from ' @/types'
-import { apiFetch } from ' @/services/api'
-import { delay, useMocks } from ' @/services/mock'
+import type { Blog, Post, PostItem } from '@/types'
+import { apiFetch } from '@/services/api'
+import { delay, useMocks } from '@/services/mock'
 
 const blogs: Blog[] = [
   {

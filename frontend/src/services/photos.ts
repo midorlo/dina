@@ -1,6 +1,6 @@
-import type { GalleryItem } from ' @/types'
-import { apiFetch } from ' @/services/api'
-import { delay, useMocks } from ' @/services/mock'
+import type { GalleryItem } from '@/types'
+import { apiFetch } from '@/services/api'
+import { delay, useMocks } from '@/services/mock'
 
 const items: GalleryItem[] = [
   {
