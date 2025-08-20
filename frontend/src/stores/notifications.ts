@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import type { NotificationItem } from '@/types'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const router = useRouter()
 
-  const items = ref([
+  const items = ref<NotificationItem[]>([
     {
       id: 1,
       title: 'New follower',
@@ -44,10 +45,10 @@ export const useNotificationsStore = defineStore('notifications', () => {
     },
   ])
 
-  const unreadCount = computed(() => items.value.filter(item => !item.read).length)
+  const unreadCount = computed(() => items.value.filter((item) => !item.read).length)
 
-  function handleNotificationClick (item) {
-    const notification = items.value.find(n => n.id === item.id)
+  function handleNotificationClick(item: NotificationItem) {
+    const notification = items.value.find((n) => n.id === item.id)
     if (notification) {
       notification.read = true
     }

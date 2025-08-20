@@ -5,9 +5,7 @@
         <v-card flat rounded="xl">
           <v-card-title class="pa-6">
             <v-row align="center">
-              <v-col cols="12" md="8">
-                Profiles
-              </v-col>
+              <v-col cols="12" md="8"> Profiles </v-col>
               <v-col cols="12" md="4">
                 <v-text-field
                   v-model="search"
@@ -29,19 +27,11 @@
                 :key="profile.id"
                 border
                 class="mb-4"
-                :prepend-avatar="profile.avatar"
+                :prepend-avatar="profile.avatarUrl"
                 rounded="xl"
-                :title="profile.name"
+                :title="profile.username"
                 :to="`/profiles/${profile.id}`"
-              >
-                <template #append>
-                  <div class="d-flex align-center">
-                    <v-icon v-if="profile.status === 'online'" color="success" icon="mdi-circle" size="8" />
-                    <span v-if="profile.status === 'online'" class="ms-2 text-body-2">Online</span>
-                    <span v-else class="ms-2 text-body-2 text-disabled">{{ profile.lastSeen }}</span>
-                  </div>
-                </template>
-              </v-list-item>
+              />
             </v-list>
           </v-card-text>
           <v-card-actions class="pa-6">
@@ -63,57 +53,145 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+import type { Profile } from '@/types'
+import { computed, ref } from 'vue'
 
-  const search = ref('')
-  const page = ref(1)
-  const itemsPerPage = 10
+const search = ref('')
+const page = ref(1)
+const itemsPerPage = 10
 
-  const profiles = ref([
-    { id: 1, name: 'John Doe', email: 'john.doe@example.com', avatar: 'https://i.pravatar.cc/150?img=1', status: 'online', lastSeen: '' },
-    { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', avatar: 'https://i.pravatar.cc/150?img=2', status: 'offline', lastSeen: '2 hours ago' },
-    { id: 3, name: 'Peter Jones', email: 'peter.jones@example.com', avatar: 'https://i.pravatar.cc/150?img=3', status: 'online', lastSeen: '', aboutMe: 'I am a software developer from New York.' },
-    { id: 4, name: 'Mary Williams', email: 'mary.williams@example.com', avatar: 'https://i.pravatar.cc/150?img=4', status: 'offline', lastSeen: 'yesterday', aboutMe: 'I am a data scientist from Berlin.' },
-    { id: 5, name: 'David Brown', email: 'david.brown@example.com', avatar: 'https://i.pravatar.cc/150?img=5', status: 'online', lastSeen: '', aboutMe: 'I am a full-stack developer from Tokyo.' },
-    { id: 6, name: 'Susan Davis', email: 'susan.davis@example.com', avatar: 'https://i.pravatar.cc/150?img=6', status: 'offline', lastSeen: '30 minutes ago', aboutMe: 'I am a project manager from Sydney.' },
-    { id: 7, name: 'Michael Miller', email: 'michael.miller@example.com', avatar: 'https://i.pravatar.cc/150?img=7', status: 'online', lastSeen: '', aboutMe: 'I am a QA engineer from Toronto.' },
-    { id: 8, name: 'Linda Wilson', email: 'linda.wilson@example.com', avatar: 'https://i.pravatar.cc/150?img=8', status: 'offline', lastSeen: '1 hour ago', aboutMe: 'I am a business analyst from Singapore.' },
-    { id: 9, name: 'Robert Moore', email: 'robert.moore@example.com', avatar: 'https://i.pravatar.cc/150?img=9', status: 'online', lastSeen: '', aboutMe: 'I am a DevOps engineer from Mumbai.' },
-    { id: 10, name: 'Patricia Taylor', email: 'patricia.taylor@example.com', avatar: 'https://i.pravatar.cc/150?img=10', status: 'offline', lastSeen: 'today', aboutMe: 'I am a technical writer from Dublin.' },
-    { id: 11, name: 'James Anderson', email: 'james.anderson@example.com', avatar: 'https://i.pravatar.cc/150?img=11', status: 'online', lastSeen: '', aboutMe: 'I am a mobile developer from Seoul.' },
-    { id: 12, name: 'Barbara Thomas', email: 'barbara.thomas@example.com', avatar: 'https://i.pravatar.cc/150?img=12', status: 'offline', lastSeen: '5 hours ago', aboutMe: 'I am a database administrator from Moscow.' },
-    { id: 13, name: 'William Jackson', email: 'william.jackson@example.com', avatar: 'https://i.pravatar.cc/150?img=13', status: 'online', lastSeen: '', aboutMe: 'I am a network engineer from Beijing.' },
-    { id: 14, name: 'Elizabeth White', email: 'elizabeth.white@example.com', avatar: 'https://i.pravatar.cc/150?img=14', status: 'offline', lastSeen: '2 days ago', aboutMe: 'I am a security analyst from Cairo.' },
-    { id: 15, name: 'Richard Harris', email: 'richard.harris@example.com', avatar: 'https://i.pravatar.cc/150?img=15', status: 'online', lastSeen: '', aboutMe: 'I am a cloud architect from Rio de Janeiro.' },
-  ])
+const profiles = ref<Profile[]>([
+  {
+    id: '1',
+    userId: '1',
+    username: 'john.doe',
+    avatarUrl: 'https://i.pravatar.cc/150?img=1',
+    bio: 'I am a software developer from New York.',
+  },
+  {
+    id: '2',
+    userId: '2',
+    username: 'jane.smith',
+    avatarUrl: 'https://i.pravatar.cc/150?img=2',
+    bio: 'I am a data scientist from Berlin.',
+  },
+  {
+    id: '3',
+    userId: '3',
+    username: 'peter.jones',
+    avatarUrl: 'https://i.pravatar.cc/150?img=3',
+    bio: 'I am a software developer from New York.',
+  },
+  {
+    id: '4',
+    userId: '4',
+    username: 'mary.williams',
+    avatarUrl: 'https://i.pravatar.cc/150?img=4',
+    bio: 'I am a data scientist from Berlin.',
+  },
+  {
+    id: '5',
+    userId: '5',
+    username: 'david.brown',
+    avatarUrl: 'https://i.pravatar.cc/150?img=5',
+    bio: 'I am a full-stack developer from Tokyo.',
+  },
+  {
+    id: '6',
+    userId: '6',
+    username: 'susan.davis',
+    avatarUrl: 'https://i.pravatar.cc/150?img=6',
+    bio: 'I am a project manager from Sydney.',
+  },
+  {
+    id: '7',
+    userId: '7',
+    username: 'michael.miller',
+    avatarUrl: 'https://i.pravatar.cc/150?img=7',
+    bio: 'I am a QA engineer from Toronto.',
+  },
+  {
+    id: '8',
+    userId: '8',
+    username: 'linda.wilson',
+    avatarUrl: 'https://i.pravatar.cc/150?img=8',
+    bio: 'I am a business analyst from Singapore.',
+  },
+  {
+    id: '9',
+    userId: '9',
+    username: 'robert.moore',
+    avatarUrl: 'https://i.pravatar.cc/150?img=9',
+    bio: 'I am a DevOps engineer from Mumbai.',
+  },
+  {
+    id: '10',
+    userId: '10',
+    username: 'patricia.taylor',
+    avatarUrl: 'https://i.pravatar.cc/150?img=10',
+    bio: 'I am a technical writer from Dublin.',
+  },
+  {
+    id: '11',
+    userId: '11',
+    username: 'james.anderson',
+    avatarUrl: 'https://i.pravatar.cc/150?img=11',
+    bio: 'I am a mobile developer from Seoul.',
+  },
+  {
+    id: '12',
+    userId: '12',
+    username: 'barbara.thomas',
+    avatarUrl: 'https://i.pravatar.cc/150?img=12',
+    bio: 'I am a database administrator from Moscow.',
+  },
+  {
+    id: '13',
+    userId: '13',
+    username: 'william.jackson',
+    avatarUrl: 'https://i.pravatar.cc/150?img=13',
+    bio: 'I am a network engineer from Beijing.',
+  },
+  {
+    id: '14',
+    userId: '14',
+    username: 'elizabeth.white',
+    avatarUrl: 'https://i.pravatar.cc/150?img=14',
+    bio: 'I am a security analyst from Cairo.',
+  },
+  {
+    id: '15',
+    userId: '15',
+    username: 'richard.harris',
+    avatarUrl: 'https://i.pravatar.cc/150?img=15',
+    bio: 'I am a cloud architect from Rio de Janeiro.',
+  },
+])
 
-  const filteredProfiles = computed(() => {
-    if (!search.value) {
-      return profiles.value
-    }
-    return profiles.value.filter(profile =>
-      profile.name.toLowerCase().includes(search.value.toLowerCase())
-      || profile.email.toLowerCase().includes(search.value.toLowerCase()),
-    )
-  })
+const filteredProfiles = computed(() => {
+  if (!search.value) {
+    return profiles.value
+  }
+  return profiles.value.filter((profile) =>
+    profile.username.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
 
-  const totalPages = computed(() => {
-    return Math.ceil(filteredProfiles.value.length / itemsPerPage)
-  })
+const totalPages = computed(() => {
+  return Math.ceil(filteredProfiles.value.length / itemsPerPage)
+})
 
-  const paginatedProfiles = computed(() => {
-    const start = (page.value - 1) * itemsPerPage
-    const end = start + itemsPerPage
-    return filteredProfiles.value.slice(start, end)
-  })
+const paginatedProfiles = computed(() => {
+  const start = (page.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredProfiles.value.slice(start, end)
+})
 
-  const paginationInfo = computed(() => {
-    const start = (page.value - 1) * itemsPerPage + 1
-    const end = Math.min(page.value * itemsPerPage, filteredProfiles.value.length)
-    return `Showing ${start}-${end} of ${filteredProfiles.value.length}`
-  })
+const paginationInfo = computed(() => {
+  const start = (page.value - 1) * itemsPerPage + 1
+  const end = Math.min(page.value * itemsPerPage, filteredProfiles.value.length)
+  return `Showing ${start}-${end} of ${filteredProfiles.value.length}`
+})
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

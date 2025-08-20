@@ -11,7 +11,8 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
-    "format": "eslint . --fix",
+    "format:prettier": "prettier --write .",
+    "format": "npm run format:prettier && npm run lint",
     "build:ci": "npm run lint:check && npm run build"
   },
   "dependencies": {
@@ -27,8 +28,11 @@
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
     "eslint": "^9.30.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-config-vuetify": "^4.0.0",
+    "eslint-plugin-prettier": "^5.5.4",
     "npm-run-all2": "^7.0.2",
+    "prettier": "^3.6.2",
     "sass-embedded": "^1.89.2",
     "typescript": "~5.8.3",
     "unplugin-auto-import": "^19.3.0",

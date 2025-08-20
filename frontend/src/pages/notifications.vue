@@ -22,13 +22,12 @@
 </template>
 
 <script setup lang="ts">
-  import { storeToRefs } from 'pinia'
-  import { useNotificationsStore } from '@/stores/notifications'
+import { storeToRefs } from 'pinia'
+import { useNotificationsStore } from '@/stores/notifications'
 
-  const notificationsStore = useNotificationsStore()
-  const { items } = storeToRefs(notificationsStore)
-  const { handleNotificationClick } = notificationsStore
-
+const notificationsStore = useNotificationsStore()
+const { items } = storeToRefs(notificationsStore)
+const { handleNotificationClick } = notificationsStore
 </script>
 
 <style scoped>
@@ -40,7 +39,7 @@
 /* Dark theme support */
 @media (prefers-color-scheme: dark) {
   .notification-read {
-    background-color: #2E2E2E; /* A dark grey for read notifications */
+    background-color: #2e2e2e; /* A dark grey for read notifications */
   }
 }
 </style>

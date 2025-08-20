@@ -24,15 +24,8 @@
       />
       <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
 
-      <div class="d-flex align-center" style="cursor: pointer;" @click="goToHome">
-        <v-img
-          alt="Logo"
-          class="ms-2"
-          contain
-          height="40"
-          src="@/assets/logo.svg"
-          width="40"
-        />
+      <div class="d-flex align-center" style="cursor: pointer" @click="goToHome">
+        <v-img alt="Logo" class="ms-2" contain height="40" src="@/assets/logo.svg" width="40" />
       </div>
 
       <v-breadcrumbs class="ms-2" :items="breadcrumbItems" />
@@ -40,30 +33,27 @@
       <v-spacer />
 
       <template #append>
-        <v-btn
-          class="app-bar-icon-btn text-none me-2"
-          height="48"
-          icon
-          slim
-          @click="toggleTheme"
-        >
+        <v-btn class="app-bar-icon-btn text-none me-2" height="48" icon slim @click="toggleTheme">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
 
-        <v-btn
-          class="app-bar-icon-btn text-none me-2"
-          height="48"
-          icon
-          slim
-          to="/notifications"
-        >
-          <v-badge color="error" :content="unreadCount" :model-value="unreadCount > 0" rounded="pill">
+        <v-btn class="app-bar-icon-btn text-none me-2" height="48" icon slim to="/notifications">
+          <v-badge
+            color="error"
+            :content="unreadCount"
+            :model-value="unreadCount > 0"
+            rounded="pill"
+          >
             <v-icon>mdi-bell-outline</v-icon>
           </v-badge>
         </v-btn>
 
         <v-btn class="app-bar-icon-btn text-none me-2" height="48" icon slim>
-          <v-avatar color="surface-light" image="https://cdn.vuetifyjs.com/images/john.png" size="32" />
+          <v-avatar
+            color="surface-light"
+            image="https://cdn.vuetifyjs.com/images/john.png"
+            size="32"
+          />
 
           <v-menu activator="parent">
             <v-list nav>
@@ -89,135 +79,140 @@
 </template>
 
 <script setup>
-  import { storeToRefs } from 'pinia'
-  import { computed, ref } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import { useTheme } from 'vuetify'
-  import { useNotificationsStore } from '@/stores/notifications'
+import { storeToRefs } from 'pinia'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useTheme } from 'vuetify'
+import { useNotificationsStore } from '@/stores/notifications'
 
-  const drawer = ref(true)
-  const theme = useTheme()
-  const loading = ref(false)
-  const route = useRoute()
-  const router = useRouter()
+const drawer = ref(true)
+const theme = useTheme()
+const loading = ref(false)
+const route = useRoute()
+const router = useRouter()
 
-  const breadcrumbItems = computed(() => {
-    const crumbs = []
-    if (route.path === '/') {
-      return crumbs
-    }
-
-    crumbs.push({
-      title: 'Home',
-      disabled: false,
-      to: '/',
-    })
-
-    const pathParts = route.path.split('/').filter(Boolean)
-    let currentPath = ''
-    for (const [index, part] of pathParts.entries()) {
-      currentPath += `/${part}`
-      const crumb = {
-        title: part.charAt(0).toUpperCase() + part.slice(1),
-        disabled: index === pathParts.length - 1,
-        to: currentPath,
-      }
-      crumbs.push(crumb)
-    }
+const breadcrumbItems = computed(() => {
+  const crumbs = []
+  if (route.path === '/') {
     return crumbs
-  })
-
-  function goToHome () {
-    router.push('/')
   }
 
-  router.beforeEach(() => {
-    loading.value = true
+  crumbs.push({
+    title: 'Home',
+    disabled: false,
+    to: '/',
   })
 
-  router.afterEach(() => {
-    loading.value = false
-  })
-
-  const notificationsStore = useNotificationsStore()
-  const { unreadCount } = storeToRefs(notificationsStore)
-
-  function toggleTheme () {
-    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  const pathParts = route.path.split('/').filter(Boolean)
+  let currentPath = ''
+  for (const [index, part] of pathParts.entries()) {
+    currentPath += `/${part}`
+    const crumb = {
+      title: part.charAt(0).toUpperCase() + part.slice(1),
+      disabled: index === pathParts.length - 1,
+      to: currentPath,
+    }
+    crumbs.push(crumb)
   }
+  return crumbs
+})
 
-  const items = ref([
-    {
-      title: 'Home',
-      prependIcon: 'mdi-home',
-      to: '/',
-    },
-    {
-      title: 'Login',
-      prependIcon: 'mdi-login',
-      to: '/login',
-    },
-    {
-      title: 'Register',
-      prependIcon: 'mdi-account-plus',
-      to: '/register',
-    },
-    {
-      title: 'Profile',
-      prependIcon: 'mdi-account',
-      to: '/profile',
-    },
-    {
-      title: 'Settings',
-      prependIcon: 'mdi-cog-outline',
-      to: '/settings',
-    },
-    {
-      title: 'About',
-      prependIcon: 'mdi-information-outline',
-      to: '/about',
-    },
-    {
-      title: 'Messages',
-      prependIcon: 'mdi-message-text-outline',
-      to: '/messages',
-    },
-    {
-      title: 'Gallery',
-      prependIcon: 'mdi-image-multiple',
-      to: '/gallery',
-    },
-    {
-      title: 'Blogs',
-      prependIcon: 'mdi-post-outline',
-      to: '/blogs',
-    },
-    {
-      title: 'Profiles',
-      prependIcon: 'mdi-account-group-outline',
-      to: '/profiles',
-    },
-    {
-      title: 'Notifications',
-      prependIcon: 'mdi-bell-outline',
-      to: '/notifications',
-    },
-    {
-      title: 'Error 401',
-      prependIcon: 'mdi-alert-circle-outline',
-      to: '/error/401',
-    },
-    {
-      title: 'Error 403',
-      prependIcon: 'mdi-alert-octagon-outline',
-      to: '/error/403',
-    },
-    {
-      title: 'Error 404',
-      prependIcon: 'mdi-alert-box-outline',
-      to: '/error/404',
-    },
-  ])
+function goToHome() {
+  router.push('/')
+}
+
+router.beforeEach(() => {
+  loading.value = true
+})
+
+router.afterEach(() => {
+  loading.value = false
+})
+
+const notificationsStore = useNotificationsStore()
+const { unreadCount } = storeToRefs(notificationsStore)
+
+function toggleTheme() {
+  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+}
+
+const items = ref([
+  {
+    title: 'Home',
+    prependIcon: 'mdi-home',
+    to: '/',
+  },
+  {
+    title: 'Store',
+    prependIcon: 'mdi-store',
+    to: '/store',
+  },
+  {
+    title: 'Login',
+    prependIcon: 'mdi-login',
+    to: '/login',
+  },
+  {
+    title: 'Register',
+    prependIcon: 'mdi-account-plus',
+    to: '/register',
+  },
+  {
+    title: 'Profile',
+    prependIcon: 'mdi-account',
+    to: '/profile',
+  },
+  {
+    title: 'Settings',
+    prependIcon: 'mdi-cog-outline',
+    to: '/settings',
+  },
+  {
+    title: 'About',
+    prependIcon: 'mdi-information-outline',
+    to: '/about',
+  },
+  {
+    title: 'Messages',
+    prependIcon: 'mdi-message-text-outline',
+    to: '/messages',
+  },
+  {
+    title: 'Gallery',
+    prependIcon: 'mdi-image-multiple',
+    to: '/gallery',
+  },
+  {
+    title: 'Blogs',
+    prependIcon: 'mdi-post-outline',
+    to: '/blogs',
+  },
+  {
+    title: 'Profiles',
+    prependIcon: 'mdi-account-group-outline',
+    to: '/profiles',
+  },
+  {
+    title: 'Notifications',
+    prependIcon: 'mdi-bell-outline',
+    to: '/notifications',
+  },
+  {
+    title: 'Error 401',
+    prependIcon: 'mdi-alert-circle-outline',
+    to: '/error/401',
+  },
+  {
+    title: 'Error 403',
+    prependIcon: 'mdi-alert-octagon-outline',
+    to: '/error/403',
+  },
+  {
+    title: 'Error 404',
+    prependIcon: 'mdi-alert-box-outline',
+    to: '/error/404',
+  },
+])
 </script>
 
 <style>
@@ -226,8 +221,8 @@
 }
 
 .v-navigation-drawer__content {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .app-bar-icon-btn.v-btn--icon:hover > .v-btn__overlay {

@@ -3,7 +3,9 @@
     <v-row align="center" justify="center">
       <v-col cols="12" lg="4" md="6" sm="8">
         <v-card class="pa-6" flat rounded="xl">
-          <v-card-title class="text-h4 font-weight-bold text-center mb-4">Create Account</v-card-title>
+          <v-card-title class="text-h4 font-weight-bold text-center mb-4"
+            >Create Account</v-card-title
+          >
           <v-card-subtitle class="text-center mb-6">Join us today!</v-card-subtitle>
 
           <v-form @submit.prevent="register">
@@ -53,14 +55,7 @@
               variant="outlined"
             />
 
-            <v-btn
-              block
-              class="mb-4"
-              color="primary"
-              rounded="pill"
-              size="large"
-              type="submit"
-            >
+            <v-btn block class="mb-4" color="primary" rounded="pill" size="large" type="submit">
               Register
             </v-btn>
           </v-form>
@@ -68,22 +63,10 @@
           <v-divider class="my-4" />
 
           <div class="text-center mb-4">
-            <v-btn
-              class="mx-2"
-              color="red"
-              icon
-              rounded="pill"
-              size="large"
-            >
+            <v-btn class="mx-2" color="red" icon rounded="pill" size="large">
               <v-icon>mdi-google</v-icon>
             </v-btn>
-            <v-btn
-              class="mx-2"
-              color="blue-darken-2"
-              icon
-              rounded="pill"
-              size="large"
-            >
+            <v-btn class="mx-2" color="blue-darken-2" icon rounded="pill" size="large">
               <v-icon>mdi-facebook</v-icon>
             </v-btn>
           </div>
@@ -99,15 +82,21 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+import { ref } from 'vue'
 
-  const name = ref('')
-  const email = ref('')
-  const password = ref('')
-  const confirmPassword = ref('')
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
 
-  function register () {
-    // Handle registration logic here
-    console.log('Registration attempt:', name.value, email.value, password.value, confirmPassword.value)
-  }
+function register() {
+  // Handle registration logic here
+  console.log(
+    'Registration attempt:',
+    name.value,
+    email.value,
+    password.value,
+    confirmPassword.value
+  )
+}
 </script>

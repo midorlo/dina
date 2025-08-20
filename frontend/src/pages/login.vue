@@ -3,10 +3,20 @@
     <v-row align="center" justify="center">
       <v-col cols="12" lg="4" md="6" sm="8">
         <v-card class="pa-6" flat rounded="xl">
-          <v-card-title class="text-h4 font-weight-bold text-center mb-4">Welcome Back</v-card-title>
+          <v-card-title class="text-h4 font-weight-bold text-center mb-4"
+            >Welcome Back</v-card-title
+          >
           <v-card-subtitle class="text-center mb-6">Sign in to continue</v-card-subtitle>
 
           <v-form @submit.prevent="login">
+            <v-alert
+              v-if="loginError"
+              class="mb-4"
+              color="error"
+              icon="mdi-alert-circle-outline"
+              text="{{ loginError }}"
+              variant="tonal"
+            />
             <v-text-field
               v-model="email"
               class="mb-4"
@@ -40,18 +50,13 @@
                 />
               </v-col>
               <v-col cols="auto">
-                <router-link class="text-decoration-none text-primary" to="/forgot-password">Forgot password?</router-link>
+                <router-link class="text-decoration-none text-primary" to="/forgot-password"
+                  >Forgot password?</router-link
+                >
               </v-col>
             </v-row>
 
-            <v-btn
-              block
-              class="mb-4"
-              color="primary"
-              rounded="pill"
-              size="large"
-              type="submit"
-            >
+            <v-btn block class="mb-4" color="primary" rounded="pill" size="large" type="submit">
               Login
             </v-btn>
           </v-form>
@@ -59,29 +64,19 @@
           <v-divider class="my-4" />
 
           <div class="text-center mb-4">
-            <v-btn
-              class="mx-2"
-              color="red"
-              icon
-              rounded="pill"
-              size="large"
-            >
+            <v-btn class="mx-2" color="red" icon rounded="pill" size="large">
               <v-icon>mdi-google</v-icon>
             </v-btn>
-            <v-btn
-              class="mx-2"
-              color="blue-darken-2"
-              icon
-              rounded="pill"
-              size="large"
-            >
+            <v-btn class="mx-2" color="blue-darken-2" icon rounded="pill" size="large">
               <v-icon>mdi-facebook</v-icon>
             </v-btn>
           </div>
 
           <div class="text-center">
             <span class="text-body-2">Don't have an account? </span>
-            <router-link class="text-decoration-none text-primary" to="/register">Register</router-link>
+            <router-link class="text-decoration-none text-primary" to="/register"
+              >Register</router-link
+            >
           </div>
         </v-card>
       </v-col>
@@ -90,14 +85,31 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+import { apiService } from '@/services/api'
+import { useAppStore } from '@/stores/app'
 
-  const email = ref('')
-  const password = ref('')
-  const rememberMe = ref(false)
+const email = ref('')
+const password = ref('')
+const rememberMe = ref(false)
+const loginError = ref('')
 
-  function login () {
-    // Handle login logic here
-    console.log('Login attempt:', email.value, password.value, rememberMe.value)
+const appStore = useAppStore()
+
+async function login() {
+  loginError.value = '' // Clear previous errors
+  try {
+    const user = await apiService.login(email.value, password.value)
+    if (user.id) {
+      appStore.currentUser = user
+      // Redirect to profile or dashboard
+      console.log('Login successful!', user)
+    } else {
+      // This case should ideally not be reached if apiService.login rejects on failure
+      loginError.value = 'An unexpected login error occurred.'
+    }
+  } catch (error: any) {
+    console.error('Login error:', error)
+    loginError.value = error.message || 'Login failed. Please check your credentials.'
   }
+}
 </script>

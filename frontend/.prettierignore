@@ -1,0 +1,10 @@
+/node_modules
+/dist
+/build
+/.vite
+*.log
+*.bak
+.browserslistrc
+.editorconfig
+.eslintrc-auto-import.json
+.prettierignore

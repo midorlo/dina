@@ -9,7 +9,12 @@
           <v-sheet class="pa-4 mb-6" rounded="lg">
             <v-card-title class="text-h6 font-weight-bold mb-4">Our Mission</v-card-title>
             <v-card-text class="text-body-1">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+              dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+              mollit anim id est laborum.
             </v-card-text>
           </v-sheet>
 
@@ -17,7 +22,10 @@
             <v-card-title class="text-h6 font-weight-bold mb-4">Contact Information</v-card-title>
             <v-card-text>
               <v-list density="compact">
-                <v-list-item prepend-icon="mdi-map-marker-outline" title="Address: 123 Main Street, Anytown, USA" />
+                <v-list-item
+                  prepend-icon="mdi-map-marker-outline"
+                  title="Address: 123 Main Street, Anytown, USA"
+                />
                 <v-list-item prepend-icon="mdi-phone-outline" title="Phone: +1 (123) 456-7890" />
                 <v-list-item prepend-icon="mdi-email-outline" title="Email: info@example.com" />
               </v-list>
@@ -54,7 +62,9 @@
           </v-sheet>
 
           <v-sheet class="pa-4 mb-6" rounded="lg">
-            <v-card-title class="text-h6 font-weight-bold mb-4">Impressum / Legal Notice</v-card-title>
+            <v-card-title class="text-h6 font-weight-bold mb-4"
+              >Impressum / Legal Notice</v-card-title
+            >
             <v-card-text class="text-body-1">
               <p><strong>Company Name:</strong> Example Corp.</p>
               <p><strong>Represented by:</strong> John Doe</p>
@@ -62,7 +72,10 @@
               <p><strong>Register Number:</strong> HRB 12345</p>
               <p><strong>VAT ID:</strong> DE123456789</p>
               <p class="mt-4">
-                Disclaimer: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Disclaimer: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.
+                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat.
               </p>
             </v-card-text>
           </v-sheet>
@@ -73,5 +86,5 @@
 </template>
 
 <script setup lang="ts">
-  // No specific script logic needed for this static page
+// No specific script logic needed for this static page
 </script>
