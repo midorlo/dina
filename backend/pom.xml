@@ -6,8 +6,9 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
+
     <groupId>com.midorlo</groupId>
     <artifactId>dina</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -26,12 +27,17 @@
         <tag/>
         <url/>
     </scm>
+
     <properties>
         <java.version>21</java.version>
         <jjwt.version>0.11.5</jjwt.version>
 
         <!-- Temporary fix for CVE-2025-41242 -->
         <spring-framework.version>6.2.10</spring-framework.version>
+
+        <!-- Spotless / Formatter -->
+        <spotless.version>2.43.0</spotless.version>
+        <googleJavaFormat.version>1.17.0</googleJavaFormat.version>
     </properties>
 
     <dependencies>
@@ -60,8 +66,7 @@
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
-
-        <!-- JJWT: own token generation/validation (no OAuth2 client/server) -->
+        <!-- JJWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -117,8 +122,6 @@
             <scope>test</scope>
         </dependency>
 
-
-
     </dependencies>
 
     <build>
@@ -139,10 +142,14 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
+            <!-- Software Bill of Materials -->
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -155,6 +162,50 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <!-- Spotless: Formatting + POM sorting -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.version}</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <version>${googleJavaFormat.version}</version>
+                            <!-- style: GOOGLE (default) | AOSP -->
+                            <style>GOOGLE</style>
+                        </googleJavaFormat>
+                        <!-- format sources & tests -->
+                        <target>
+                            ${project.basedir}/src/main/java/**/*.java,
+                            ${project.basedir}/src/test/java/**/*.java
+                        </target>
+                        <removeUnusedImports/>
+                        <formatAnnotations/>
+                    </java>
+                    <pom>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                        <sortPom/>
+                        <indent>space</indent>
+                        <indentSize>2</indentSize>
+                    </pom>
+                    <!-- Optional: Nur neue/änderte Files vs. Hauptbranch prüfen -->
+                    <!-- <ratchetFrom>origin/main</ratchetFrom> -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>spotless-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                    <!-- Lokales Auto-Fix: mvn spotless:apply -->
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

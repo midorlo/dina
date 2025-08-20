@@ -8,7 +8,10 @@
           >
           <v-card-subtitle class="text-center mb-6">Manage your account settings</v-card-subtitle>
 
-          <template v-if="user">
+          <template v-if="loading">
+            <v-skeleton-loader type="avatar, article, actions" />
+          </template>
+          <template v-else-if="user">
             <v-sheet class="pa-4 mb-6 text-center" rounded="lg">
               <v-avatar class="mb-4" color="grey-lighten-2" size="120">
                 <v-img :src="user.avatarUrl" />
@@ -89,7 +92,7 @@
             </v-form>
           </template>
           <template v-else>
-            <v-alert type="info">Loading profile...</v-alert>
+            <v-alert type="error">Error loading profile. Please try again.</v-alert>
           </template>
         </v-card>
       </v-col>
@@ -110,16 +113,23 @@ const password = reactive({
   confirm: '',
 })
 
+const loading = ref(true)
 const user = computed(() => appStore.userProfile)
 
 onMounted(async () => {
-  if (appStore.currentUser && !appStore.userProfile) {
+  loading.value = true
+  if (appStore.currentUser) {
     try {
       const profile = await apiService.fetchProfile(appStore.currentUser.id)
       appStore.userProfile = profile
     } catch (error) {
       console.error('Error fetching profile:', error)
+    } finally {
+      loading.value = false
     }
+  } else {
+    console.warn('No current user found. Cannot fetch profile.')
+    loading.value = false
   }
 })
 

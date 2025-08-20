@@ -38,12 +38,18 @@ export const apiService = {
     // Simulate API call
     return new Promise((resolve) => {
       setTimeout(() => {
+        // Return a consistent mock profile for demonstration
         resolve({
-          id: 'profile-456',
+          id: `profile-${userId}`,
           userId,
-          username: 'testuser',
-          avatarUrl: 'https://i.pravatar.cc/150?img=68',
-          bio: 'This is a mock bio for the test user.',
+          username: `user-${userId}`,
+          avatarUrl: `https://i.pravatar.cc/150?img=${Number.parseInt(userId) + 10}`,
+          bio: `This is a mock bio for user ${userId}.`,
+          status: Number.parseInt(userId) % 2 === 0 ? 'online' : 'offline',
+          lastSeen:
+            Number.parseInt(userId) % 2 === 0
+              ? ''
+              : `${(Number.parseInt(userId) % 5) + 1} hours ago`,
         })
       }, 1000)
     })
