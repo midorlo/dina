@@ -1,7 +1,17 @@
 import type { AuthTokens, LoginResponse, Profile, User } from '@/types'
-import { Role } from '@/types'
+import { Role } from ' @/types'
+import { apiFetch } from ' @/services/api'
+import { useMocks } from ' @/services/mock'
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
+  if (!useMocks) {
+    const res = await apiFetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+    return res.json()
+  }
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const users: User[] = [

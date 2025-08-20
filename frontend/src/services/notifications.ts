@@ -1,4 +1,6 @@
-import type { NotificationItem } from '@/types'
+import type { NotificationItem } from ' @/types'
+import { apiFetch } from ' @/services/api'
+import { delay, useMocks } from ' @/services/mock'
 
 const mockNotifications: NotificationItem[] = [
   {
@@ -40,7 +42,9 @@ const mockNotifications: NotificationItem[] = [
 ]
 
 export async function fetchNotifications(): Promise<NotificationItem[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(mockNotifications), 300)
-  })
+  if (!useMocks) {
+    const res = await apiFetch('/api/notifications')
+    return res.json()
+  }
+  return delay(mockNotifications, 300)
 }

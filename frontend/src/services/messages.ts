@@ -1,4 +1,6 @@
-import type { Conversation, ConversationId, Message, MessageId } from '@/types'
+import type { Conversation } from ' @/types'
+import { apiFetch } from ' @/services/api'
+import { delay, useMocks } from ' @/services/mock'
 
 const conversations: Conversation[] = [
   {
@@ -123,23 +125,26 @@ const conversations: Conversation[] = [
 ]
 
 export async function fetchConversations(): Promise<Conversation[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(conversations), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch('/api/conversations')
+    return res.json()
+  }
+  return delay(conversations, 500)
 }
 
-export async function fetchConversation(id: ConversationId): Promise<Conversation | undefined> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(conversations.find((c) => c.id === Number(id))), 500)
-  })
+export async function fetchConversation(id: string | number): Promise<Conversation | undefined> {
+  if (!useMocks) {
+    const res = await apiFetch(`/api/conversations/${id}`)
+    return res.json()
+  }
+  return delay(conversations.find((c) => c.id === Number(id)), 500)
 }
 
-export async function fetchMessage(
-  conversationId: ConversationId,
-  messageId: MessageId
-): Promise<Message | undefined> {
-  return new Promise((resolve) => {
-    const conv = conversations.find((c) => c.id === Number(conversationId))
-    setTimeout(() => resolve(conv?.messages.find((m) => m.id === Number(messageId))), 500)
-  })
+export async function fetchMessage(conversationId: string | number, messageId: string | number) {
+  if (!useMocks) {
+    const res = await apiFetch(`/api/conversations/${conversationId}/messages/${messageId}`)
+    return res.json()
+  }
+  const conv = conversations.find((c) => c.id === Number(conversationId))
+  return delay(conv?.messages.find((m) => m.id === Number(messageId)), 500)
 }

@@ -1,4 +1,6 @@
-import type { Blog, Post, PostItem } from '@/types'
+import type { Blog, Post, PostItem } from ' @/types'
+import { apiFetch } from ' @/services/api'
+import { delay, useMocks } from ' @/services/mock'
 
 const blogs: Blog[] = [
   {
@@ -129,25 +131,33 @@ const postDetails: Record<string, Post> = {
 }
 
 export async function fetchBlogs(): Promise<Blog[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(blogs), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch('/api/blogs')
+    return res.json()
+  }
+  return delay(blogs, 500)
 }
 
 export async function fetchBlog(id: string): Promise<Blog | undefined> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(blogs.find((b) => b.id === id)), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch(`/api/blogs/${id}`)
+    return res.json()
+  }
+  return delay(blogs.find((b) => b.id === id), 500)
 }
 
 export async function fetchBlogPosts(blogId: string): Promise<PostItem[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(posts[blogId] || []), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch(`/api/blogs/${blogId}/posts`)
+    return res.json()
+  }
+  return delay(posts[blogId] || [], 500)
 }
 
 export async function fetchBlogPost(blogId: string, postId: string): Promise<Post | undefined> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(postDetails[`${blogId}:${postId}`]), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch(`/api/blogs/${blogId}/posts/${postId}`)
+    return res.json()
+  }
+  return delay(postDetails[`${blogId}:${postId}`], 500)
 }

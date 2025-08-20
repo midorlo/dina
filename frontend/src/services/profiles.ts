@@ -1,4 +1,6 @@
-import type { Profile } from '@/types'
+import type { Profile } from ' @/types'
+import { apiFetch } from ' @/services/api'
+import { delay, useMocks } from ' @/services/mock'
 
 const profiles: Profile[] = [
   {
@@ -139,13 +141,17 @@ const profiles: Profile[] = [
 ]
 
 export async function fetchProfiles(): Promise<Profile[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(profiles), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch('/api/profiles')
+    return res.json()
+  }
+  return delay(profiles, 500)
 }
 
 export async function fetchProfile(id: string): Promise<Profile | undefined> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(profiles.find((p) => p.id === id)), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch(`/api/profiles/${id}`)
+    return res.json()
+  }
+  return delay(profiles.find((p) => p.id === id), 500)
 }

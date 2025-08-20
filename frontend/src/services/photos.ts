@@ -1,4 +1,6 @@
-import type { GalleryItem } from '@/types'
+import type { GalleryItem } from ' @/types'
+import { apiFetch } from ' @/services/api'
+import { delay, useMocks } from ' @/services/mock'
 
 const items: GalleryItem[] = [
   {
@@ -76,13 +78,17 @@ const items: GalleryItem[] = [
 ]
 
 export async function fetchPhotos(): Promise<GalleryItem[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(items), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch('/api/photos')
+    return res.json()
+  }
+  return delay(items, 500)
 }
 
 export async function fetchPhoto(id: number): Promise<GalleryItem | undefined> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(items.find((i) => i.id === id)), 500)
-  })
+  if (!useMocks) {
+    const res = await apiFetch(`/api/photos/${id}`)
+    return res.json()
+  }
+  return delay(items.find((i) => i.id === id), 500)
 }
