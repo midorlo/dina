@@ -11,7 +11,10 @@
       width="256"
     >
       <v-list nav>
-        <v-list-item v-for="item in filteredItems" :key="item.title" v-bind="item" />
+        <template v-for="(item, index) in filteredItems" :key="index">
+          <v-divider v-if="item.type === 'divider'" />
+          <v-list-item v-else v-bind="item" />
+        </template>
       </v-list>
 
       <template #append />
@@ -25,7 +28,7 @@
         color="primary"
         :indeterminate="loading"
       />
-      <v-app-bar-nav-icon v-if="!$vuetify.display.mdAndUp" @click="drawer = !drawer" />
+      <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
 
       <v-breadcrumbs class="ms-2" :items="breadcrumbItems" />
 
@@ -107,8 +110,7 @@
   </v-layout>
 </template>
 
-<script setup lang="ts">
-import type { RouteNamedMap } from 'vue-router/auto-routes'
+<script setup>
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -117,11 +119,11 @@ import { menu } from '@/config/menu'
 import { loading } from '@/router/loading'
 import { filterMenuByRole, useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
-import { useSnackbarStore } from '@/stores/snackbar'
+import { useSnackbarStore } from '@/stores/snackbar' // New import
 import { Role } from '@/types'
 
-const snackbarStore = useSnackbarStore()
-const { message, color, visible, timeout } = storeToRefs(snackbarStore)
+const snackbarStore = useSnackbarStore() // New
+const { message, color, visible, timeout } = storeToRefs(snackbarStore) // New
 
 const drawer = ref(true)
 const theme = useTheme()
@@ -135,17 +137,22 @@ const breadcrumbItems = computed(() => {
   const records = route.matched.slice(1)
 
   for (const [index, record] of records.entries()) {
-    const parts = record.path.split('/').filter(Boolean)
-    const segment = parts.at(-1) ?? ''
-    const title =
-      (record.meta?.breadcrumb as string | undefined) ??
-      segment
-        .replace(/[:()*]/g, '')
-        .replace(/-/g, ' ')
-        .replace(/^\w/, (c: string) => c.toUpperCase())
+    const segment = record.path.split('/').findLast(Boolean) ?? ''
 
-    const name = record.name as keyof RouteNamedMap | undefined
-    const to = name ? router.resolve({ name, params: route.params as any }).path : record.path
+    const paramMatches = [...segment.matchAll(/:([^/-]+)/g)].map((m) => m[1])
+    const slugParam = paramMatches.at(-1)
+    let title =
+      (record.meta?.breadcrumb as string | undefined) ||
+      (slugParam && typeof route.params[slugParam] === 'string'
+        ? (route.params[slugParam] as string)
+        : segment)
+
+    title = title
+      .replace(/[:()*]/g, '')
+      .replace(/-/g, ' ')
+      .replace(/^\w/, (c) => c.toUpperCase())
+
+    const to = router.resolve({ name: record.name!, params: route.params }).path
 
     items.push({
       title,
@@ -172,12 +179,19 @@ function logout() {
   router.push('/login')
 }
 
-const filteredItems = computed(() =>
-  filterMenuByRole(menu, currentUser.value?.role || Role.Guest).map((item) => ({
+const filteredItems = computed(() => {
+  const items = filterMenuByRole(menu, currentUser.value?.role || Role.Guest).map((item) => ({
     ...item,
     to: typeof item.to === 'function' ? item.to(currentUser.value?.id) : item.to,
   }))
-)
+
+  return items.filter((item, index, array) => {
+    if (item.type !== 'divider') return true
+    const prev = array[index - 1]
+    const next = array[index + 1]
+    return prev && prev.type !== 'divider' && next && next.type !== 'divider'
+  })
+})
 </script>
 
 <style>
