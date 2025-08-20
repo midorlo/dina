@@ -1,7 +1,7 @@
+import type { NotificationItem } from '@/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import type { NotificationItem } from '@/types'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const router = useRouter()

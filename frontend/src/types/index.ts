@@ -20,47 +20,49 @@ export interface Profile {
   username: string
   avatarUrl?: string
   bio?: string
+  status?: 'online' | 'offline'
+  lastSeen?: string
 }
 
 export interface Message {
-  id: number;
-  sender: string;
-  text: string;
-  time: string;
-  read?: boolean; // Optional, as it's only for 'You' messages
+  id: number
+  sender: string
+  text: string
+  time: string
+  read?: boolean // Optional, as it's only for 'You' messages
 }
 
 export interface Conversation {
-  id: number;
-  partner: string;
-  lastMessage: string;
-  time: string;
-  unreadCount: number;
-  messages: Message[];
+  id: number
+  partner: string
+  lastMessage: string
+  time: string
+  unreadCount: number
+  messages: Message[]
 }
 
 export interface NotificationItem {
-  id: number;
-  title: string;
-  subtitle: string;
-  avatar: string;
-  time: string;
-  link: string;
-  read: boolean;
+  id: number
+  title: string
+  subtitle: string
+  avatar: string
+  time: string
+  link: string
+  read: boolean
 }
 
 export interface Blog {
-  id: string;
-  name: string;
-  description: string;
-  authorAvatarUrl: string;
-  postCount: number;
-  createdAt: string;
+  id: string
+  name: string
+  description: string
+  authorAvatarUrl: string
+  postCount: number
+  createdAt: string
 }
 
 export interface PostItem {
-  id: number;
-  title: string;
-  createdAt: string;
-  excerpt: string;
+  id: number
+  title: string
+  createdAt: string
+  excerpt: string
 }

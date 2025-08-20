@@ -40,7 +40,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface ProfileRouteParams {
-  id: string;
+  id: string
 }
 
 const route = useRoute()

@@ -121,8 +121,8 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
 import type { Conversation, Message } from '@/types'
+import { nextTick, ref, watch } from 'vue'
 
 const conversations = ref<Conversation[]>([
   {
@@ -135,7 +135,13 @@ const conversations = ref<Conversation[]>([
       { id: 1, sender: 'Alice', text: 'Hi there!', time: '10:28 AM' },
       { id: 2, sender: 'You', text: 'Hey, how are you?', time: '10:30 AM', read: true },
       { id: 3, sender: 'Alice', text: "I'm doing great, thanks! How about you?", time: '10:32 AM' },
-      { id: 4, sender: 'You', text: 'All good here. Just busy with work.', time: '10:35 AM', read: true },
+      {
+        id: 4,
+        sender: 'You',
+        text: 'All good here. Just busy with work.',
+        time: '10:35 AM',
+        read: true,
+      },
       { id: 5, sender: 'Alice', text: 'Same here! We should catch up soon.', time: '10:40 AM' },
     ],
   },
@@ -152,9 +158,21 @@ const conversations = ref<Conversation[]>([
         text: 'Are you free tomorrow for the project meeting?',
         time: 'Yesterday 3:00 PM',
       },
-      { id: 7, sender: 'You', text: 'Yes, I am. What time?', time: 'Yesterday 3:05 PM', read: true },
+      {
+        id: 7,
+        sender: 'You',
+        text: 'Yes, I am. What time?',
+        time: 'Yesterday 3:05 PM',
+        read: true,
+      },
       { id: 8, sender: 'Bob', text: 'At 10 AM. See you then!', time: 'Yesterday 3:10 PM' },
-      { id: 9, sender: 'You', text: 'Got it. See you tomorrow!', time: 'Yesterday 3:15 PM', read: true },
+      {
+        id: 9,
+        sender: 'You',
+        text: 'Got it. See you tomorrow!',
+        time: 'Yesterday 3:15 PM',
+        read: true,
+      },
     ],
   },
   {
@@ -170,7 +188,13 @@ const conversations = ref<Conversation[]>([
         text: 'Hi, just a reminder about the report.',
         time: '2 days ago 9:00 AM',
       },
-      { id: 11, sender: 'You', text: 'Thanks for the reminder!', time: '2 days ago 9:05 AM', read: true },
+      {
+        id: 11,
+        sender: 'You',
+        text: 'Thanks for the reminder!',
+        time: '2 days ago 9:05 AM',
+        read: true,
+      },
       {
         id: 12,
         sender: 'Charlie',
@@ -186,7 +210,13 @@ const conversations = ref<Conversation[]>([
     time: 'Last week',
     unreadCount: 0,
     messages: [
-      { id: 13, sender: 'You', text: 'Can you send me the updated figures?', time: 'Last week', read: true },
+      {
+        id: 13,
+        sender: 'You',
+        text: 'Can you send me the updated figures?',
+        time: 'Last week',
+        read: true,
+      },
       { id: 14, sender: 'David', text: "Sure, I'll send them over.", time: 'Last week' },
       { id: 15, sender: 'You', text: 'Thanks!', time: 'Last week', read: true },
       {

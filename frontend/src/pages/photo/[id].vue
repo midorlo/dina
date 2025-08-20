@@ -26,7 +26,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface PhotoRouteParams {
-  id: string;
+  id: string
 }
 
 const route = useRoute()
