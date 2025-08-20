@@ -74,7 +74,7 @@
 
           <div class="text-center">
             <span class="text-body-2">Don't have an account? </span>
-            <router-link class="text-decoration-none text-primary" to="/auth/register"
+            <router-link class="text-decoration-none text-primary" to="/register"
               >Register</router-link
             >
           </div>
@@ -89,7 +89,11 @@ import { useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
 
 definePage({
-  meta: { roles: [Role.Guest] },
+  alias: '/auth/login',
+  meta: {
+    roles: [Role.Guest],
+    layout: 'empty',
+  },
 })
 
 const email = ref('')

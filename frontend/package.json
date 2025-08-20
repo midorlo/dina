@@ -4,6 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
+    "clean": "rimraf dist src/typed-router.d.ts src/auto-imports.d.ts src/components.d.ts",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -47,18 +48,5 @@
     "vue-router": "^4.5.1",
     "vue-tsc": "^3.0.1",
     "rimraf": "^5.0.0"
-  },
-  "scripts": {
-    "clean": "rimraf dist src/typed-router.d.ts src/auto-imports.d.ts src/components.d.ts",
-    "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --fix",
-    "lint:check": "eslint .",
-    "format:prettier": "prettier --write .",
-    "format": "npm run format:prettier && npm run lint",
-    "build:ci": "npm run lint:check && npm run build"
   }
 }

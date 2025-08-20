@@ -19,9 +19,8 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/[...path]': RouteRecordInfo<'/[...path]', '/:path(.*)', { path: ParamValue<true> }, { path: ParamValue<false> }>,
     '/about': RouteRecordInfo<'/about', '/about', Record<never, never>, Record<never, never>>,
-    '/auth/login': RouteRecordInfo<'/auth/login', '/auth/login', Record<never, never>, Record<never, never>>,
-    '/auth/register': RouteRecordInfo<'/auth/register', '/auth/register', Record<never, never>, Record<never, never>>,
     '/blogs/': RouteRecordInfo<'/blogs/', '/blogs', Record<never, never>, Record<never, never>>,
     '/blogs/[id]/': RouteRecordInfo<'/blogs/[id]/', '/blogs/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/blogs/[id]/edit': RouteRecordInfo<'/blogs/[id]/edit', '/blogs/:id/edit', { id: ParamValue<true> }, { id: ParamValue<false> }>,
@@ -37,6 +36,7 @@ declare module 'vue-router/auto-routes' {
     '/error/403': RouteRecordInfo<'/error/403', '/error/403', Record<never, never>, Record<never, never>>,
     '/error/404': RouteRecordInfo<'/error/404', '/error/404', Record<never, never>, Record<never, never>>,
     '/error/500': RouteRecordInfo<'/error/500', '/error/500', Record<never, never>, Record<never, never>>,
+    '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/notifications/': RouteRecordInfo<'/notifications/', '/notifications', Record<never, never>, Record<never, never>>,
     '/photos/[id]/': RouteRecordInfo<'/photos/[id]/', '/photos/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/photos/[id]/[photoId]': RouteRecordInfo<'/photos/[id]/[photoId]', '/photos/:id/:photoId', { id: ParamValue<true>, photoId: ParamValue<true> }, { id: ParamValue<false>, photoId: ParamValue<false> }>,
@@ -44,5 +44,6 @@ declare module 'vue-router/auto-routes' {
     '/profiles/[id]/': RouteRecordInfo<'/profiles/[id]/', '/profiles/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/profiles/[id]/edit': RouteRecordInfo<'/profiles/[id]/edit', '/profiles/:id/edit', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/profiles/[id]/notifications': RouteRecordInfo<'/profiles/[id]/notifications', '/profiles/:id/notifications', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
   }
 }
