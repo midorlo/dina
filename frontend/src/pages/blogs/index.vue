@@ -24,7 +24,7 @@
             flat
             height="100%"
             rounded="xl"
-            @click="router.push(`/blogs/${blog.id}`)"
+            @click="router.push(`/blogs/${blog.id}-${slugify(blog.name)}`)"
           >
             <div class="d-flex align-center mb-3">
               <v-avatar>
@@ -42,7 +42,9 @@
 
             <v-card-actions>
               <v-spacer />
-              <v-btn color="primary" :to="`/blogs/${blog.id}`" variant="text">Blog ansehen</v-btn>
+              <v-btn color="primary" :to="`/blogs/${blog.id}-${slugify(blog.name)}`" variant="text">
+                Blog ansehen
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -56,6 +58,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchBlogs } from '@/services/blogs'
 import { type Blog, Role } from '@/types'
+import { slugify } from '@/utils/slug'
 
 definePage({
   meta: { roles: [Role.Any], layout: 'default' },

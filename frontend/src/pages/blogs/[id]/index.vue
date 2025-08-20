@@ -30,7 +30,7 @@
             class="mt-4"
             color="primary"
             prepend-icon="mdi-pencil"
-            :to="`/blogs/${currentBlog?.id}/edit`"
+            :to="`/blogs/${currentBlog?.id}-${slugify(currentBlog?.name ?? '')}/edit`"
             variant="text"
           >
             Blog bearbeiten
@@ -51,7 +51,7 @@
             class="mb-6 pa-2"
             flat
             rounded="xl"
-            :to="`/blogs/${currentBlog?.id}/posts/${post.id}`"
+            :to="`/blogs/${currentBlog?.id}-${slugify(currentBlog?.name ?? '')}/posts/${post.id}-${slugify(post.title)}`"
           >
             <v-card-title>{{ post.title }}</v-card-title>
             <v-card-subtitle>{{ post.createdAt }}</v-card-subtitle>
@@ -67,7 +67,7 @@
             block
             class="mt-4"
             color="primary"
-            :to="`/blogs/${currentBlog?.id}/posts`"
+            :to="`/blogs/${currentBlog?.id}-${slugify(currentBlog?.name ?? '')}/posts`"
             variant="text"
           >
             Alle Beiträge anzeigen
@@ -107,3 +107,9 @@ const currentBlog = computed(() => blog.value)
 
 const canEdit = computed(() => currentUser.value?.username === currentBlog.value?.authorHandle)
 </script>
+
+<route lang="yaml">
+path: /blogs/:id-:slug
+alias:
+  - /blogs/:id
+</route>

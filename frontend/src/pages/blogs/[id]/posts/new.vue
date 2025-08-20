@@ -22,6 +22,7 @@ const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 const blogId = computed(() => (route.params as any).id as string)
+const blogSlug = computed(() => (route.params as any).slug as string | undefined)
 const post = reactive({ title: '', excerpt: '' })
 
 function create() {
@@ -30,6 +31,12 @@ function create() {
     return
   }
   console.log('Creating post', post)
-  router.push(`/blogs/${blogId.value}/posts`)
+  router.push(`/blogs/${blogId.value}${blogSlug.value ? `-${blogSlug.value}` : ''}/posts`)
 }
 </script>
+
+<route lang="yaml">
+path: /blogs/:id-:slug/posts/new
+alias:
+  - /blogs/:id/posts/new
+</route>

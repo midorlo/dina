@@ -15,6 +15,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { fetchBlogPost } from '@/services/blogs'
 import { useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
+import { slugify } from '@/utils/slug'
 
 definePage({
   meta: { roles: [Role.User], layout: 'default' },
@@ -24,6 +25,7 @@ const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 const blogId = computed(() => (route.params as any).id as string)
+const blogSlug = computed(() => (route.params as any).blogSlug as string | undefined)
 const postId = computed(() => (route.params as any).postId as string)
 const loading = ref(true)
 const post = reactive({ title: '', excerpt: '' })
@@ -40,6 +42,14 @@ onMounted(async () => {
 
 async function save() {
   console.log('Saving post', post)
-  router.push(`/blogs/${blogId.value}/posts/${postId.value}`)
+  router.push(
+    `/blogs/${blogId.value}${blogSlug.value ? `-${blogSlug.value}` : ''}/posts/${postId.value}-${slugify(post.title)}`
+  )
 }
 </script>
+
+<route lang="yaml">
+path: /blogs/:id-:blogSlug/posts/:postId-:postSlug/edit
+alias:
+  - /blogs/:id/posts/:postId/edit
+</route>

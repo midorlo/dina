@@ -5,13 +5,17 @@
         <v-skeleton-loader v-if="loading" type="image, article, actions" />
         <template v-else-if="post">
           <div class="mb-10 d-flex justify-space-between">
-            <v-btn prepend-icon="mdi-arrow-left" :to="`/blogs/${blogId}`" variant="text">
+            <v-btn
+              prepend-icon="mdi-arrow-left"
+              :to="`/blogs/${blogId}-${slugify(post.blogName)}`"
+              variant="text"
+            >
               Zurück zu {{ post.blogName }}
             </v-btn>
             <v-btn
               v-if="canEdit"
               prepend-icon="mdi-pencil"
-              :to="`/blogs/${blogId}/posts/${postId}/edit`"
+              :to="`/blogs/${blogId}-${slugify(post.blogName)}/posts/${postId}-${slugify(post.title)}/edit`"
               variant="text"
             >
               Bearbeiten
@@ -64,6 +68,7 @@ import { useRoute } from 'vue-router'
 import { fetchBlogPost } from '@/services/blogs'
 import { useAuthStore } from '@/stores/auth'
 import { type Post, Role } from '@/types'
+import { slugify } from '@/utils/slug'
 
 const route = useRoute()
 const blogId = computed(() => (route.params as any).id as string)
@@ -90,3 +95,9 @@ const canEdit = computed(
   () => currentUser.value?.username?.toLowerCase() === post.value?.author.toLowerCase()
 )
 </script>
+
+<route lang="yaml">
+path: /blogs/:id-:blogSlug/posts/:postId-:postSlug
+alias:
+  - /blogs/:id/posts/:postId
+</route>

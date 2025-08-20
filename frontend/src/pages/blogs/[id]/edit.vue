@@ -15,6 +15,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { fetchBlog } from '@/services/blogs'
 import { useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
+import { slugify } from '@/utils/slug'
 
 definePage({
   meta: { roles: [Role.User], layout: 'default' },
@@ -40,6 +41,12 @@ onMounted(async () => {
 async function save() {
   // placeholder save
   console.log('Saving blog', blog)
-  router.push(`/blogs/${blogId.value}`)
+  router.push(`/blogs/${blogId.value}-${slugify(blog.name)}`)
 }
 </script>
+
+<route lang="yaml">
+path: /blogs/:id/edit
+alias:
+  - /blogs/:id-:slug/edit
+</route>
