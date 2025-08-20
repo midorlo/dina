@@ -1,7 +1,8 @@
 <template>
   <v-container>
     <h1 class="text-h4 mb-4">Notifications</h1>
-    <v-list lines="three">
+    <v-alert v-if="error" class="mb-4" type="error">Failed to load notifications</v-alert>
+    <v-list v-else lines="three">
       <v-list-item
         v-for="item in items"
         :key="item.id"
@@ -31,7 +32,7 @@ definePage({
 })
 
 const notificationsStore = useNotificationsStore()
-const { items } = storeToRefs(notificationsStore)
+const { items, error } = storeToRefs(notificationsStore)
 const { handleNotificationClick } = notificationsStore
 </script>
 

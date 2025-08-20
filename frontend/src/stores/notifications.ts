@@ -2,14 +2,23 @@ import type { NotificationItem } from '@/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useSnackbarStore } from '@/stores/snackbar'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const router = useRouter()
   const items = ref<NotificationItem[]>([])
+  const error = ref<Error | null>(null)
+  const snackbar = useSnackbarStore()
 
   async function load() {
-    const { fetchNotifications } = await import('@/services/notifications')
-    items.value = await fetchNotifications()
+    error.value = null
+    try {
+      const { fetchNotifications } = await import('@/services/notifications')
+      items.value = await fetchNotifications()
+    } catch (error_) {
+      error.value = error_ as Error
+      snackbar.showSnackbar('Failed to load notifications', 'error')
+    }
   }
 
   load()
@@ -28,5 +37,5 @@ export const useNotificationsStore = defineStore('notifications', () => {
     load()
   }
 
-  return { items, unreadCount, handleNotificationClick, reset }
+  return { items, unreadCount, handleNotificationClick, reset, error }
 })
