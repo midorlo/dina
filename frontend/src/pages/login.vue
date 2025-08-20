@@ -126,16 +126,19 @@ definePage({
 })
 
 const form = ref()
-const email = ref('')
-const password = ref('')
+const formData = reactive({
+  email: '',
+  password: '',
+})
+const { email, password } = toRefs(formData)
 const rememberMe = ref(false)
 const loginError = ref('')
 
 const emailRules = [
-  (v: string) => !!v || 'Email is required',
-  (v: string) => /.+@.+\..+/.test(v) || 'Email must be valid',
+  () => !!formData.email || 'Email is required',
+  () => /.+@.+\..+/.test(formData.email) || 'Email must be valid',
 ]
-const passwordRules = [(v: string) => !!v || 'Password is required']
+const passwordRules = [() => !!formData.password || 'Password is required']
 
 const presets = mockUsers.map((mockUser) => ({
   label: mockUser.user.role,
@@ -154,7 +157,7 @@ async function login() {
   loginError.value = ''
   try {
     const { login } = await import('@/services/auth')
-    const response = await login(email.value, password.value)
+    const response = await login(formData.email, formData.password)
     if (response.user.id) {
       authStore.setUser(response.user)
       authStore.setTokens(response.tokens)
@@ -168,8 +171,8 @@ async function login() {
 }
 
 function presetLogin(presetEmail: string) {
-  email.value = presetEmail
-  password.value = 'password'
+  formData.email = presetEmail
+  formData.password = 'password'
   login()
 }
 </script>

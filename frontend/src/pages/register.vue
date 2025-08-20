@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { Role } from '@/types'
 
 definePage({
@@ -95,19 +95,22 @@ definePage({
   },
 })
 
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
+const formData = reactive({
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+})
+const { name, email, password, confirmPassword } = toRefs(formData)
 
 function register() {
   // Handle registration logic here
   console.log(
     'Registration attempt:',
-    name.value,
-    email.value,
-    password.value,
-    confirmPassword.value
+    formData.name,
+    formData.email,
+    formData.password,
+    formData.confirmPassword
   )
 }
 </script>
