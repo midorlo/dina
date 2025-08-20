@@ -23,7 +23,7 @@ import { fetchBlogPosts } from '@/services/blogs'
 import { Role } from '@/types'
 
 definePage({
-  meta: { roles: [Role.User] },
+  meta: { roles: [Role.Any], layout: 'default' },
 })
 
 const route = useRoute()

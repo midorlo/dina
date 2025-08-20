@@ -86,5 +86,11 @@
 </template>
 
 <script lang="ts" setup>
+import { Role } from '@/types'
+
+definePage({
+  meta: { roles: [Role.Any], layout: 'default' },
+})
+
 // No specific script logic needed for this static page
 </script>

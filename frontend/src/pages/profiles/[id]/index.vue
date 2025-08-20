@@ -43,14 +43,18 @@
 </template>
 
 <script lang="ts" setup>
-import type { Profile } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchProfile } from '@/services/profiles'
+import { type Profile, Role } from '@/types'
 
 interface ProfileRouteParams {
   id: string
 }
+
+definePage({
+  meta: { roles: [Role.Any], layout: 'default' },
+})
 
 const route = useRoute()
 const profileId = computed(() => (route.params as ProfileRouteParams).id)

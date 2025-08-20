@@ -24,11 +24,15 @@
 </template>
 
 <script lang="ts" setup>
-import type { GalleryItem } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchPhoto } from '@/services/photos'
 import { useAuthStore } from '@/stores/auth'
+import { type GalleryItem, Role } from '@/types'
+
+definePage({
+  meta: { roles: [Role.User], layout: 'default' },
+})
 
 const authStore = useAuthStore()
 const route = useRoute()

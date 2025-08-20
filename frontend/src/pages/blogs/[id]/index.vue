@@ -67,12 +67,16 @@
 </template>
 
 <script lang="ts" setup>
-import type { Blog, PostItem } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { fetchBlog, fetchBlogPosts } from '@/services/blogs'
+import { type Blog, type PostItem, Role } from '@/types'
 
 const route = useRoute()
 const blogId = computed(() => (route.params as any).id as string)
+
+definePage({
+  meta: { roles: [Role.Any], layout: 'default' },
+})
 
 const blog = ref<Blog | null>(null)
 const posts = ref<PostItem[]>([])

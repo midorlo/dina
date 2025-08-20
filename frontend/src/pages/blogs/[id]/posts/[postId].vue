@@ -47,14 +47,18 @@
 </template>
 
 <script lang="ts" setup>
-import type { Post } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchBlogPost } from '@/services/blogs'
+import { type Post, Role } from '@/types'
 
 const route = useRoute()
 const blogId = computed(() => (route.params as any).id as string)
 const postId = computed(() => (route.params as any).postId as string)
+
+definePage({
+  meta: { roles: [Role.Any], layout: 'default' },
+})
 
 const post = ref<Post | null>(null)
 const loading = ref(true)

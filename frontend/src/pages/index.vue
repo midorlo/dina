@@ -30,6 +30,12 @@
 </template>
 
 <script lang="ts" setup>
+import { Role } from '@/types'
+
+definePage({
+  meta: { roles: [Role.Any], layout: 'default' },
+})
+
 const links = [
   {
     href: 'https://vuetifyjs.com/',

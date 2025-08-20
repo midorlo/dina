@@ -118,7 +118,7 @@ import { useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
 
 definePage({
-  meta: { roles: [Role.User] },
+  meta: { roles: [Role.User], layout: 'default' },
 })
 
 const authStore = useAuthStore()

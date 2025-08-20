@@ -19,7 +19,7 @@ import { fetchMessage } from '@/services/messages'
 import { Role } from '@/types'
 
 definePage({
-  meta: { roles: [Role.User] },
+  meta: { roles: [Role.User], layout: 'default' },
 })
 
 const route = useRoute()

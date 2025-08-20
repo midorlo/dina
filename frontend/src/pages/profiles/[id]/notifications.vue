@@ -29,7 +29,7 @@ import { useNotificationsStore } from '@/stores/notifications'
 import { Role } from '@/types'
 
 definePage({
-  meta: { roles: [Role.Administrator] },
+  meta: { roles: [Role.Administrator], layout: 'default' },
 })
 
 const route = useRoute()

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { type AuthTokens, Permission, type Profile, Role, type User } from '@/types'
 
 const rolePermissions: Record<Role, Permission[]> = {
+  [Role.Any]: [],
   [Role.Guest]: [],
   [Role.User]: [Permission.ViewDashboard],
   [Role.Moderator]: [Permission.ViewDashboard],
@@ -11,6 +12,7 @@ const rolePermissions: Record<Role, Permission[]> = {
 }
 
 const roleHierarchy: Record<Role, Role[]> = {
+  [Role.Any]: [],
   [Role.Developer]: [Role.Developer, Role.Administrator, Role.Moderator, Role.User],
   [Role.Administrator]: [Role.Administrator, Role.Moderator, Role.User],
   [Role.Moderator]: [Role.Moderator, Role.User],
@@ -20,6 +22,7 @@ const roleHierarchy: Record<Role, Role[]> = {
 }
 
 export function hasRole(role: Role, required: Role) {
+  if (required === Role.Any) return role !== Role.Banned
   return roleHierarchy[role]?.includes(required) ?? false
 }
 

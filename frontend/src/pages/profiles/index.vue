@@ -80,9 +80,13 @@
 </template>
 
 <script lang="ts" setup>
-import type { Profile } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { fetchProfiles } from '@/services/profiles'
+import { type Profile, Role } from '@/types'
+
+definePage({
+  meta: { roles: [Role.Any], layout: 'default' },
+})
 
 const search = ref('')
 const page = ref(1)

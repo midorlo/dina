@@ -52,10 +52,14 @@
 </template>
 
 <script lang="ts" setup>
-import type { Blog } from '@/types'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchBlogs } from '@/services/blogs'
+import { type Blog, Role } from '@/types'
+
+definePage({
+  meta: { roles: [Role.Any], layout: 'default' },
+})
 
 const blogs = ref<Blog[]>([])
 const loading = ref(true)
