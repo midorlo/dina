@@ -153,5 +153,8 @@ export async function fetchProfile(id: string): Promise<Profile | undefined> {
     const res = await apiFetch(`/api/profiles/${id}`)
     return res.json()
   }
-  return delay(profiles.find((p) => p.id === id), 500)
+  return delay(
+    profiles.find((p) => p.id === id),
+    500
+  )
 }
