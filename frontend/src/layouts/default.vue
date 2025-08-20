@@ -154,7 +154,7 @@ const { currentUser } = storeToRefs(authStore)
 
 function logout() {
   authStore.reset()
-  router.push('/auth/login')
+  router.push('/login')
 }
 
 const items = computed(() => [
@@ -172,13 +172,13 @@ const items = computed(() => [
   {
     title: 'Login',
     prependIcon: 'mdi-login',
-    to: '/auth/login',
+    to: '/login',
     roles: [Role.Guest],
   },
   {
     title: 'Register',
     prependIcon: 'mdi-account-plus',
-    to: '/auth/register',
+    to: '/register',
     roles: [Role.Guest],
   },
   {

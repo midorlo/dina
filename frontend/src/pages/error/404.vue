@@ -15,7 +15,8 @@
   </v-container>
 </template>
 
-<script lang="ts" setup>
-/* layout: 'empty' */
-//
+<script setup lang="ts">
+definePage({
+  meta: { layout: 'empty' },
+})
 </script>

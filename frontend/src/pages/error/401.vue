@@ -8,16 +8,15 @@
           <p class="text-subtitle-1 text-center mb-6">
             You are not authorized to access this page.
           </p>
-          <v-btn block color="primary" rounded="pill" size="large" to="/auth/login"
-            >Go to Login</v-btn
-          >
+          <v-btn block color="primary" rounded="pill" size="large" to="/login">Go to Login</v-btn>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
-<script lang="ts" setup>
-/* layout: 'empty' */
-//
+<script setup lang="ts">
+definePage({
+  meta: { layout: 'empty' },
+})
 </script>
