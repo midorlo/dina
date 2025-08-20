@@ -33,7 +33,7 @@
 import { Role } from '@/types'
 
 definePage({
-  meta: { roles: [Role.Any], layout: 'default' },
+  meta: { roles: [Role.Any], layout: 'default', breadcrumb: 'Home' },
 })
 
 const links = [

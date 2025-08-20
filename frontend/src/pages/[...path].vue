@@ -14,6 +14,7 @@ definePage({
   meta: {
     roles: [Role.Developer],
     layout: 'empty',
+    breadcrumb: 'Debug',
   },
 })
 

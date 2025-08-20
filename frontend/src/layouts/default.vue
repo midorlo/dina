@@ -128,29 +128,30 @@ const route = useRoute()
 const router = useRouter()
 
 const breadcrumbItems = computed(() => {
-  const crumbs = []
-  if (route.path === '/') {
-    return crumbs
+  if (route.matched.length <= 1) return []
+
+  const items = [{ title: 'Dina', disabled: false, to: '/' }]
+  const records = route.matched.slice(1)
+
+  for (const [index, record] of records.entries()) {
+    const segment = record.path.split('/').findLast(Boolean) ?? ''
+    const title =
+      (record.meta?.breadcrumb as string | undefined) ??
+      segment
+        .replace(/[:()*]/g, '')
+        .replace(/-/g, ' ')
+        .replace(/^\w/, (c) => c.toUpperCase())
+
+    const to = router.resolve({ path: record.path, params: route.params }).path
+
+    items.push({
+      title,
+      disabled: index === records.length - 1,
+      to,
+    })
   }
 
-  crumbs.push({
-    title: 'Dina',
-    disabled: false,
-    to: '/',
-  })
-
-  const pathParts = route.path.split('/').filter(Boolean)
-  let currentPath = ''
-  for (const [index, part] of pathParts.entries()) {
-    currentPath += `/${part}`
-    const crumb = {
-      title: part.charAt(0).toUpperCase() + part.slice(1),
-      disabled: index === pathParts.length - 1,
-      to: currentPath,
-    }
-    crumbs.push(crumb)
-  }
-  return crumbs
+  return items
 })
 
 const notificationsStore = useNotificationsStore()

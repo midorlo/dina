@@ -89,7 +89,7 @@
 import { Role } from '@/types'
 
 definePage({
-  meta: { roles: [Role.Any], layout: 'default' },
+  meta: { roles: [Role.Any], layout: 'default', breadcrumb: 'About' },
 })
 
 // No specific script logic needed for this static page

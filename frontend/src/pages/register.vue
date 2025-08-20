@@ -91,6 +91,7 @@ definePage({
     roles: [Role.Guest],
     layout: 'empty',
     requiresGuest: true,
+    breadcrumb: 'Register',
   },
 })
 
