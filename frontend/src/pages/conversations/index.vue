@@ -140,7 +140,8 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
+import { useAutoScroll } from '@/composables/useAutoScroll'
 import { fetchConversations } from '@/services/messages'
 import { type Conversation, type Message, Role } from '@/types'
 
@@ -152,6 +153,7 @@ const conversations = ref<Conversation[]>([])
 const selectedConversation = ref<Conversation | null>(null)
 const newMessage = ref('')
 const messageArea = ref<HTMLElement | null>(null)
+const { scrollToBottom } = useAutoScroll(messageArea)
 const loading = ref(true)
 
 onMounted(async () => {
@@ -178,27 +180,8 @@ function sendMessage() {
   selectedConversation.value.messages.push(message)
   selectedConversation.value.lastMessage = newMessage.value
   newMessage.value = ''
+  nextTick(scrollToBottom)
 }
-
-watch(
-  selectedConversation,
-  () => {
-    nextTick(() => {
-      if (messageArea.value) {
-        messageArea.value.scrollTop = messageArea.value.scrollHeight
-      }
-    })
-  },
-  { deep: true }
-)
-
-watch(newMessage, () => {
-  nextTick(() => {
-    if (messageArea.value) {
-      messageArea.value.scrollTop = messageArea.value.scrollHeight
-    }
-  })
-})
 </script>
 
 <style scoped>
