@@ -8,15 +8,15 @@
           >
           <v-card-subtitle class="text-center mb-6">Join us today!</v-card-subtitle>
 
-          <v-form @submit.prevent="register">
+          <v-form ref="form" @submit.prevent="register">
             <v-text-field
               v-model="name"
               class="mb-4"
               density="comfortable"
               label="Full Name"
               prepend-inner-icon="mdi-account-outline"
-              required
               rounded="pill"
+              :rules="nameRules"
               variant="outlined"
             />
 
@@ -26,8 +26,8 @@
               density="comfortable"
               label="Email"
               prepend-inner-icon="mdi-email-outline"
-              required
               rounded="pill"
+              :rules="emailRules"
               variant="outlined"
             />
 
@@ -37,8 +37,8 @@
               density="comfortable"
               label="Password"
               prepend-inner-icon="mdi-lock-outline"
-              required
               rounded="pill"
+              :rules="passwordRules"
               type="password"
               variant="outlined"
             />
@@ -49,8 +49,8 @@
               density="comfortable"
               label="Confirm Password"
               prepend-inner-icon="mdi-lock-check-outline"
-              required
               rounded="pill"
+              :rules="confirmPasswordRules"
               type="password"
               variant="outlined"
             />
@@ -82,7 +82,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs } from 'vue'
+import { ref } from 'vue'
+import { useFormValidation } from '@/composables/useFormValidation'
 import { Role } from '@/types'
 
 definePage({
@@ -95,22 +96,29 @@ definePage({
   },
 })
 
-const formData = reactive({
-  name: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-})
-const { name, email, password, confirmPassword } = toRefs(formData)
+const form = ref()
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
 
-function register() {
+const { required, email: emailRule } = useFormValidation()
+
+const nameRules = [required]
+const emailRules = [required, emailRule]
+const passwordRules = [required]
+const confirmPasswordRules = [required]
+
+async function register() {
+  const isValid = await form.value?.validate()
+  if (!isValid) return
   // Handle registration logic here
   console.log(
     'Registration attempt:',
-    formData.name,
-    formData.email,
-    formData.password,
-    formData.confirmPassword
+    name.value,
+    email.value,
+    password.value,
+    confirmPassword.value
   )
 }
 </script>
