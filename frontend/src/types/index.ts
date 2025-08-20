@@ -89,6 +89,19 @@ export interface PostItem {
   excerpt: string
 }
 
+export interface Post {
+  id: string
+  blogId: string
+  blogName: string
+  title: string
+  author: string
+  authorAvatarUrl: string
+  date: string
+  category: string
+  imageUrl: string
+  content: string[]
+}
+
 export interface GalleryItem {
   id: number
   src: string

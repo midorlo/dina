@@ -14,9 +14,13 @@
         <v-skeleton-loader class="rounded-lg" type="image" />
       </div>
     </div>
-    <div v-else class="masonry-container" :style="{ 'column-count': columnCount }">
+    <div
+      v-else-if="items.length > 0"
+      class="masonry-container"
+      :style="{ 'column-count': columnCount }"
+    >
       <div v-for="item in items" :key="item.id" class="masonry-item">
-        <router-link :to="`/photo/${item.id}`">
+        <router-link :to="`/photos/${item.id}`">
           <v-img
             :aspect-ratio="item.aspectRatio"
             class="bg-grey-lighten-2 rounded-lg"
@@ -33,6 +37,7 @@
         </router-link>
       </div>
     </div>
+    <v-empty-state v-else icon="mdi-image-off-outline" title="Keine Fotos gefunden" />
   </v-container>
 </template>
 
@@ -40,7 +45,7 @@
 import type { GalleryItem } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { fetchGalleryItems } from '@/services/gallery'
+import { fetchPhotos } from '@/services/photos'
 
 const { name } = useDisplay()
 const density = ref('medium') // 'large', 'medium', 'small'
@@ -67,11 +72,13 @@ const items = ref<GalleryItem[]>([])
 const loading = ref(true)
 
 onMounted(async () => {
-  items.value = await fetchGalleryItems()
-  loading.value = false
+  try {
+    items.value = await fetchPhotos()
+  } finally {
+    loading.value = false
+  }
 })
 </script>
-
 <style scoped>
 .masonry-container {
   column-gap: 16px;

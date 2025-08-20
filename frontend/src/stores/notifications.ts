@@ -22,7 +22,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
       subtitle: '<strong>Jane Smith</strong> liked your <strong>photo.jpg</strong>.',
       avatar: 'https://cdn.vuetifyjs.com/images/avatars/avatar-2.png',
       time: '1h ago',
-      link: '/gallery',
+      link: '/photos',
       read: true,
     },
     {

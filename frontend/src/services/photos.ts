@@ -75,8 +75,14 @@ const items: GalleryItem[] = [
   },
 ]
 
-export async function fetchGalleryItems(): Promise<GalleryItem[]> {
+export async function fetchPhotos(): Promise<GalleryItem[]> {
   return new Promise((resolve) => {
     setTimeout(() => resolve(items), 500)
+  })
+}
+
+export async function fetchPhoto(id: number): Promise<GalleryItem | undefined> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(items.find((i) => i.id === id)), 500)
   })
 }

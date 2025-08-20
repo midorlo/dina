@@ -1,6 +1,7 @@
 import prettierConfig from 'eslint-config-prettier'
 import vuetify from 'eslint-config-vuetify'
 import prettierPlugin from 'eslint-plugin-prettier'
+import vueScopedCss from 'eslint-plugin-vue-scoped-css'
 
 export default vuetify(
   {
@@ -17,9 +18,11 @@ export default vuetify(
   {
     plugins: {
       prettier: prettierPlugin,
+      'vue-scoped-css': vueScopedCss,
     },
     rules: {
       'prettier/prettier': 'error',
+      'vue-scoped-css/no-unused-selector': 'warn',
     },
   }
 )

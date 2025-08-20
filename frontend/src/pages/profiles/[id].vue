@@ -24,10 +24,8 @@
                 Personal Information
               </v-card-title>
               <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>About Me</v-list-item-title>
-                  <v-list-item-subtitle>{{ profile.bio }}</v-list-item-subtitle>
-                </v-list-item-content>
+                <v-list-item-title>About Me</v-list-item-title>
+                <v-list-item-subtitle>{{ profile.bio }}</v-list-item-subtitle>
               </v-list-item>
             </v-sheet>
 
@@ -36,7 +34,7 @@
             </v-btn>
           </template>
           <template v-else>
-            <v-alert type="error">Profile not found.</v-alert>
+            <v-empty-state icon="mdi-account-off-outline" title="Profile not found" />
           </template>
         </v-card>
       </v-col>

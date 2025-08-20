@@ -1,4 +1,4 @@
-import type { Blog, PostItem } from '@/types'
+import type { Blog, Post, PostItem } from '@/types'
 
 const blogs: Blog[] = [
   {
@@ -94,6 +94,40 @@ const posts: Record<string, PostItem[]> = {
   ],
 }
 
+const postDetails: Record<string, Post> = {
+  '1:101': {
+    id: '101',
+    blogId: '1',
+    blogName: 'Annas Gedanken',
+    title: 'Mein Weg zum Minimalismus',
+    author: 'Anna',
+    authorAvatarUrl: 'https://randomuser.me/api/portraits/women/26.jpg',
+    date: '15. August 2025',
+    category: 'Lebensstil',
+    imageUrl:
+      'https://images.unsplash.com/photo-1484981138541-3d074aa97716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    content: [
+      'Es begann alles mit einer einfachen Frage: Brauche ich das wirklich? Eine Reise zu weniger Besitz und mehr Freiheit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.',
+      'Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.',
+    ],
+  },
+  '2:201': {
+    id: '201',
+    blogId: '2',
+    blogName: "Markus' Abenteuer",
+    title: 'Wanderung zur Zugspitze',
+    author: 'Markus',
+    authorAvatarUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
+    date: '10. August 2025',
+    category: 'Reisen',
+    imageUrl:
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    content: [
+      'Ein anstrengender Aufstieg, der mit einer unglaublichen Aussicht belohnt wurde. Mein Erfahrungsbericht.',
+    ],
+  },
+}
+
 export async function fetchBlogs(): Promise<Blog[]> {
   return new Promise((resolve) => {
     setTimeout(() => resolve(blogs), 500)
@@ -109,5 +143,11 @@ export async function fetchBlog(id: string): Promise<Blog | undefined> {
 export async function fetchBlogPosts(blogId: string): Promise<PostItem[]> {
   return new Promise((resolve) => {
     setTimeout(() => resolve(posts[blogId] || []), 500)
+  })
+}
+
+export async function fetchBlogPost(blogId: string, postId: string): Promise<Post | undefined> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(postDetails[`${blogId}:${postId}`]), 500)
   })
 }

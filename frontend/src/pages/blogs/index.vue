@@ -14,14 +14,17 @@
         </v-col>
       </template>
       <template v-else>
-        <v-col v-for="blog in blogs" :key="blog.id" cols="12" lg="4" md="6">
+        <v-col v-if="blogs.length === 0" cols="12">
+          <v-empty-state icon="mdi-book-open-variant-outline" title="Keine Blogs gefunden" />
+        </v-col>
+        <v-col v-for="blog in blogs" v-else :key="blog.id" cols="12" lg="4" md="6">
           <v-card
             border
             class="pa-3"
             flat
             height="100%"
             rounded="xl"
-            @click="$router.push(`/blogs/${blog.id}`)"
+            @click="router.push(`/blogs/${blog.id}`)"
           >
             <div class="d-flex align-center mb-3">
               <v-avatar>
@@ -39,7 +42,7 @@
 
             <v-card-actions>
               <v-spacer />
-              <v-btn color="primary" :to="`/blogs/${blog.id}`" variant="text"> Blog ansehen </v-btn>
+              <v-btn color="primary" :to="`/blogs/${blog.id}`" variant="text">Blog ansehen</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -51,10 +54,12 @@
 <script setup lang="ts">
 import type { Blog } from '@/types'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { fetchBlogs } from '@/services/blogs'
 
 const blogs = ref<Blog[]>([])
 const loading = ref(true)
+const router = useRouter()
 
 onMounted(async () => {
   blogs.value = await fetchBlogs()
@@ -63,13 +68,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.v-card {
-  transition: all 0.2s ease-in-out;
-}
-.v-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(var(--v-theme-primary), 0.6) !important;
-}
 .v-card-title {
   line-height: 1.2rem;
 }

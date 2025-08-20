@@ -198,9 +198,9 @@ const items = ref([
     to: '/messages',
   },
   {
-    title: 'Gallery',
+    title: 'Photos',
     prependIcon: 'mdi-image-multiple',
-    to: '/gallery',
+    to: '/photos',
   },
   {
     title: 'Blogs',

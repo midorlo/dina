@@ -3,33 +3,31 @@
     <v-row>
       <v-col>
         <v-skeleton-loader v-if="loading" type="image, article, actions" />
-        <v-card v-else>
-          <v-img
-            aspect-ratio="4/3"
-            cover
-            :lazy-src="`https://picsum.photos/id/${photoId}/10/10`"
-            :src="photoSrc"
-          >
+        <v-card v-else-if="photo">
+          <v-img :aspect-ratio="photo.aspectRatio" cover :lazy-src="photo.lazySrc" :src="photo.src">
             <template #placeholder>
               <v-row align="center" class="fill-height ma-0" justify="center">
                 <v-progress-circular indeterminate />
               </v-row>
             </template>
           </v-img>
-          <v-card-title>Photo {{ photoId }}</v-card-title>
-          <v-card-text>This is the detail page for photo {{ photoId }}.</v-card-text>
+          <v-card-title>Photo {{ photo.id }}</v-card-title>
+          <v-card-text>This is the detail page for photo {{ photo.id }}.</v-card-text>
           <v-card-actions>
-            <v-btn to="/gallery">Back to Gallery</v-btn>
+            <v-btn to="/photos">Back to Gallery</v-btn>
           </v-card-actions>
         </v-card>
+        <v-empty-state v-else icon="mdi-image-off-outline" title="Photo not found" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup lang="ts">
+import type { GalleryItem } from '@/types'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { fetchPhoto } from '@/services/photos'
 
 interface PhotoRouteParams {
   id: string
@@ -38,14 +36,13 @@ interface PhotoRouteParams {
 const route = useRoute()
 const photoId = computed(() => (route.params as PhotoRouteParams).id)
 const loading = ref(true)
-const photoSrc = ref('')
+const photo = ref<GalleryItem | null>(null)
 
-onMounted(() => {
-  photoSrc.value = `https://picsum.photos/id/${photoId.value}/800/600`
-  const img = new Image()
-  img.src = photoSrc.value
-  img.addEventListener('load', () => {
+onMounted(async () => {
+  try {
+    photo.value = (await fetchPhoto(Number(photoId.value))) || null
+  } finally {
     loading.value = false
-  })
+  }
 })
 </script>
