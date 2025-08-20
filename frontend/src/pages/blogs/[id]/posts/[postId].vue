@@ -4,9 +4,17 @@
       <v-col cols="12" lg="8" md="10">
         <v-skeleton-loader v-if="loading" type="image, article, actions" />
         <template v-else-if="post">
-          <div class="mb-10">
+          <div class="mb-10 d-flex justify-space-between">
             <v-btn prepend-icon="mdi-arrow-left" :to="`/blogs/${blogId}`" variant="text">
               Zurück zu {{ post.blogName }}
+            </v-btn>
+            <v-btn
+              v-if="canEdit"
+              prepend-icon="mdi-pencil"
+              :to="`/blogs/${blogId}/posts/${postId}/edit`"
+              variant="text"
+            >
+              Bearbeiten
             </v-btn>
           </div>
 
@@ -31,11 +39,15 @@
           <v-divider class="my-10" />
 
           <div class="d-flex align-center">
-            <v-avatar>
-              <v-img :src="post.authorAvatarUrl" />
-            </v-avatar>
-            <div class="ml-4">
-              <div class="font-weight-bold">{{ post.author }}</div>
+            <router-link class="mr-4" :to="`/profiles/${post.author}`">
+              <v-avatar>
+                <v-img :src="post.authorAvatarUrl" />
+              </v-avatar>
+            </router-link>
+            <div>
+              <router-link class="text-decoration-none" :to="`/profiles/${post.author}`">
+                <div class="font-weight-bold">{{ post.author }}</div>
+              </router-link>
               <div class="text-caption text-medium-emphasis">Autor</div>
             </div>
           </div>
@@ -50,6 +62,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchBlogPost } from '@/services/blogs'
+import { useAuthStore } from '@/stores/auth'
 import { type Post, Role } from '@/types'
 
 const route = useRoute()
@@ -62,6 +75,8 @@ definePage({
 
 const post = ref<Post | null>(null)
 const loading = ref(true)
+const authStore = useAuthStore()
+const { currentUser } = storeToRefs(authStore)
 
 onMounted(async () => {
   try {
@@ -70,4 +85,8 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+const canEdit = computed(
+  () => currentUser.value?.username?.toLowerCase() === post.value?.author.toLowerCase()
+)
 </script>

@@ -8,7 +8,7 @@
           >
           <v-card-subtitle class="text-center mb-6">Sign in to continue</v-card-subtitle>
 
-          <v-form @submit.prevent="login">
+          <v-form ref="form" @submit.prevent="login">
             <v-alert
               v-if="loginError"
               class="mb-4"
@@ -23,8 +23,8 @@
               density="comfortable"
               label="Email"
               prepend-inner-icon="mdi-email-outline"
-              required
               rounded="pill"
+              :rules="emailRules"
               variant="outlined"
             />
 
@@ -34,8 +34,8 @@
               density="comfortable"
               label="Password"
               prepend-inner-icon="mdi-lock-outline"
-              required
               rounded="pill"
+              :rules="passwordRules"
               type="password"
               variant="outlined"
             />
@@ -56,9 +56,14 @@
               </v-col>
             </v-row>
 
-            <v-btn block class="mb-4" color="primary" rounded="pill" size="large" type="submit">
-              Login
-            </v-btn>
+            <v-row class="mb-4" justify="space-between">
+              <v-col cols="6">
+                <v-btn block color="primary" rounded="pill" size="large" type="submit">Login</v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-btn block color="secondary" rounded="pill" size="large" to="/">Zurück</v-btn>
+              </v-col>
+            </v-row>
           </v-form>
 
           <v-divider class="my-4" />
@@ -69,6 +74,23 @@
             </v-btn>
             <v-btn class="mx-2" color="blue-darken-2" icon rounded="pill" size="large">
               <v-icon>mdi-facebook</v-icon>
+            </v-btn>
+          </div>
+
+          <v-divider class="my-4" />
+
+          <div class="text-center mb-4">
+            <div class="mb-2">Preset Logins</div>
+            <v-btn
+              v-for="preset in presets"
+              :key="preset.email"
+              class="ma-1"
+              rounded="pill"
+              size="small"
+              variant="outlined"
+              @click="presetLogin(preset.email)"
+            >
+              {{ preset.label }}
             </v-btn>
           </div>
 
@@ -96,15 +118,32 @@ definePage({
   },
 })
 
+const form = ref()
 const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
 const loginError = ref('')
 
+const emailRules = [
+  (v: string) => !!v || 'Email is required',
+  (v: string) => /.+@.+\..+/.test(v) || 'Email must be valid',
+]
+const passwordRules = [(v: string) => !!v || 'Password is required']
+
+const presets = [
+  { label: 'User', email: 'user@example.com' },
+  { label: 'Moderator', email: 'moderator@example.com' },
+  { label: 'Administrator', email: 'admin@example.com' },
+  { label: 'Developer', email: 'dev@example.com' },
+  { label: 'Banned', email: 'banned@example.com' },
+]
+
 const authStore = useAuthStore()
 
 async function login() {
-  loginError.value = '' // Clear previous errors
+  const isValid = await form.value?.validate()
+  if (!isValid) return
+  loginError.value = ''
   try {
     const { login } = await import('@/services/auth')
     const response = await login(email.value, password.value)
@@ -112,15 +151,15 @@ async function login() {
       authStore.setUser(response.user)
       authStore.setTokens(response.tokens)
       authStore.setProfile(response.profile)
-      // Redirect to profile or dashboard
-      console.log('Login successful!', response.user)
-    } else {
-      // This case should ideally not be reached if apiService.login rejects on failure
-      loginError.value = 'An unexpected login error occurred.'
     }
   } catch (error: any) {
-    console.error('Login error:', error)
     loginError.value = error.message || 'Login failed. Please check your credentials.'
   }
+}
+
+function presetLogin(presetEmail: string) {
+  email.value = presetEmail
+  password.value = 'password'
+  login()
 }
 </script>

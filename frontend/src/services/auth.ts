@@ -37,10 +37,22 @@ export async function login(email: string, password: string): Promise<LoginRespo
           username: 'dev_user',
           avatarUrl: 'https://i.pravatar.cc/150?img=4',
         },
+        {
+          id: 'user-5',
+          email: 'banned@example.com',
+          name: 'Banned User',
+          role: Role.Banned,
+          username: 'banned_user',
+          avatarUrl: 'https://i.pravatar.cc/150?img=5',
+        },
       ]
 
-      const foundUser = users.find((u) => u.email === email && password === 'password')
-      if (foundUser) {
+      const foundUser = users.find((u) => u.email === email)
+      if (foundUser && password === 'password') {
+        if (foundUser.role === Role.Banned) {
+          reject(new Error('User is banned'))
+          return
+        }
         const tokens: AuthTokens = {
           accessToken: 'mock-access-token',
           refreshToken: 'mock-refresh-token',
@@ -55,7 +67,7 @@ export async function login(email: string, password: string): Promise<LoginRespo
         }
         resolve({ user: foundUser, tokens, profile })
       } else {
-        reject(new Error('Invalid credentials'))
+        reject(new Error('Invalid email or password'))
       }
     }, 1000)
   })

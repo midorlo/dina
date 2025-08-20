@@ -25,10 +25,6 @@
       />
       <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" />
 
-      <div class="d-flex align-center" style="cursor: pointer" @click="goToHome">
-        <v-img alt="Logo" class="ms-2" contain height="40" src="@/assets/logo.svg" width="40" />
-      </div>
-
       <v-breadcrumbs class="ms-2" :items="breadcrumbItems" />
 
       <v-spacer />
@@ -38,7 +34,14 @@
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
 
-        <v-btn class="app-bar-icon-btn text-none me-2" height="48" icon slim to="/notifications">
+        <v-btn
+          v-if="currentUser"
+          class="app-bar-icon-btn text-none me-2"
+          height="48"
+          icon
+          slim
+          to="/notifications"
+        >
           <v-badge
             color="error"
             :content="unreadCount"
@@ -49,30 +52,34 @@
           </v-badge>
         </v-btn>
 
-        <v-btn class="app-bar-icon-btn text-none me-2" height="48" icon slim>
-          <v-avatar
-            color="surface-light"
-            image="https://cdn.vuetifyjs.com/images/john.png"
-            size="32"
-          />
+        <v-btn v-if="currentUser" class="app-bar-icon-btn text-none me-2" height="48" icon slim>
+          <v-avatar v-if="currentUser.avatarUrl" :image="currentUser.avatarUrl" size="32" />
+          <v-avatar v-else color="surface-light" size="32">
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
 
           <v-menu activator="parent">
             <v-list nav>
               <v-list-item>
-                <v-list-item-title class="font-weight-bold">John Doe</v-list-item-title>
-                <v-list-item-subtitle>john.doe@example.com</v-list-item-subtitle>
+                <v-list-item-title class="font-weight-bold">
+                  {{ currentUser.name }}
+                </v-list-item-title>
+                <v-list-item-subtitle>{{ currentUser.email }}</v-list-item-subtitle>
               </v-list-item>
               <v-divider />
               <v-list-item
                 append-icon="mdi-account"
                 link
                 title="Profile"
-                :to="`/profiles/${currentUser.value?.id}/edit`"
+                :to="`/profiles/${currentUser.id}/edit`"
               />
-              <!-- Settings removed -->
               <v-list-item append-icon="mdi-logout" title="Logout" @click="logout" />
             </v-list>
           </v-menu>
+        </v-btn>
+
+        <v-btn v-else class="app-bar-icon-btn text-none me-2" height="48" icon slim to="/login">
+          <v-icon>mdi-login</v-icon>
         </v-btn>
       </template>
     </v-app-bar>
@@ -129,10 +136,6 @@ const breadcrumbItems = computed(() => {
   }
   return crumbs
 })
-
-function goToHome() {
-  router.push('/')
-}
 
 router.beforeEach(() => {
   loading.value = true

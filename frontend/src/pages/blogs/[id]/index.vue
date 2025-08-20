@@ -12,9 +12,11 @@
       <!-- Blog Header -->
       <v-row justify="center">
         <v-col class="text-center" cols="12" lg="8" md="10">
-          <v-avatar class="mb-4 elevation-4" size="120">
-            <v-img :src="currentBlog?.authorAvatarUrl" />
-          </v-avatar>
+          <router-link :to="`/profiles/${currentBlog?.authorHandle}`">
+            <v-avatar class="mb-4 elevation-4" size="120">
+              <v-img :src="currentBlog?.authorAvatarUrl" />
+            </v-avatar>
+          </router-link>
           <h1 class="text-h3 font-weight-bold">{{ currentBlog?.name }}</h1>
           <p class="text-h6 text-medium-emphasis font-weight-regular mt-2">
             {{ currentBlog?.description }}
@@ -23,6 +25,16 @@
             <v-chip class="mr-2">{{ currentBlog?.postCount }} Beiträge</v-chip>
             <v-chip>Erstellt am {{ currentBlog?.createdAt }}</v-chip>
           </div>
+          <v-btn
+            v-if="canEdit"
+            class="mt-4"
+            color="primary"
+            prepend-icon="mdi-pencil"
+            :to="`/blogs/${currentBlog?.id}/edit`"
+            variant="text"
+          >
+            Blog bearbeiten
+          </v-btn>
         </v-col>
       </v-row>
 
@@ -69,6 +81,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { fetchBlog, fetchBlogPosts } from '@/services/blogs'
+import { useAuthStore } from '@/stores/auth'
 import { type Blog, type PostItem, Role } from '@/types'
 
 const route = useRoute()
@@ -81,6 +94,8 @@ definePage({
 const blog = ref<Blog | null>(null)
 const posts = ref<PostItem[]>([])
 const loading = ref(true)
+const authStore = useAuthStore()
+const { currentUser } = storeToRefs(authStore)
 
 onMounted(async () => {
   blog.value = (await fetchBlog(blogId.value)) || null
@@ -89,4 +104,6 @@ onMounted(async () => {
 })
 
 const currentBlog = computed(() => blog.value)
+
+const canEdit = computed(() => currentUser.value?.username === currentBlog.value?.authorHandle)
 </script>
