@@ -2,6 +2,7 @@
   <v-layout>
     <v-navigation-drawer
       v-model="drawer"
+      app
       color="surface-variant"
       :expand-on-hover="$vuetify.display.mdAndUp"
       fixed
@@ -14,7 +15,7 @@
       <template #append />
     </v-navigation-drawer>
 
-    <v-app-bar absolute flat height="56">
+    <v-app-bar app flat height="56">
       <v-progress-linear
         absolute
         :active="loading"
@@ -64,15 +65,19 @@
               <v-divider />
               <v-list-item append-icon="mdi-account" link title="Profile" to="/profile" />
               <v-list-item append-icon="mdi-cog-outline" link title="Settings" to="/settings" />
-              <v-list-item append-icon="mdi-logout" link title="Logout" />
+              <v-list-item append-icon="mdi-logout" title="Logout" @click="logout" />
             </v-list>
           </v-menu>
         </v-btn>
       </template>
     </v-app-bar>
 
-    <v-main>
-      <router-view />
+    <v-main class="overflow-y-auto">
+      <router-view v-slot="{ Component }">
+        <v-fade-transition mode="out-in">
+          <component :is="Component" />
+        </v-fade-transition>
+      </router-view>
     </v-main>
     <app-footer />
   </v-layout>
@@ -83,6 +88,7 @@ import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
+import logo from '@/assets/logo.svg'
 import { filterMenuByRole, useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
 import { Role } from '@/types'
@@ -100,7 +106,7 @@ const breadcrumbItems = computed(() => {
   }
 
   crumbs.push({
-    title: 'Home',
+    title: 'Dina',
     disabled: false,
     to: '/',
   })
@@ -141,10 +147,15 @@ function toggleTheme() {
 const authStore = useAuthStore()
 const { currentUser } = storeToRefs(authStore)
 
+function logout() {
+  authStore.reset()
+  router.push('/login')
+}
+
 const items = ref([
   {
     title: 'Home',
-    prependIcon: 'mdi-home',
+    prependAvatar: logo,
     to: '/',
   },
   {
@@ -168,13 +179,13 @@ const items = ref([
     title: 'Profile',
     prependIcon: 'mdi-account',
     to: '/profile',
-    roles: [Role.User, Role.Admin],
+    roles: [Role.User],
   },
   {
     title: 'Settings',
     prependIcon: 'mdi-cog-outline',
     to: '/settings',
-    roles: [Role.User, Role.Admin],
+    roles: [Role.User],
   },
   {
     title: 'About',
@@ -205,7 +216,7 @@ const items = ref([
     title: 'Notifications',
     prependIcon: 'mdi-bell-outline',
     to: '/notifications',
-    roles: [Role.User, Role.Admin],
+    roles: [Role.User],
   },
   {
     title: 'Error 401',

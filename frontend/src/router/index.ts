@@ -8,7 +8,7 @@ import { setupLayouts } from 'virtual:generated-layouts'
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
-import { useAuthStore } from '@/stores/auth'
+import { hasRole, useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
 
 const router = createRouter({
@@ -18,16 +18,13 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const auth = useAuthStore()
-  const role = auth.currentUser?.role || Role.Guest
+  const role = auth.currentUser.role
 
-  if (auth.currentUser && to.path === '/login') {
-    return '/'
-  }
+  if (['/login', '/register'].includes(to.path) && role !== Role.Guest) return '/'
 
   const allowedRoles = to.meta.roles as Role[] | undefined
-  if (allowedRoles && allowedRoles.length > 0) {
-    if (!auth.currentUser) return '/error/401'
-    if (!allowedRoles.includes(role)) return '/error/403'
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.some((r) => hasRole(role, r))) {
+    return '/error/403'
   }
 })
 

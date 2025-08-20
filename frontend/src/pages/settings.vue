@@ -8,6 +8,6 @@
 <script setup lang="ts">
 import { Role } from '@/types'
 definePage({
-  meta: { roles: [Role.User, Role.Admin] },
+  meta: { roles: [Role.User] },
 })
 </script>

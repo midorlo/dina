@@ -10,6 +10,7 @@ export async function fetchProfile(userId: string): Promise<Profile> {
         username: `user-${userId}`,
         avatarUrl: `https://i.pravatar.cc/150?img=${Number.parseInt(userId) + 10}`,
         bio: `This is a mock bio for user ${userId}.`,
+        location: 'Mock City',
         status: Number.parseInt(userId) % 2 === 0 ? 'online' : 'offline',
         lastSeen:
           Number.parseInt(userId) % 2 === 0 ? '' : `${(Number.parseInt(userId) % 5) + 1} hours ago`,

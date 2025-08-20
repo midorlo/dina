@@ -18,6 +18,7 @@
               </v-avatar>
               <div class="text-h5 font-weight-bold">{{ user.username }}</div>
               <div class="text-subtitle-1 text-medium-emphasis">Username</div>
+              <div class="text-subtitle-2">{{ user.location }}</div>
             </v-sheet>
 
             <v-form @submit.prevent="saveProfile">
@@ -45,6 +46,16 @@
                   prepend-inner-icon="mdi-information-outline"
                   rounded="lg"
                   rows="3"
+                  variant="outlined"
+                />
+
+                <v-text-field
+                  v-model="user.location"
+                  class="mb-4"
+                  density="comfortable"
+                  label="Location"
+                  prepend-inner-icon="mdi-map-marker"
+                  rounded="pill"
                   variant="outlined"
                 />
               </v-sheet>
@@ -105,7 +116,7 @@ import { computed, onMounted, reactive } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
 definePage({
-  meta: { roles: [Role.User, Role.Admin] },
+  meta: { roles: [Role.User] },
 })
 
 const authStore = useAuthStore()

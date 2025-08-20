@@ -26,7 +26,7 @@ import { storeToRefs } from 'pinia'
 import { useNotificationsStore } from '@/stores/notifications'
 import { Role } from '@/types'
 definePage({
-  meta: { roles: [Role.User, Role.Admin] },
+  meta: { roles: [Role.User] },
 })
 
 const notificationsStore = useNotificationsStore()

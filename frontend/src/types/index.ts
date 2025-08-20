@@ -1,7 +1,10 @@
 export enum Role {
   Guest = 'guest',
   User = 'user',
-  Admin = 'admin',
+  Moderator = 'moderator',
+  Administrator = 'administrator',
+  Developer = 'developer',
+  Banned = 'banned',
 }
 
 export enum Permission {
@@ -37,6 +40,7 @@ export interface Profile {
   username: string
   avatarUrl?: string
   bio?: string
+  location?: string
   status?: 'online' | 'offline'
   lastSeen?: string
 }
