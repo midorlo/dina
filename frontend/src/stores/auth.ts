@@ -49,6 +49,9 @@ export const useAuthStore = defineStore('auth', {
     setProfile(profile: Profile | null) {
       this.userProfile = profile
     },
+    updateProfile(profile: Profile) {
+      this.userProfile = profile
+    },
     setTokens(tokens: AuthTokens | null) {
       this.tokens = tokens
     },

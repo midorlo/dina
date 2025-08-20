@@ -145,7 +145,7 @@ onMounted(async () => {
   try {
     const { fetchProfile } = await import('@/services/users')
     const profile = await fetchProfile(profileId.value)
-    authStore.userProfile = profile
+    authStore.updateProfile(profile)
   } catch (error) {
     console.error('Error fetching profile:', error)
   } finally {
@@ -156,9 +156,9 @@ onMounted(async () => {
 async function saveProfile() {
   if (user.value) {
     try {
-      const { updateProfile } = await import('@/services/users')
-      const updatedProfile = await updateProfile(user.value)
-      authStore.userProfile = updatedProfile
+      const { updateProfile: updateProfileApi } = await import('@/services/users')
+      const updatedProfile = await updateProfileApi(user.value)
+      authStore.updateProfile(updatedProfile)
       console.log('Profile saved successfully!', updatedProfile)
     } catch (error) {
       console.error('Error saving profile:', error)

@@ -11,20 +11,7 @@
       width="256"
     >
       <v-list nav>
-        <v-divider class="my-2">
-          <span class="text-caption text-uppercase">Sections</span>
-        </v-divider>
-        <v-list-item v-for="item in sectionsItems" :key="item.title" v-bind="item" />
-
-        <v-divider class="my-2">
-          <span class="text-caption text-uppercase">Account</span>
-        </v-divider>
-        <v-list-item v-for="item in accountItems" :key="item.title" v-bind="item" />
-
-        <v-divider class="my-2">
-          <span class="text-caption text-uppercase">Development</span>
-        </v-divider>
-        <v-list-item v-for="item in developmentItems" :key="item.title" v-bind="item" />
+        <v-list-item v-for="item in filteredItems" :key="item.title" v-bind="item" />
       </v-list>
 
       <template #append />
@@ -125,7 +112,7 @@ import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
-import logo from '@/assets/logo.svg'
+import { menu } from ' @/config/menu'
 import { loading } from '@/router/loading'
 import { filterMenuByRole, useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
@@ -181,76 +168,14 @@ function logout() {
   router.push('/login')
 }
 
-const sectionsItems = computed(() => [
-  {
-    title: 'Home',
-    prependAvatar: logo,
-    to: '/',
-  },
-  {
-    title: 'About',
-    prependIcon: 'mdi-information-outline',
-    to: '/about',
-  },
-  {
-    title: 'Profiles',
-    prependIcon: 'mdi-account-group-outline',
-    to: '/profiles',
-  },
-  {
-    title: 'Blogs',
-    prependIcon: 'mdi-post-outline',
-    to: '/blogs',
-  },
-])
+const filteredItems = computed(() =>
+  filterMenuByRole(menu, currentUser.value?.role || Role.Guest).map((item) => ({
+    ...item,
+    to: typeof item.to === 'function' ? item.to(currentUser.value?.id) : item.to,
+  }))
+)
 
-const accountItems = computed(() => {
-  const items = [
-    {
-      title: 'Profile',
-      prependIcon: 'mdi-account',
-      to: `/profiles/${currentUser.value?.id}/edit`,
-      roles: [Role.User],
-    },
-    {
-      title: 'Conversations',
-      prependIcon: 'mdi-message-text-outline',
-      to: '/conversations',
-    },
-    {
-      title: 'Photos',
-      prependIcon: 'mdi-image-multiple',
-      to: `/photos/${currentUser.value?.id}`,
-    },
-    {
-      title: 'Notifications',
-      prependIcon: 'mdi-bell-outline',
-      to: '/notifications',
-      roles: [Role.User],
-    },
-  ]
 
-  const role = currentUser.value?.role || Role.Guest
-  return filterMenuByRole(items, role)
-})
-
-const developmentItems = computed(() => [
-  {
-    title: 'Error 401',
-    prependIcon: 'mdi-alert-circle-outline',
-    to: '/error/401',
-  },
-  {
-    title: 'Error 403',
-    prependIcon: 'mdi-alert-octagon-outline',
-    to: '/error/403',
-  },
-  {
-    title: 'Error 500',
-    prependIcon: 'mdi-alert-box-outline',
-    to: '/error/500',
-  },
-])
 </script>
 
 <style>
