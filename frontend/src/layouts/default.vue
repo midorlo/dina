@@ -11,7 +11,10 @@
       width="256"
     >
       <v-list nav>
-        <v-list-item v-for="item in filteredItems" :key="item.title" v-bind="item" />
+        <template v-for="(item, index) in filteredItems" :key="index">
+          <v-divider v-if="item.type === 'divider'" />
+          <v-list-item v-else v-bind="item" />
+        </template>
       </v-list>
 
       <template #append />
@@ -169,12 +172,19 @@ function logout() {
   router.push('/login')
 }
 
-const filteredItems = computed(() =>
-  filterMenuByRole(menu, currentUser.value?.role || Role.Guest).map((item) => ({
+const filteredItems = computed(() => {
+  const items = filterMenuByRole(menu, currentUser.value?.role || Role.Guest).map((item) => ({
     ...item,
     to: typeof item.to === 'function' ? item.to(currentUser.value?.id) : item.to,
   }))
-)
+
+  return items.filter((item, index, array) => {
+    if (item.type !== 'divider') return true
+    const prev = array[index - 1]
+    const next = array[index + 1]
+    return prev && prev.type !== 'divider' && next && next.type !== 'divider'
+  })
+})
 </script>
 
 <style>

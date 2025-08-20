@@ -2,18 +2,44 @@ import logo from '@/assets/logo.svg'
 import { Role } from '@/types'
 
 export interface MenuItem {
-  title: string
+  title?: string
   prependIcon?: string
   prependAvatar?: string
-  to: string | ((id: string | undefined) => string)
+  to?: string | ((id: string | undefined) => string)
   roles?: Role[]
+  type?: 'divider'
 }
 
 export const menu: MenuItem[] = [
   {
+    title: 'About',
+    prependIcon: 'mdi-information-outline',
+    to: '/about',
+  },
+  {
+    title: 'Blogs',
+    prependIcon: 'mdi-post-outline',
+    to: '/blogs',
+  },
+  {
+    title: 'Conversations',
+    prependIcon: 'mdi-message-text-outline',
+    to: '/conversations',
+  },
+  {
     title: 'Home',
     prependAvatar: logo,
     to: '/',
+  },
+  {
+    title: 'Photos',
+    prependIcon: 'mdi-image-multiple',
+    to: (id) => `/photos/${id}`,
+  },
+  {
+    title: 'Profiles',
+    prependIcon: 'mdi-account-group-outline',
+    to: '/profiles',
   },
   {
     title: 'Store',
@@ -21,6 +47,7 @@ export const menu: MenuItem[] = [
     to: '/developer/store',
     roles: [Role.Developer],
   },
+  { type: 'divider' },
   {
     title: 'Login',
     prependIcon: 'mdi-login',
@@ -28,10 +55,10 @@ export const menu: MenuItem[] = [
     roles: [Role.Guest],
   },
   {
-    title: 'Register',
-    prependIcon: 'mdi-account-plus',
-    to: '/register',
-    roles: [Role.Guest],
+    title: 'Notifications',
+    prependIcon: 'mdi-bell-outline',
+    to: '/notifications',
+    roles: [Role.User],
   },
   {
     title: 'Profile',
@@ -40,36 +67,12 @@ export const menu: MenuItem[] = [
     roles: [Role.User],
   },
   {
-    title: 'About',
-    prependIcon: 'mdi-information-outline',
-    to: '/about',
+    title: 'Register',
+    prependIcon: 'mdi-account-plus',
+    to: '/register',
+    roles: [Role.Guest],
   },
-  {
-    title: 'Conversations',
-    prependIcon: 'mdi-message-text-outline',
-    to: '/conversations',
-  },
-  {
-    title: 'Photos',
-    prependIcon: 'mdi-image-multiple',
-    to: (id) => `/photos/${id}`,
-  },
-  {
-    title: 'Blogs',
-    prependIcon: 'mdi-post-outline',
-    to: '/blogs',
-  },
-  {
-    title: 'Profiles',
-    prependIcon: 'mdi-account-group-outline',
-    to: '/profiles',
-  },
-  {
-    title: 'Notifications',
-    prependIcon: 'mdi-bell-outline',
-    to: '/notifications',
-    roles: [Role.User],
-  },
+  { type: 'divider' },
   {
     title: 'Error 401',
     prependIcon: 'mdi-alert-circle-outline',
