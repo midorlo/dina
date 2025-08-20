@@ -10,11 +10,14 @@ import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
 import { hasRole, useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
+import { setupRouterLoading } from './loading'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routes),
 })
+
+setupRouterLoading(router)
 
 router.beforeEach((to) => {
   const auth = useAuthStore()

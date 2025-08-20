@@ -10,7 +10,22 @@
       :rail="$vuetify.display.mdAndUp"
       width="256"
     >
-      <v-list item-props :items="filteredItems" nav />
+      <v-list nav>
+        <v-divider class="my-2">
+          <span class="text-caption text-uppercase">Sections</span>
+        </v-divider>
+        <v-list-item v-for="item in sectionsItems" :key="item.title" v-bind="item" />
+
+        <v-divider class="my-2">
+          <span class="text-caption text-uppercase">Account</span>
+        </v-divider>
+        <v-list-item v-for="item in accountItems" :key="item.title" v-bind="item" />
+
+        <v-divider class="my-2">
+          <span class="text-caption text-uppercase">Development</span>
+        </v-divider>
+        <v-list-item v-for="item in developmentItems" :key="item.title" v-bind="item" />
+      </v-list>
 
       <template #append />
     </v-navigation-drawer>
@@ -111,6 +126,7 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
 import logo from '@/assets/logo.svg'
+import { loading } from '@/router/loading'
 import { filterMenuByRole, useAuthStore } from '@/stores/auth'
 import { useNotificationsStore } from '@/stores/notifications'
 import { useSnackbarStore } from '@/stores/snackbar' // New import
@@ -121,7 +137,6 @@ const { message, color, visible, timeout } = storeToRefs(snackbarStore) // New
 
 const drawer = ref(true)
 const theme = useTheme()
-const loading = ref(false)
 const route = useRoute()
 const router = useRouter()
 
@@ -151,14 +166,6 @@ const breadcrumbItems = computed(() => {
   return crumbs
 })
 
-router.beforeEach(() => {
-  loading.value = true
-})
-
-router.afterEach(() => {
-  loading.value = false
-})
-
 const notificationsStore = useNotificationsStore()
 const { unreadCount } = storeToRefs(notificationsStore)
 
@@ -174,35 +181,11 @@ function logout() {
   router.push('/login')
 }
 
-const items = computed(() => [
+const sectionsItems = computed(() => [
   {
     title: 'Home',
     prependAvatar: logo,
     to: '/',
-  },
-  {
-    title: 'Store',
-    prependIcon: 'mdi-store',
-    to: '/developer/store',
-    roles: [Role.Developer],
-  },
-  {
-    title: 'Login',
-    prependIcon: 'mdi-login',
-    to: '/login',
-    roles: [Role.Guest],
-  },
-  {
-    title: 'Register',
-    prependIcon: 'mdi-account-plus',
-    to: '/register',
-    roles: [Role.Guest],
-  },
-  {
-    title: 'Profile',
-    prependIcon: 'mdi-account',
-    to: `/profiles/${currentUser.value?.id}/edit`,
-    roles: [Role.User],
   },
   {
     title: 'About',
@@ -210,31 +193,48 @@ const items = computed(() => [
     to: '/about',
   },
   {
-    title: 'Conversations',
-    prependIcon: 'mdi-message-text-outline',
-    to: '/conversations',
-  },
-  {
-    title: 'Photos',
-    prependIcon: 'mdi-image-multiple',
-    to: `/photos/${currentUser.value?.id}`,
+    title: 'Profiles',
+    prependIcon: 'mdi-account-group-outline',
+    to: '/profiles',
   },
   {
     title: 'Blogs',
     prependIcon: 'mdi-post-outline',
     to: '/blogs',
   },
-  {
-    title: 'Profiles',
-    prependIcon: 'mdi-account-group-outline',
-    to: '/profiles',
-  },
-  {
-    title: 'Notifications',
-    prependIcon: 'mdi-bell-outline',
-    to: '/notifications',
-    roles: [Role.User],
-  },
+])
+
+const accountItems = computed(() => {
+  const items = [
+    {
+      title: 'Profile',
+      prependIcon: 'mdi-account',
+      to: `/profiles/${currentUser.value?.id}/edit`,
+      roles: [Role.User],
+    },
+    {
+      title: 'Conversations',
+      prependIcon: 'mdi-message-text-outline',
+      to: '/conversations',
+    },
+    {
+      title: 'Photos',
+      prependIcon: 'mdi-image-multiple',
+      to: `/photos/${currentUser.value?.id}`,
+    },
+    {
+      title: 'Notifications',
+      prependIcon: 'mdi-bell-outline',
+      to: '/notifications',
+      roles: [Role.User],
+    },
+  ]
+
+  const role = currentUser.value?.role || Role.Guest
+  return filterMenuByRole(items, role)
+})
+
+const developmentItems = computed(() => [
   {
     title: 'Error 401',
     prependIcon: 'mdi-alert-circle-outline',
@@ -246,15 +246,11 @@ const items = computed(() => [
     to: '/error/403',
   },
   {
-    title: 'Error 404',
+    title: 'Error 500',
     prependIcon: 'mdi-alert-box-outline',
-    to: '/error/404',
+    to: '/error/500',
   },
 ])
-
-const filteredItems = computed(() =>
-  filterMenuByRole(items.value, currentUser.value?.role || Role.Guest)
-)
 </script>
 
 <style>
@@ -265,6 +261,14 @@ const filteredItems = computed(() =>
 .v-navigation-drawer__content {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.v-navigation-drawer .v-list-item {
+  --indent-padding: 0;
+}
+
+.v-navigation-drawer--rail .v-list-subheader span {
+  display: none;
 }
 
 .app-bar-icon-btn.v-btn--icon:hover > .v-btn__overlay {
