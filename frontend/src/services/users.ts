@@ -1,7 +1,7 @@
 import type { Profile } from '@/types'
+import { mockUsers } from '@/data/mock-data.ts'
 import { apiFetch, getAuthHeaders } from '@/services/api'
-import { delay, useMocks } from '@/services/mock'
-import { mockUsers } from '@/services/mock-data'
+import { delay, useMocks } from '@/utils/mock.ts'
 
 export async function fetchProfile(userId: string): Promise<Profile> {
   if (!useMocks) {

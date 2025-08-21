@@ -1,0 +1,17 @@
+/* z.B. src/styles/transitions.css, global importieren */
+@media (prefers-reduced-motion: reduce) {
+  .fade-transition-enter-active,
+  .fade-transition-leave-active {
+    transition: none !important;
+  }
+}
+
+/* Beispiel: eigene Fade-Dauer */
+.fade-transition-enter-active,
+.fade-transition-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-transition-enter-from,
+.fade-transition-leave-to {
+  opacity: 0;
+}

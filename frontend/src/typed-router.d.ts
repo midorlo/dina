@@ -31,7 +31,7 @@ declare module 'vue-router/auto-routes' {
     '/conversations/': RouteRecordInfo<'/conversations/', '/conversations', Record<never, never>, Record<never, never>>,
     '/conversations/[conversationId]/': RouteRecordInfo<'/conversations/[conversationId]/', '/conversations/:conversationId', { conversationId: ParamValue<true> }, { conversationId: ParamValue<false> }>,
     '/conversations/[conversationId]/[messageId]': RouteRecordInfo<'/conversations/[conversationId]/[messageId]', '/conversations/:conversationId/:messageId', { conversationId: ParamValue<true>, messageId: ParamValue<true> }, { conversationId: ParamValue<false>, messageId: ParamValue<false> }>,
-    '/Croppertest': RouteRecordInfo<'/Croppertest', '/Croppertest', Record<never, never>, Record<never, never>>,
+    '/developer/croptest': RouteRecordInfo<'/developer/croptest', '/developer/croptest', Record<never, never>, Record<never, never>>,
     '/developer/store': RouteRecordInfo<'/developer/store', '/developer/store', Record<never, never>, Record<never, never>>,
     '/error/401': RouteRecordInfo<'/error/401', '/error/401', Record<never, never>, Record<never, never>>,
     '/error/403': RouteRecordInfo<'/error/403', '/error/403', Record<never, never>, Record<never, never>>,

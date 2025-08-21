@@ -109,9 +109,9 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { useFormValidation } from '@/composables/useFormValidation'
-import { mockUsers } from '@/services/mock-data'
+import { mockUsers } from '@/data/mock-data.ts'
 import { useAuthStore } from '@/stores/auth'
-import { useSnackbarStore } from '@/stores/snackbar' // New import
+import { useSnackbarStore } from '@/stores/snackbar'
 
 import { Role } from '@/types'
 
@@ -148,7 +148,7 @@ const presets = mockUsers.map((mockUser) => ({
 const authStore = useAuthStore()
 
 const router = useRouter()
-const snackbarStore = useSnackbarStore() // New
+const snackbarStore = useSnackbarStore()
 
 async function login() {
   const isValid = await form.value?.validate()
@@ -161,7 +161,7 @@ async function login() {
       authStore.setUser(response.user)
       authStore.setTokens(response.tokens)
       authStore.setProfile(response.profile)
-      snackbarStore.showSnackbar('Login successful!', 'success') // New
+      snackbarStore.showSnackbar('Login successful!', 'success')
       router.push('/')
     }
   } catch (error: any) {

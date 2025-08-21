@@ -1,19 +1,5 @@
 import type { Profile } from './profile'
-
-export enum Role {
-  Any = 'any',
-  Guest = 'guest',
-  User = 'user',
-  Moderator = 'moderator',
-  Administrator = 'administrator',
-  Developer = 'developer',
-  Banned = 'banned',
-}
-
-export enum Permission {
-  ViewDashboard = 'view_dashboard',
-  ManageUsers = 'manage_users',
-}
+import type { Role } from '@/data/mock-data'
 
 export interface User {
   id: string
@@ -36,3 +22,5 @@ export interface LoginResponse {
   tokens: AuthTokens
   profile: Profile
 }
+
+export { Permission, Role } from '@/data/mock-data'

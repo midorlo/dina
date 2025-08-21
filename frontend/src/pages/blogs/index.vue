@@ -61,7 +61,11 @@ import { type Blog, Role } from '@/types'
 import { slugify } from '@/utils/slug'
 
 definePage({
-  meta: { roles: [Role.Any], layout: 'default' },
+  meta: {
+    roles: [Role.Any],
+    layout: 'default',
+    breadcrumb: 'Übersicht',
+  },
 })
 
 const blogs = ref<Blog[]>([])

@@ -54,6 +54,7 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchProfile } from '@/services/profiles'
@@ -69,7 +70,7 @@ definePage({
 })
 
 const route = useRoute()
-const profileId = computed(() => (route.params as ProfileRouteParams).id)
+const profileId = computed(() => (route.params as unknown as ProfileRouteParams).id)
 
 const profile = ref<Profile | null>(null)
 const loading = ref(true)

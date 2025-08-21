@@ -4,18 +4,31 @@
  * Automatic routes for `./src/pages/*.vue`
  */
 
+import type { Router } from 'vue-router'
 import { setupLayouts } from 'virtual:generated-layouts'
+import { ref } from 'vue'
+
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
 import { hasRole, useAuthStore } from '@/stores/auth'
 import { Role } from '@/types'
-import { setupRouterLoading } from './loading'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routes),
 })
+
+export const loading = ref(false)
+
+export function setupRouterLoading(router: Router) {
+  router.beforeEach(() => {
+    loading.value = true
+  })
+  router.afterEach(() => {
+    loading.value = false
+  })
+}
 
 setupRouterLoading(router)
 

@@ -1,7 +1,7 @@
+import { mockUsers } from '@/data/mock-data.ts'
 import { apiFetch } from '@/services/api'
-import { useMocks } from '@/services/mock'
-import { mockUsers } from '@/services/mock-data'
 import { type AuthTokens, type LoginResponse, Role } from '@/types'
+import { useMocks } from '@/utils/mock.ts'
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
   if (!useMocks) {

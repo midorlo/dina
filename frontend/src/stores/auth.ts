@@ -1,38 +1,12 @@
+import type { Permission } from '@/data/mock-data'
+import type { AuthTokens, Profile, User } from '@/types'
 import { defineStore } from 'pinia'
-import { type AuthTokens, Permission, type Profile, Role, type User } from '@/types'
-
-const rolePermissions: Record<Role, Permission[]> = {
-  [Role.Any]: [],
-  [Role.Guest]: [],
-  [Role.User]: [Permission.ViewDashboard],
-  [Role.Moderator]: [Permission.ViewDashboard],
-  [Role.Administrator]: [Permission.ViewDashboard, Permission.ManageUsers],
-  [Role.Developer]: [Permission.ViewDashboard, Permission.ManageUsers],
-  [Role.Banned]: [],
-}
-
-const roleHierarchy: Record<Role, Role[]> = {
-  [Role.Any]: [],
-  [Role.Developer]: [Role.Developer, Role.Administrator, Role.Moderator, Role.User],
-  [Role.Administrator]: [Role.Administrator, Role.Moderator, Role.User],
-  [Role.Moderator]: [Role.Moderator, Role.User],
-  [Role.User]: [Role.User],
-  [Role.Guest]: [Role.Guest],
-  [Role.Banned]: [],
-}
+import { guestUser, Role, roleHierarchy, rolePermissions } from '@/data/mock-data'
+import router from '@/router'
 
 export function hasRole(role: Role, required: Role) {
   if (required === Role.Any) return role !== Role.Banned
   return roleHierarchy[role]?.includes(required) ?? false
-}
-
-const guestUser: User = {
-  id: 'guest',
-  email: '',
-  name: 'Guest',
-  role: Role.Guest,
-  username: 'guest',
-  avatarUrl: '',
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -66,6 +40,10 @@ export const useAuthStore = defineStore('auth', {
       this.tokens = null
       this.init()
     },
+    logout() {
+      this.reset()
+      router.push('/login')
+    },
     hasPermission(role: Role, permission: Permission) {
       return rolePermissions[role]?.includes(permission) ?? false
     },
@@ -76,4 +54,4 @@ export function filterMenuByRole<T extends { roles?: Role[] }>(menu: T[], role: 
   return menu.filter((item) => !item.roles || item.roles.some((r) => hasRole(role, r)))
 }
 
-export { rolePermissions }
+export { rolePermissions } from '@/data/mock-data'

@@ -63,6 +63,7 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchBlogPost } from '@/services/blogs'
