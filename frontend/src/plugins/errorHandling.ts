@@ -13,7 +13,7 @@ export default {
 
     app.config.errorHandler = (err, instance, info) => {
       Sentry.captureException(err)
-      useSnackbarStore().showError()
+      useSnackbarStore().showError(err)
       defaultHandler?.(err, instance, info)
     }
   },

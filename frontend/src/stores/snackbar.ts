@@ -14,7 +14,15 @@ export const useSnackbarStore = defineStore('snackbar', () => {
     visible.value = true
   }
 
-  function showError(msg = 'An unexpected error occurred. Please check the console for details.') {
+  function showError(
+    errorOrMessage?: unknown,
+    msg = 'An unexpected error occurred. Please check the console for details.'
+  ) {
+    if (typeof errorOrMessage === 'string') {
+      msg = errorOrMessage
+    } else if (errorOrMessage != null) {
+      console.error(errorOrMessage)
+    }
     showSnackbar(msg, 'error')
   }
 
