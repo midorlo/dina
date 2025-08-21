@@ -8,13 +8,26 @@
           class="cursor-pointer"
           :rounded="circlePreview"
           :size="avatarSize"
-          @click="open()"
+          @click="triggerFileInput()"
         >
           <v-img v-if="modelValue" cover :src="modelValue" />
           <v-icon v-else size="36">mdi-account-circle</v-icon>
         </v-avatar>
       </template>
     </v-tooltip>
+
+    <v-file-input
+      ref="fileInputRef"
+      v-model="files"
+      accept="image/*"
+      density="comfortable"
+      hide-details
+      label="Bild auswählen"
+      prepend-icon="mdi-image"
+      style="display: none"
+      variant="outlined"
+      @change="onFileSelected"
+    ></v-file-input>
 
     <!-- Arbeitsfenster: Modaler Dialog -->
     <v-dialog v-model="dialog" :max-width="dialogMaxWidth">
@@ -59,16 +72,7 @@
 
             <v-col class="d-flex flex-column ga-4" :cols="12" :md="5">
               <div class="d-flex ga-3 align-center">
-                <v-file-input
-                  v-model="files"
-                  accept="image/*"
-                  density="comfortable"
-                  hide-details
-                  label="Bild auswählen"
-                  prepend-icon="mdi-image"
-                  variant="outlined"
-                  @change="onFileSelected"
-                ></v-file-input>
+                <!-- The v-file-input was here, now it's outside and hidden -->
                 <v-btn
                   :disabled="!cropper"
                   icon="mdi-rotate-left"
@@ -154,7 +158,7 @@
 </template>
 
 <script lang="ts" setup>
-import Cropper, { type Options as CropperOptions } from 'cropperjs'
+import Cropper, { type CropperOptions } from 'cropperjs'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 type OutputFormat = 'image/png' | 'image/jpeg' | 'image/webp'
@@ -221,6 +225,8 @@ const cropper = ref<Cropper | null>(null)
 const errorMessage = ref('')
 const imageReady = ref(false)
 
+const fileInputRef = ref<any>(null)
+
 const zoom = ref(1)
 const zoomMin = 0.1
 const zoomMax = 5
@@ -241,6 +247,19 @@ function open(): void {
 }
 function close(): void {
   dialog.value = false
+}
+
+function triggerFileInput(): void {
+  console.log('triggerFileInput called')
+  console.log('fileInputRef.value:', fileInputRef.value)
+  if (fileInputRef.value) {
+    nextTick(() => {
+      const nativeInput = (fileInputRef.value as any).$el.querySelector('input[type="file"]')
+      console.log('nativeInput (inside nextTick):', nativeInput)
+      nativeInput?.click()
+      console.log('Attempted to click file input.')
+    })
+  }
 }
 
 function setError(msg: string): void {
@@ -265,7 +284,6 @@ function revokeObjectUrl(): void {
 
 function destroyCropper(): void {
   if (cropper.value) {
-    cropper.value.destroy()
     cropper.value = null
   }
   imageReady.value = false
@@ -278,68 +296,82 @@ function mountCropper(): void {
   requestAnimationFrame(() => {
     destroyCropper()
     const opts: CropperOptions = {
-      aspectRatio: aspectRatio.value > 0 ? aspectRatio.value : Number.NaN,
-      autoCropArea: 1,
-      viewMode: 1,
-      responsive: true,
-      dragMode: 'move',
-      preview,
       ...props.cropperOptions,
     }
     cropper.value = new Cropper(img, opts)
+    const selection = cropper.value.getCropperSelection()
+    if (selection) {
+      selection.aspectRatio = aspectRatio.value > 0 ? aspectRatio.value : Number.NaN
+    }
     imageReady.value = true
   })
 }
 
-function onFileSelected(): void {
-  const file = files.value && files.value[0] ? files.value[0] : null
-  if (!file) return
+function onFileSelected(event: Event): void {
+  console.log('onFileSelected called')
+  const file = (event.target as HTMLInputElement).files?.[0] || null
+  console.log('files.value (from v-model):', files.value)
+  console.log('selected file (from event):', file)
+  if (!file) {
+    console.log('No file selected, returning.')
+    return
+  }
   const err = validateFile(file)
   if (err) {
     setError(err)
+    console.log('File validation error:', err)
     return
   }
   revokeObjectUrl()
   objectUrl = URL.createObjectURL(file)
   const img = imgRef.value
-  if (!img) return
+  if (!img) {
+    console.log('imgRef.value is null, returning.')
+    return
+  }
   const onLoad = () => {
     img.removeEventListener('load', onLoad)
-    mountCropper()
+    // mountCropper() // Removed this call
+    console.log('Image loaded, mountCropper called.')
   }
   const onErr = () => {
     img.removeEventListener('error', onErr)
     setError('Bild konnte nicht geladen werden.')
+    console.log('Image loading error.')
   }
   img.addEventListener('load', onLoad, { once: true })
   img.addEventListener('error', onErr, { once: true })
   imageSrc.value = objectUrl
+  dialog.value = true
+  console.log('Dialog opened and imageSrc set.')
 }
 
 function onDrop(e: DragEvent): void {
   const f = e.dataTransfer?.files?.[0]
   if (f) {
     files.value = [f]
-    onFileSelected()
+    onFileSelected(e) // Pass the event object
   }
 }
 
 function rotate(deg: number): void {
-  if (cropper.value) cropper.value.rotate(deg)
+  if (cropper.value) cropper.value.getCropperImage()?.$rotate(deg)
 }
 function reset(): void {
-  if (cropper.value) cropper.value.reset()
+  if (cropper.value) cropper.value.getCropperImage()?.$resetTransform()
 }
 
 function toggleAspect(): void {
   if (!allowFreeAspect.value) return
   aspectRatio.value = aspectRatio.value > 0 ? 0 : 1 // unicorn/prefer-ternary
-  if (cropper.value)
-    cropper.value.setAspectRatio(aspectRatio.value > 0 ? aspectRatio.value : Number.NaN)
+  const selection = cropper.value?.getCropperSelection()
+  if (selection) {
+    selection.aspectRatio = aspectRatio.value > 0 ? aspectRatio.value : Number.NaN
+  }
 }
 
 function onZoomChange(val: number): void {
-  if (cropper.value) cropper.value.zoomTo(val)
+  if (cropper.value) cropper.value.getCropperImage()?.$zoom(val)
 }
 
 function canvasToBlob(canvas: HTMLCanvasElement, type: OutputFormat, q: number): Promise<Blob> {
@@ -358,7 +390,7 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: OutputFormat, q: number):
 function buildOutputCanvas(): HTMLCanvasElement | null {
   if (!cropper.value) return null
   const size = outputSize.value
-  const base = cropper.value.getCroppedCanvas({ width: size, height: size })
+  const base = (cropper.value.getCropperImage() as any)?.$toCanvas({ width: size, height: size })
   if (!base) return null
   if (circlePreview.value && (format.value === 'image/png' || format.value === 'image/webp')) {
     const c = document.createElement('canvas')
@@ -401,9 +433,16 @@ async function save(): Promise<void> {
 watch(dialog, (open) => {
   emit('open-change', open)
   if (!open) {
+    // When dialog closes
     destroyCropper()
     revokeObjectUrl()
     files.value = null
+  }
+})
+
+watch(imageSrc, (newVal) => {
+  if (newVal) {
+    mountCropper()
   }
 })
 
@@ -450,8 +489,4 @@ defineExpose<{ open: () => void }>({ open })
 .cursor-pointer {
   cursor: pointer;
 }
-</style>
-
-<style>
-@import 'cropperjs/dist/cropper.css';
 </style>

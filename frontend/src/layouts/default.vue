@@ -4,10 +4,10 @@
       v-model="drawer"
       app
       color="surface-variant"
-      :expand-on-hover="$vuetify.display.mdAndUp"
+      :expand-on-hover="mdAndUp"
       fixed
       mobile-breakpoint="md"
-      :rail="$vuetify.display.mdAndUp"
+      :rail="mdAndUp"
       width="256"
     >
       <v-list nav>

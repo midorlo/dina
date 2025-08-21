@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import Cropper from '@/components/Cropper.vue'
 import { ref } from 'vue'
+import Cropper from '@/components/Cropper.vue'
 
 const avatarUrl = ref<string | null>(null)
 

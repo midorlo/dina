@@ -9,7 +9,7 @@
       target="_blank"
       :title="item.title"
     >
-      <v-icon :icon="item.icon" :size="item.icon === '$vuetify' ? 24 : 16" />
+      <v-icon :icon="item.icon" :size="item.icon === 'mdi-vuetify' ? 24 : 16" />
     </a>
 
     <div class="text-caption text-disabled" style="position: absolute; right: 16px">
@@ -32,7 +32,7 @@
 const items = [
   {
     title: 'Vuetify Documentation',
-    icon: `$vuetify`,
+    icon: 'mdi-vuetify',
     href: 'https://vuetifyjs.com/',
   },
   {
