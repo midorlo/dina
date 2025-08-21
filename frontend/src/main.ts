@@ -16,6 +16,7 @@ import App from './App.vue'
 
 // Styles
 import 'unfonts.css'
+import 'cropperjs/dist/cropper.css' // Added for testing build issue
 
 const app = createApp(App)
 
