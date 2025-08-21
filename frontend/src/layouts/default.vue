@@ -114,7 +114,7 @@
 import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useTheme } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify' // Added useDisplay
 import { menu } from '@/config/menu'
 import { loading } from '@/router/loading'
 import { filterMenuByRole, useAuthStore } from '@/stores/auth'
@@ -162,7 +162,8 @@ const breadcrumbItems = computed(() => {
   return items
 })
 
-const showAppBarNavIcon = computed(() => !$vuetify.display.mdAndUp)
+const { mdAndUp } = useDisplay() // Call useDisplay and destructure mdAndUp
+const showAppBarNavIcon = computed(() => !mdAndUp.value) // Use mdAndUp.value
 
 const notificationsStore = useNotificationsStore()
 const { unreadCount } = storeToRefs(notificationsStore)
