@@ -397,40 +397,8 @@ export const blogPostsDetails: Record<string, Post> = {
 }
 export const menuData: MenuItem[] = [
   {
-    title: 'About',
-    prependIcon: 'mdi-information-outline',
-    to: '/about',
-  },
-  {
-    title: 'Blogs',
-    prependIcon: 'mdi-post-outline',
-    to: '/blogs',
-  },
-  {
-    title: 'Conversations',
-    prependIcon: 'mdi-message-text-outline',
-    to: '/conversations',
-  },
-  {
-    title: 'Home',
     prependAvatar: logo,
     to: '/',
-  },
-  {
-    title: 'Photos',
-    prependIcon: 'mdi-image-multiple',
-    to: (id) => `/photos/${id}`,
-  },
-  {
-    title: 'Profiles',
-    prependIcon: 'mdi-account-group-outline',
-    to: '/profiles',
-  },
-  {
-    title: 'Store',
-    prependIcon: 'mdi-store',
-    to: '/developer/store',
-    roles: [Role.Developer],
   },
   { type: 'divider' },
   {
@@ -440,18 +408,6 @@ export const menuData: MenuItem[] = [
     roles: [Role.Guest],
   },
   {
-    title: 'Notifications',
-    prependIcon: 'mdi-bell-outline',
-    to: '/notifications',
-    roles: [Role.User],
-  },
-  {
-    title: 'Profile',
-    prependIcon: 'mdi-account',
-    to: (id) => `/profiles/${id}/edit`,
-    roles: [Role.User],
-  },
-  {
     title: 'Register',
     prependIcon: 'mdi-account-plus',
     to: '/register',
@@ -459,19 +415,52 @@ export const menuData: MenuItem[] = [
   },
   { type: 'divider' },
   {
+    title: 'Profiles',
+    prependIcon: 'mdi-account-group-outline',
+    to: '/profiles',
+  },
+  {
+    title: 'Blogs',
+    prependIcon: 'mdi-post-outline',
+    to: '/blogs',
+  },
+  { type: 'divider' },
+  {
+    title: 'Conversations',
+    prependIcon: 'mdi-message-text-outline',
+    to: '/conversations',
+    roles: [Role.User],
+  },
+  {
+    title: 'Photos',
+    prependIcon: 'mdi-image-multiple',
+    to: (id) => `/photos/${id}`,
+    roles: [Role.User],
+  },
+  { type: 'divider' },
+  {
     title: 'Error 401',
     prependIcon: 'mdi-alert-circle-outline',
     to: '/error/401',
+    roles: [Role.Developer],
   },
   {
     title: 'Error 403',
     prependIcon: 'mdi-alert-octagon-outline',
     to: '/error/403',
+    roles: [Role.Developer],
   },
   {
     title: 'Error 404',
     prependIcon: 'mdi-alert-box-outline',
     to: '/error/404',
+    roles: [Role.Developer],
+  },
+  {
+    title: 'Error 500',
+    prependIcon: 'mdi-alert-decagram-outline',
+    to: '/error/500',
+    roles: [Role.Developer],
   },
 ]
 
