@@ -1,12 +1,11 @@
-import type { Permission } from '@/data/mock-data'
+import type { Permission, Role } from '@/data/mock-data'
 import type { AuthTokens, Profile, User } from '@/types'
 import { defineStore } from 'pinia'
-import { guestUser, Role, roleHierarchy, rolePermissions } from '@/data/mock-data'
+import { hasPermission as checkPermission, guestUser, roleAtLeast } from '@/data/mock-data'
 import router from '@/router'
 
 export function hasRole(role: Role, required: Role) {
-  if (required === Role.Any) return role !== Role.Banned
-  return roleHierarchy[role]?.includes(required) ?? false
+  return roleAtLeast(role, required)
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -45,7 +44,7 @@ export const useAuthStore = defineStore('auth', {
       router.push('/login')
     },
     hasPermission(role: Role, permission: Permission) {
-      return rolePermissions[role]?.includes(permission) ?? false
+      return checkPermission(role, permission)
     },
   },
 })
