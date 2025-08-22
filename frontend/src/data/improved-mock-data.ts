@@ -11,10 +11,7 @@ import type {
 import type { MenuItem } from '@/types/menuData.ts'
 import logo from '@/assets/logo.svg'
 
-export interface MockUser {
-  user: User
-  profile: Profile
-}
+/** ---------- Roles & Permissions ---------- */
 
 export enum Permission {
   ViewDashboard = 'view_dashboard',
@@ -31,105 +28,22 @@ export enum Role {
   Banned = 'banned',
 }
 
-export const mockUsers: MockUser[] = [
-  {
-    user: {
-      id: '1',
-      email: 'john.doe@example.com',
-      name: 'John Doe',
-      role: Role.User,
-      username: 'john.doe',
-      avatarUrl: 'https://i.pravatar.cc/150?img=1',
-    },
-    profile: {
-      id: '1',
-      userId: '1',
-      username: 'john.doe',
-      avatarUrl: 'https://i.pravatar.cc/150?img=1',
-      bio: 'I am a software developer from New York.',
-      status: 'online',
-      lastSeen: '',
-    },
-  },
-  {
-    user: {
-      id: '2',
-      email: 'jane.smith@example.com',
-      name: 'Jane Smith',
-      role: Role.Moderator,
-      username: 'jane.smith',
-      avatarUrl: 'https://i.pravatar.cc/150?img=2',
-    },
-    profile: {
-      id: '2',
-      userId: '2',
-      username: 'jane.smith',
-      avatarUrl: 'https://i.pravatar.cc/150?img=2',
-      bio: 'I am a data scientist from Berlin.',
-      status: 'offline',
-      lastSeen: '2 hours ago',
-    },
-  },
-  {
-    user: {
-      id: '3',
-      email: 'peter.jones@example.com',
-      name: 'Peter Jones',
-      role: Role.Administrator,
-      username: 'peter.jones',
-      avatarUrl: 'https://i.pravatar.cc/150?img=3',
-    },
-    profile: {
-      id: '3',
-      userId: '3',
-      username: 'peter.jones',
-      avatarUrl: 'https://i.pravatar.cc/150?img=3',
-      bio: 'I am a software developer from New York.',
-      status: 'online',
-      lastSeen: '',
-    },
-  },
-  {
-    user: {
-      id: '4',
-      email: 'mary.williams@example.com',
-      name: 'Mary Williams',
-      role: Role.Developer,
-      username: 'mary.williams',
-      avatarUrl: 'https://i.pravatar.cc/150?img=4',
-    },
-    profile: {
-      id: '4',
-      userId: '4',
-      username: 'mary.williams',
-      avatarUrl: 'https://i.pravatar.cc/150?img=4',
-      bio: 'I am a data scientist from Berlin.',
-      status: 'offline',
-      lastSeen: 'yesterday',
-    },
-  },
-  {
-    user: {
-      id: '5',
-      email: 'david.brown@example.com',
-      name: 'David Brown',
-      role: Role.Banned,
-      username: 'david.brown',
-      avatarUrl: 'https://i.pravatar.cc/150?img=5',
-    },
-    profile: {
-      id: '5',
-      userId: '5',
-      username: 'david.brown',
-      avatarUrl: 'https://i.pravatar.cc/150?img=5',
-      bio: 'I am a full-stack developer from Tokyo.',
-      status: 'online',
-      lastSeen: '',
-    },
-  },
-]
+/** Rollenrang für verlässliche Vergleiche (höher = mehr Rechte) */
+export const roleRank: Readonly<Record<Role, number>> = {
+  [Role.Banned]: -1,
+  [Role.Guest]: 0,
+  [Role.User]: 1,
+  [Role.Moderator]: 2,
+  [Role.Administrator]: 3,
+  [Role.Developer]: 4,
+  [Role.Any]: 0, // neutral/default
+} as const
 
-export const rolePermissions: Record<Role, Permission[]> = {
+export const roleAtLeast = (role: Role, required: Role): boolean =>
+  roleRank[role] >= roleRank[required]
+
+/** Basis-Permissions, ggf. ergänzt über roleAtLeast(...) Checks in Guards */
+export const rolePermissions: Readonly<Record<Role, readonly Permission[]>> = {
   [Role.Any]: [],
   [Role.Guest]: [],
   [Role.User]: [Permission.ViewDashboard],
@@ -137,17 +51,117 @@ export const rolePermissions: Record<Role, Permission[]> = {
   [Role.Administrator]: [Permission.ViewDashboard, Permission.ManageUsers],
   [Role.Developer]: [Permission.ViewDashboard, Permission.ManageUsers],
   [Role.Banned]: [],
+} as const
+
+export const hasPermission = (role: Role, permission: Permission): boolean =>
+  rolePermissions[role].includes(permission)
+
+/** ---------- Helpers (Mock utils) ---------- */
+
+const avatar = (n: number) => `https://i.pravatar.cc/150?img=${n}`
+const unsplash = (id: string, w = 2070) =>
+  `https://images.unsplash.com/photo-${id}?ixlib=rb-4.0.3&auto=format&fit=crop&w=${w}&q=80`
+
+/** ISO-Dateien beibehalten – UI formatiert. */
+type ISODate = `${number}-${number}-${number}`
+
+/** ---------- Users & Profiles ---------- */
+
+export interface MockUser {
+  user: User
+  profile: Profile
 }
 
-export const roleHierarchy: Record<Role, Role[]> = {
-  [Role.Any]: [],
-  [Role.Developer]: [Role.Developer, Role.Administrator, Role.Moderator, Role.User],
-  [Role.Administrator]: [Role.Administrator, Role.Moderator, Role.User],
-  [Role.Moderator]: [Role.Moderator, Role.User],
-  [Role.User]: [Role.User],
-  [Role.Guest]: [Role.Guest],
-  [Role.Banned]: [],
+/** Minimale, konsistente Erstellung eines Users inkl. Profil */
+function createMockUser(params: {
+  id: string
+  email: string
+  name: string
+  role: Role
+  username: string
+  avatarIndex: number
+  bio: string
+  status: 'online' | 'offline'
+  lastSeen?: string // ISO oder menschenlesbar – Anzeige entscheidet
+}): MockUser {
+  const { id, email, name, role, username, avatarIndex, bio, status, lastSeen = '' } = params
+  const avatarUrl = avatar(avatarIndex)
+  const user: User = { id, email, name, role, username, avatarUrl }
+  const profile: Profile = {
+    id,
+    userId: id,
+    username,
+    avatarUrl,
+    bio,
+    status,
+    lastSeen,
+  }
+  return { user, profile }
 }
+
+export const mockUsers: Readonly<MockUser[]> = [
+  createMockUser({
+    id: '1',
+    email: 'john.doe@example.com',
+    name: 'John Doe',
+    role: Role.User,
+    username: 'john.doe',
+    avatarIndex: 1,
+    bio: 'I am a software developer from New York.',
+    status: 'online',
+  }),
+  createMockUser({
+    id: '2',
+    email: 'jane.smith@example.com',
+    name: 'Jane Smith',
+    role: Role.Moderator,
+    username: 'jane.smith',
+    avatarIndex: 2,
+    bio: 'I am a data scientist from Berlin.',
+    status: 'offline',
+    lastSeen: '2025-08-20', // ISO bevorzugt
+  }),
+  createMockUser({
+    id: '3',
+    email: 'peter.jones@example.com',
+    name: 'Peter Jones',
+    role: Role.Administrator,
+    username: 'peter.jones',
+    avatarIndex: 3,
+    bio: 'I am a software developer from New York.',
+    status: 'online',
+  }),
+  createMockUser({
+    id: '4',
+    email: 'mary.williams@example.com',
+    name: 'Mary Williams',
+    role: Role.Developer,
+    username: 'mary.williams',
+    avatarIndex: 4,
+    bio: 'I am a data scientist from Berlin.',
+    status: 'offline',
+    lastSeen: '2025-08-21',
+  }),
+  createMockUser({
+    id: '5',
+    email: 'david.brown@example.com',
+    name: 'David Brown',
+    role: Role.Banned,
+    username: 'david.brown',
+    avatarIndex: 5,
+    bio: 'I am a full-stack developer from Tokyo.',
+    status: 'online',
+  }),
+] as const
+
+/** schnelle Lookups */
+export const usersById: Readonly<Record<string, User>> = Object.fromEntries(
+  mockUsers.map(({ user }) => [user.id, user])
+) as Record<string, User>
+
+export const profilesByUserId: Readonly<Record<string, Profile>> = Object.fromEntries(
+  mockUsers.map(({ profile }) => [profile.userId, profile])
+) as Record<string, Profile>
 
 export const guestUser: User = {
   id: 'guest',
@@ -158,80 +172,86 @@ export const guestUser: User = {
   avatarUrl: '',
 }
 
-const [john, jane, peter, mary, david] = mockUsers.map(({ user }) => user)
+/** convenience getters */
+export const getUserById = (id: string): User | undefined => usersById[id]
+export const getProfileByUserId = (userId: string): Profile | undefined => profilesByUserId[userId]
 
-export const mockBlogsData: Blog[] = [
+/** ---------- Blogs & Posts ---------- */
+
+const u = (username: string) => mockUsers.find((m) => m.user.username === username)?.user
+
+export const mockBlogsData: Readonly<Blog[]> = [
   {
     id: '1',
     name: 'Johns Gedanken',
-    authorHandle: john.username ?? '',
-    authorAvatarUrl: john.avatarUrl ?? '',
+    authorHandle: 'john.doe',
+    authorAvatarUrl: u('john.doe')!.avatarUrl,
     description:
       'Ein Einblick in einen aufgeräumten Lebensstil und wie er zu mehr Klarheit führen kann.',
     postCount: 3,
-    createdAt: '12. Mai 2024',
+    createdAt: '2024-05-12' satisfies ISODate,
   },
   {
     id: '2',
     name: 'Janes Abenteuer',
-    authorHandle: jane.username ?? '',
-    authorAvatarUrl: jane.avatarUrl ?? '',
+    authorHandle: 'jane.smith',
+    authorAvatarUrl: u('jane.smith')!.avatarUrl,
     description:
       'Atemberaubende Landschaften und unvergessliche Momente auf meinen Reisen durch die Welt.',
     postCount: 2,
-    createdAt: '01. Januar 2024',
+    createdAt: '2024-01-01',
   },
   {
     id: '3',
     name: 'Peters Küche',
-    authorHandle: peter.username ?? '',
-    authorAvatarUrl: peter.avatarUrl ?? '',
+    authorHandle: 'peter.jones',
+    authorAvatarUrl: u('peter.jones')!.avatarUrl,
     description:
       'Einfache Rezepte, die immer gelingen. Entdecke die Freude am Kochen, Schritt für Schritt.',
     postCount: 1,
-    createdAt: '22. Februar 2024',
+    createdAt: '2024-02-22',
   },
   {
     id: '4',
     name: 'Marys grüner Daumen',
-    authorHandle: mary.username ?? '',
-    authorAvatarUrl: mary.avatarUrl ?? '',
+    authorHandle: 'mary.williams',
+    authorAvatarUrl: u('mary.williams')!.avatarUrl,
     description: 'Wie du auch ohne Garten frisches Gemüse und Kräuter anbauen kannst.',
     postCount: 1,
-    createdAt: '12. März 2024',
+    createdAt: '2024-03-12',
   },
   {
     id: '5',
     name: 'Davids Sternenbilder',
-    authorHandle: david.username ?? '',
-    authorAvatarUrl: david.avatarUrl ?? '',
+    authorHandle: 'david.brown',
+    authorAvatarUrl: u('david.brown')!.avatarUrl,
     description:
       'Die Sterne fotografieren: Welche Ausrüstung du brauchst und die besten Tipps für den Anfang.',
     postCount: 1,
-    createdAt: '02. April 2024',
+    createdAt: '2024-04-02',
   },
-]
+] as const
 
-export const mockBlogPostsData: Record<string, PostItem[]> = {
+export const mockBlogPostsData: Readonly<Record<string, readonly PostItem[]>> = {
   '1': [
     {
       id: 101,
       title: 'Mein Weg zum Minimalismus',
-      createdAt: '15. August 2025',
+      createdAt: '2025-08-15',
       excerpt:
         'Es begann alles mit einer einfachen Frage: Brauche ich das wirklich? Eine Reise zu weniger Besitz und mehr Freiheit.',
     },
     {
       id: 102,
       title: 'Die 5-Minuten-Regel für mehr Ordnung',
-      createdAt: '02. Juli 2025',
+      createdAt: '2025-07-02',
       excerpt:
         'Ein einfacher Trick, der mir geholfen hat, mein Zuhause dauerhaft ordentlich zu halten, ohne großen Aufwand.',
     },
     {
       id: 103,
       title: 'Digital Detox: Erfahrungen & Tipps',
-      createdAt: '21. Juni 2025',
+      createdAt: '2025-06-21',
       excerpt:
         'Eine Woche ohne Smartphone. Was ich gelernt habe und wie auch du eine digitale Auszeit schaffen kannst.',
     },
@@ -240,14 +260,14 @@ export const mockBlogPostsData: Record<string, PostItem[]> = {
     {
       id: 201,
       title: 'Wanderung zur Zugspitze',
-      createdAt: '10. August 2025',
+      createdAt: '2025-08-10',
       excerpt:
         'Ein anstrengender Aufstieg, der mit einer unglaublichen Aussicht belohnt wurde. Mein Erfahrungsbericht.',
     },
     {
       id: 202,
       title: 'Mit dem Rucksack durch Vietnam',
-      createdAt: '15. März 2025',
+      createdAt: '2025-03-15',
       excerpt:
         'Von lauten Städten bis zu stillen Reisfeldern. Eine Reise voller Kontraste und unvergesslicher Begegnungen.',
     },
@@ -256,7 +276,7 @@ export const mockBlogPostsData: Record<string, PostItem[]> = {
     {
       id: 301,
       title: 'Mein Lieblingsrezept',
-      createdAt: '05. Mai 2025',
+      createdAt: '2025-05-05',
       excerpt: 'Ein einfaches Gericht, das jeder zuhause nachkochen kann.',
     },
   ],
@@ -264,7 +284,7 @@ export const mockBlogPostsData: Record<string, PostItem[]> = {
     {
       id: 401,
       title: 'Urban Gardening für Anfänger',
-      createdAt: '18. April 2025',
+      createdAt: '2025-04-18',
       excerpt: 'Wie du auch auf dem Balkon frische Kräuter ziehen kannst.',
     },
   ],
@@ -272,24 +292,24 @@ export const mockBlogPostsData: Record<string, PostItem[]> = {
     {
       id: 501,
       title: 'Die Milchstraße fotografieren',
-      createdAt: '11. Juni 2025',
+      createdAt: '2025-06-11',
       excerpt: 'Tipps, wie du die Milchstraße mit einfacher Ausrüstung festhältst.',
     },
   ],
-}
+} as const
 
-export const blogPostsDetails: Record<string, Post> = {
+/** Post-Details keyed "blogId:postId" */
+export const blogPostsDetails: Readonly<Record<string, Post>> = {
   '1:101': {
     id: '101',
     blogId: '1',
     blogName: 'Johns Gedanken',
     title: 'Mein Weg zum Minimalismus',
-    author: john.name ?? '',
-    authorAvatarUrl: john.avatarUrl ?? '',
-    date: '15. August 2025',
+    author: u('john.doe')!.name,
+    authorAvatarUrl: u('john.doe')!.avatarUrl,
+    date: '2025-08-15',
     category: 'Lebensstil',
-    imageUrl:
-      'https://images.unsplash.com/photo-1484981138541-3d074aa97716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    imageUrl: unsplash('1484981138541-3d074aa97716'),
     content: [
       'Es begann alles mit einer einfachen Frage: Brauche ich das wirklich? Eine Reise zu weniger Besitz und mehr Freiheit.',
       'Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.',
@@ -300,12 +320,11 @@ export const blogPostsDetails: Record<string, Post> = {
     blogId: '1',
     blogName: 'Johns Gedanken',
     title: 'Die 5-Minuten-Regel für mehr Ordnung',
-    author: john.name ?? '',
-    authorAvatarUrl: john.avatarUrl ?? '',
-    date: '02. Juli 2025',
+    author: u('john.doe')!.name,
+    authorAvatarUrl: u('john.doe')!.avatarUrl,
+    date: '2025-07-02',
     category: 'Organisation',
-    imageUrl:
-      'https://images.unsplash.com/photo-1529070538774-1843cb3265df?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    imageUrl: unsplash('1529070538774-1843cb3265df'),
     content: [
       'Ein einfacher Trick, der mir geholfen hat, mein Zuhause dauerhaft ordentlich zu halten, ohne großen Aufwand.',
     ],
@@ -315,12 +334,11 @@ export const blogPostsDetails: Record<string, Post> = {
     blogId: '1',
     blogName: 'Johns Gedanken',
     title: 'Digital Detox: Erfahrungen & Tipps',
-    author: john.name ?? '',
-    authorAvatarUrl: john.avatarUrl ?? '',
-    date: '21. Juni 2025',
+    author: u('john.doe')!.name,
+    authorAvatarUrl: u('john.doe')!.avatarUrl,
+    date: '2025-06-21',
     category: 'Digitales',
-    imageUrl:
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    imageUrl: unsplash('1518770660439-4636190af475'),
     content: [
       'Eine Woche ohne Smartphone. Was ich gelernt habe und wie auch du eine digitale Auszeit schaffen kannst.',
     ],
@@ -330,12 +348,11 @@ export const blogPostsDetails: Record<string, Post> = {
     blogId: '2',
     blogName: 'Janes Abenteuer',
     title: 'Wanderung zur Zugspitze',
-    author: jane.name ?? '',
-    authorAvatarUrl: jane.avatarUrl ?? '',
-    date: '10. August 2025',
+    author: u('jane.smith')!.name,
+    authorAvatarUrl: u('jane.smith')!.avatarUrl,
+    date: '2025-08-10',
     category: 'Reisen',
-    imageUrl:
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    imageUrl: unsplash('1506905925346-21bda4d32df4'),
     content: [
       'Ein anstrengender Aufstieg, der mit einer unglaublichen Aussicht belohnt wurde. Mein Erfahrungsbericht.',
     ],
@@ -345,12 +362,11 @@ export const blogPostsDetails: Record<string, Post> = {
     blogId: '2',
     blogName: 'Janes Abenteuer',
     title: 'Mit dem Rucksack durch Vietnam',
-    author: jane.name ?? '',
-    authorAvatarUrl: jane.avatarUrl ?? '',
-    date: '15. März 2025',
+    author: u('jane.smith')!.name,
+    authorAvatarUrl: u('jane.smith')!.avatarUrl,
+    date: '2025-03-15',
     category: 'Reisen',
-    imageUrl:
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    imageUrl: unsplash('1506744038136-46273834b3fb'),
     content: [
       'Von lauten Städten bis zu stillen Reisfeldern. Eine Reise voller Kontraste und unvergesslicher Begegnungen.',
     ],
@@ -360,12 +376,11 @@ export const blogPostsDetails: Record<string, Post> = {
     blogId: '3',
     blogName: 'Peters Küche',
     title: 'Mein Lieblingsrezept',
-    author: peter.name ?? '',
-    authorAvatarUrl: peter.avatarUrl ?? '',
-    date: '05. Mai 2025',
+    author: u('peter.jones')!.name,
+    authorAvatarUrl: u('peter.jones')!.avatarUrl,
+    date: '2025-05-05',
     category: 'Kochen',
-    imageUrl:
-      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    imageUrl: unsplash('1504674900247-0877df9cc836'),
     content: ['Ein einfaches Gericht, das jeder zuhause nachkochen kann.'],
   },
   '4:401': {
@@ -373,12 +388,11 @@ export const blogPostsDetails: Record<string, Post> = {
     blogId: '4',
     blogName: 'Marys grüner Daumen',
     title: 'Urban Gardening für Anfänger',
-    author: mary.name ?? '',
-    authorAvatarUrl: mary.avatarUrl ?? '',
-    date: '18. April 2025',
+    author: u('mary.williams')!.name,
+    authorAvatarUrl: u('mary.williams')!.avatarUrl,
+    date: '2025-04-18',
     category: 'Garten',
-    imageUrl:
-      'https://images.unsplash.com/photo-1459664018906-085c36f472af?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    imageUrl: unsplash('1459664018906-085c36f472af'),
     content: ['Wie du auch auf dem Balkon frische Kräuter ziehen kannst.'],
   },
   '5:501': {
@@ -386,45 +400,25 @@ export const blogPostsDetails: Record<string, Post> = {
     blogId: '5',
     blogName: 'Davids Sternenbilder',
     title: 'Die Milchstraße fotografieren',
-    author: david.name ?? '',
-    authorAvatarUrl: david.avatarUrl ?? '',
-    date: '11. Juni 2025',
+    author: u('david.brown')!.name,
+    authorAvatarUrl: u('david.brown')!.avatarUrl,
+    date: '2025-06-11',
     category: 'Fotografie',
-    imageUrl:
-      'https://images.unsplash.com/photo-1500534623283-312aade485b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    imageUrl: unsplash('1500534623283-312aade485b7'),
     content: ['Tipps, wie du die Milchstraße mit einfacher Ausrüstung festhältst.'],
   },
-}
+} as const
 
-export const menuData: MenuItem[] = [
-  {
-    prependAvatar: logo,
-    to: '/',
-  },
+/** ---------- Menu & Visibility Guard ---------- */
+
+export const menuData: Readonly<MenuItem[]> = [
+  { prependAvatar: logo, to: '/' },
   { type: 'divider' },
-  {
-    title: 'Login',
-    prependIcon: 'mdi-login',
-    to: '/login',
-    roles: [Role.Guest],
-  },
-  {
-    title: 'Register',
-    prependIcon: 'mdi-account-plus',
-    to: '/register',
-    roles: [Role.Guest],
-  },
+  { title: 'Login', prependIcon: 'mdi-login', to: '/login', roles: [Role.Guest] },
+  { title: 'Register', prependIcon: 'mdi-account-plus', to: '/register', roles: [Role.Guest] },
   { type: 'divider' },
-  {
-    title: 'Profiles',
-    prependIcon: 'mdi-account-group-outline',
-    to: '/profiles',
-  },
-  {
-    title: 'Blogs',
-    prependIcon: 'mdi-post-outline',
-    to: '/blogs',
-  },
+  { title: 'Profiles', prependIcon: 'mdi-account-group-outline', to: '/profiles' },
+  { title: 'Blogs', prependIcon: 'mdi-post-outline', to: '/blogs' },
   { type: 'divider' },
   {
     title: 'Conversations',
@@ -435,7 +429,7 @@ export const menuData: MenuItem[] = [
   {
     title: 'Photos',
     prependIcon: 'mdi-image-multiple',
-    to: (id) => `/photos/${id}`,
+    to: (id: string) => `/photos/${id}`,
     roles: [Role.User],
   },
   { type: 'divider' },
@@ -463,9 +457,18 @@ export const menuData: MenuItem[] = [
     to: '/error/500',
     roles: [Role.Developer],
   },
-]
+] as const
 
-export const mockConversations: Conversation[] = [
+/** Sichtbarkeit: Standard = sichtbar, wenn kein roles-Array angegeben.
+ *  Wenn vorhanden: role >= mindestens einer geforderten Rolle.
+ */
+export const isMenuVisibleFor = (userRole: Role, item: MenuItem): boolean => {
+  if (!('roles' in item) || !item.roles || item.roles.length === 0) return true
+  return item.roles.some((required) => roleAtLeast(userRole, required))
+}
+
+/** ---------- Conversations ---------- */
+export const mockConversations: Readonly<Conversation[]> = [
   {
     id: 1,
     partner: 'Alice',
@@ -475,12 +478,7 @@ export const mockConversations: Conversation[] = [
     messages: [
       { id: 1, sender: 'Alice', text: 'Hi there!', time: '10:28 AM' },
       { id: 2, sender: 'You', text: 'Hey, how are you?', time: '10:30 AM', read: true },
-      {
-        id: 3,
-        sender: 'Alice',
-        text: "I'm doing great, thanks! How about you?",
-        time: '10:32 AM',
-      },
+      { id: 3, sender: 'Alice', text: "I'm doing great, thanks! How about you?", time: '10:32 AM' },
       {
         id: 4,
         sender: 'You',
@@ -585,9 +583,10 @@ export const mockConversations: Conversation[] = [
       { id: 19, sender: 'Eve', text: 'Are you coming to the team lunch?', time: 'Just now' },
     ],
   },
-]
+] as const
 
-export const mockNotifications: NotificationItem[] = [
+/** ---------- Notifications ---------- */
+export const mockNotifications: Readonly<NotificationItem[]> = [
   {
     id: 1,
     title: 'New follower',
@@ -624,9 +623,10 @@ export const mockNotifications: NotificationItem[] = [
     link: '/developer/store',
     read: false,
   },
-]
+] as const
 
-export const mockGalleryItems: GalleryItem[] = [
+/** ---------- Gallery ---------- */
+export const mockGalleryItems: Readonly<GalleryItem[]> = [
   {
     id: 15,
     src: 'https://picsum.photos/500/300?image=15',
@@ -636,7 +636,7 @@ export const mockGalleryItems: GalleryItem[] = [
   {
     id: 25,
     src: 'https://picsum.photos/400/600?image=25',
-    lazySrc: 'https://picsum.photos/8/12?image=25',
+    lazySrc: 'httpsum.photos/8/12?image=25'.replace('httpsum', 'https://picsum'),
     aspectRatio: 400 / 600,
   },
   {
@@ -699,4 +699,4 @@ export const mockGalleryItems: GalleryItem[] = [
     lazySrc: 'https://picsum.photos/10/14?image=62',
     aspectRatio: 500 / 700,
   },
-]
+] as const
