@@ -2,7 +2,7 @@ import { menuData } from '@/data/mock-data.ts';
 import { filterMenuByRole } from '@/stores/auth';
 import { type MenuItem, Role } from '@/types';
 
-export function getMenuItems(role: Role, userId?: string): MenuItem[] {
+export function getMenuItems(role: Role, userId?: string): ProcessedMenuItem[] {
   const items = filterMenuByRole(menuData, role || Role.Guest).map((item: any) => ({
     ...item,
     to: typeof item.to === 'function' ? item.to(userId) : item.to
