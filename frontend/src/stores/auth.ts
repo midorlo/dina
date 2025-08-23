@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', {
   }
 });
 
-export function filterMenuByRole<T extends { roles?: Role[] }>(menu: T[], role: Role) {
+export function filterMenuByRole<T extends { roles?: Role[] }>(menu: readonly T[], role: Role) {
   return menu.filter(item => !item.roles || item.roles.some(r => hasRole(role, r)));
 }
 

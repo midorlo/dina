@@ -11,8 +11,3 @@ export interface MenuItem {
   roles?: Role[];
   type?: 'divider';
 }
-
-// New interface for menu items after processing dynamic 'to' properties
-export interface ProcessedMenuItem extends Omit<MenuItem, 'to'> {
-  to?: string;
-}

@@ -10,16 +10,6 @@
 
       <v-row> Bitte einloggen oder registrieren </v-row>
 
-      <v-row class="mt-8">
-        <v-col cols="12">
-          <DeveloperInfoCard rounded="lg" variant="tonal">
-            <template #title>Developer Information</template>
-            <p>This card is only visible to users with the 'Developer' role.</p>
-            <p>You can put any developer-specific information here.</p>
-          </DeveloperInfoCard>
-        </v-col>
-      </v-row>
-
       <v-row>
         <v-col v-for="link in links" :key="link.href" cols="6">
           <v-card
