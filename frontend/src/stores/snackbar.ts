@@ -16,14 +16,26 @@ export const useSnackbarStore = defineStore('snackbar', () => {
 
   function showError(
     errorOrMessage?: unknown,
-    msg = 'An unexpected error occurred. Please check the console for details.'
+    defaultMsg = 'An unexpected error occurred. Please check the console for details.'
   ) {
-    if (typeof errorOrMessage === 'string') {
-      msg = errorOrMessage;
+    let displayMessage = defaultMsg;
+    let stackTrace = '';
+
+    if (errorOrMessage instanceof Error) {
+      displayMessage = errorOrMessage.message;
+      if (errorOrMessage.stack) {
+        // Take the first few lines of the stack trace
+        stackTrace = errorOrMessage.stack.split('\n').slice(0, 3).join('\n');
+      }
+      console.error(errorOrMessage); // Still log to console for full details
+    } else if (typeof errorOrMessage === 'string') {
+      displayMessage = errorOrMessage;
     } else if (errorOrMessage != null) {
       console.error(errorOrMessage);
     }
-    showSnackbar(msg, 'error');
+
+    const fullMessage = stackTrace ? `${displayMessage}\n\n${stackTrace}` : displayMessage;
+    showSnackbar(fullMessage, 'error', 8000); // Increase timeout for longer messages
   }
 
   function hideSnackbar() {
