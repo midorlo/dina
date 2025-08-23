@@ -10,7 +10,7 @@ This means that you can use any component in your application without having to 
 
 The following example assumes a component located at `src/components/MyComponent.vue`:
 
-```vue
+```
 <template>
   <div>
     <MyComponent />
@@ -24,7 +24,7 @@ The following example assumes a component located at `src/components/MyComponent
 
 When your template is rendered, the component's import will automatically be inlined, which renders to this:
 
-```vue
+```
 <template>
   <div>
     <MyComponent />

@@ -27,7 +27,7 @@ export async function fetchBlogPosts(blogId: string): Promise<PostItem[]> {
     const res = await apiFetch(`/api/blogs/${blogId}/posts`);
     return res.json();
   }
-  return delay(mockBlogPostsData[blogId] || [], 500);
+  return delay([...(mockBlogPostsData[blogId] || [])], 500);
 }
 
 export async function fetchBlogPost(blogId: string, postId: string): Promise<Post | undefined> {
