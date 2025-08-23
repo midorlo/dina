@@ -10,41 +10,41 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { fetchBlogPost } from '@/services/blogs'
-import { useAuthStore } from '@/stores/auth'
-import { Role } from '@/types'
-import { slugify } from '@/utils/slug'
+import { computed, onMounted, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { fetchBlogPost } from '@/services/blogs';
+import { useAuthStore } from '@/stores/auth';
+import { Role } from '@/types';
+import { slugify } from '@/utils/slug';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' },
-})
+  meta: { roles: [Role.User], layout: 'default' }
+});
 
-const auth = useAuthStore()
-const route = useRoute()
-const router = useRouter()
-const blogId = computed(() => (route.params as any).id as string)
-const blogSlug = computed(() => (route.params as any).slug as string | undefined)
-const postId = computed(() => (route.params as any).postId as string)
-const loading = ref(true)
-const post = reactive({ title: '', excerpt: '' })
+const auth = useAuthStore();
+const route = useRoute();
+const router = useRouter();
+const blogId = computed(() => (route.params as any).id as string);
+const blogSlug = computed(() => (route.params as any).slug as string | undefined);
+const postId = computed(() => (route.params as any).postId as string);
+const loading = ref(true);
+const post = reactive({ title: '', excerpt: '' });
 
 onMounted(async () => {
   if (blogId.value !== auth.currentUser?.id) {
-    router.replace('/error/403')
-    return
+    router.replace('/error/403');
+    return;
   }
-  const data = await fetchBlogPost(blogId.value, postId.value)
-  if (data) Object.assign(post, { title: data.title, excerpt: data.content?.[0] || '' })
-  loading.value = false
-})
+  const data = await fetchBlogPost(blogId.value, postId.value);
+  if (data) Object.assign(post, { title: data.title, excerpt: data.content?.[0] || '' });
+  loading.value = false;
+});
 
 async function save() {
-  console.log('Saving post', post)
+  console.log('Saving post', post);
   router.push(
     `/blogs/${blogId.value}${blogSlug.value ? `-${blogSlug.value}` : ''}/posts/${postId.value}-${slugify(post.title)}`
-  )
+  );
 }
 </script>
 

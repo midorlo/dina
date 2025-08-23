@@ -7,16 +7,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from 'vue-router'
-import { Role } from '@/types'
+import { useRoute } from 'vue-router';
+import { Role } from '@/types';
 
 definePage({
   meta: {
     roles: [Role.Developer],
     layout: 'empty',
-    breadcrumb: 'Debug',
-  },
-})
+    breadcrumb: 'Debug'
+  }
+});
 
-const route = useRoute()
+const route = useRoute();
 </script>

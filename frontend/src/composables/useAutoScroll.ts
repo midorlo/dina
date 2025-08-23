@@ -1,50 +1,50 @@
-import type { Ref } from 'vue'
-import { onUnmounted, watchEffect } from 'vue'
+import type { Ref } from 'vue';
+import { onUnmounted, watchEffect } from 'vue';
 
 function createRafThrottle(fn: () => void) {
-  let pending = false
+  let pending = false;
   return () => {
-    if (pending) return
-    pending = true
+    if (pending) return;
+    pending = true;
     requestAnimationFrame(() => {
-      pending = false
-      fn()
-    })
-  }
+      pending = false;
+      fn();
+    });
+  };
 }
 
 export function useAutoScroll(elementRef: Ref<HTMLElement | null>) {
   const scrollToBottomRaw = () => {
-    const el = elementRef.value
+    const el = elementRef.value;
     if (el) {
-      el.scrollTop = el.scrollHeight
+      el.scrollTop = el.scrollHeight;
     }
-  }
+  };
 
-  const scrollToBottom = createRafThrottle(scrollToBottomRaw)
-  let observer: MutationObserver | null = null
+  const scrollToBottom = createRafThrottle(scrollToBottomRaw);
+  let observer: MutationObserver | null = null;
 
-  watchEffect((onCleanup) => {
-    const el = elementRef.value
-    if (!el) return
+  watchEffect(onCleanup => {
+    const el = elementRef.value;
+    if (!el) return;
 
     // Perform an initial scroll when element becomes available
-    scrollToBottom()
+    scrollToBottom();
 
-    observer?.disconnect()
-    observer = new MutationObserver(scrollToBottom)
-    observer.observe(el, { childList: true, subtree: true })
+    observer?.disconnect();
+    observer = new MutationObserver(scrollToBottom);
+    observer.observe(el, { childList: true, subtree: true });
 
     onCleanup(() => {
-      observer?.disconnect()
-      observer = null
-    })
-  })
+      observer?.disconnect();
+      observer = null;
+    });
+  });
 
   onUnmounted(() => {
-    observer?.disconnect()
-    observer = null
-  })
+    observer?.disconnect();
+    observer = null;
+  });
 
-  return { scrollToBottom }
+  return { scrollToBottom };
 }

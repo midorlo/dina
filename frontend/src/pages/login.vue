@@ -3,9 +3,7 @@
     <v-row align="center" justify="center">
       <v-col cols="12" lg="4" md="6" sm="8">
         <v-card class="pa-6" flat rounded="xl">
-          <v-card-title class="text-h4 font-weight-bold text-center mb-4"
-            >Welcome Back</v-card-title
-          >
+          <v-card-title class="text-h4 font-weight-bold text-center mb-4">Welcome Back</v-card-title>
           <v-card-subtitle class="text-center mb-6">Sign in to continue</v-card-subtitle>
 
           <v-form ref="form" @submit.prevent="login">
@@ -42,12 +40,7 @@
 
             <v-row align="center" class="mb-4" justify="space-between">
               <v-col cols="auto">
-                <v-checkbox
-                  v-model="rememberMe"
-                  density="compact"
-                  hide-details
-                  label="Remember me"
-                />
+                <v-checkbox v-model="rememberMe" density="compact" hide-details label="Remember me" />
               </v-col>
               <v-col cols="auto">
                 <router-link class="text-decoration-none text-primary" to="/forgot-password"
@@ -96,9 +89,7 @@
 
           <div class="text-center">
             <span class="text-body-2">Don't have an account? </span>
-            <router-link class="text-decoration-none text-primary" to="/register"
-              >Register</router-link
-            >
+            <router-link class="text-decoration-none text-primary" to="/register">Register</router-link>
           </div>
         </v-card>
       </v-col>
@@ -107,13 +98,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router'
-import { useFormValidation } from '@/composables/useFormValidation'
-import { mockUsers } from '@/data/mock-data.ts'
-import { useAuthStore } from '@/stores/auth'
-import { useSnackbarStore } from '@/stores/snackbar'
+import { useRouter } from 'vue-router';
+import { useFormValidation } from '@/composables/useFormValidation';
+import { mockUsers } from '@/data/mock-data.ts';
+import { useAuthStore } from '@/stores/auth';
+import { useSnackbarStore } from '@/stores/snackbar';
 
-import { Role } from '@/types'
+import { Role } from '@/types';
 
 definePage({
   alias: '/auth/login',
@@ -121,57 +112,57 @@ definePage({
     roles: [Role.Guest],
     layout: 'empty',
     requiresGuest: true,
-    breadcrumb: 'Login',
-  },
-})
+    breadcrumb: 'Login'
+  }
+});
 
-const form = ref()
+const form = ref();
 const formData = reactive({
   email: '',
-  password: '',
-})
-const { email, password } = toRefs(formData)
-const rememberMe = ref(false)
-const loginError = ref('')
+  password: ''
+});
+const { email, password } = toRefs(formData);
+const rememberMe = ref(false);
+const loginError = ref('');
 
-const { required, email: emailRule } = useFormValidation()
+const { required, email: emailRule } = useFormValidation();
 
-const emailRules = [required, emailRule]
-const passwordRules = [required]
+const emailRules = [required, emailRule];
+const passwordRules = [required];
 
-const presets = mockUsers.map((mockUser) => ({
+const presets = mockUsers.map(mockUser => ({
   label: mockUser.user.role,
   email: mockUser.user.email,
-  id: mockUser.user.id,
-}))
+  id: mockUser.user.id
+}));
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
-const router = useRouter()
-const snackbarStore = useSnackbarStore()
+const router = useRouter();
+const snackbarStore = useSnackbarStore();
 
 async function login() {
-  const isValid = await form.value?.validate()
-  if (!isValid) return
-  loginError.value = ''
+  const isValid = await form.value?.validate();
+  if (!isValid) return;
+  loginError.value = '';
   try {
-    const { login } = await import('@/services/auth')
-    const response = await login(formData.email, formData.password)
+    const { login } = await import('@/services/auth');
+    const response = await login(formData.email, formData.password);
     if (response.user.id) {
-      authStore.setUser(response.user)
-      authStore.setTokens(response.tokens)
-      authStore.setProfile(response.profile)
-      snackbarStore.showSnackbar('Login successful!', 'success')
-      router.push('/')
+      authStore.setUser(response.user);
+      authStore.setTokens(response.tokens);
+      authStore.setProfile(response.profile);
+      snackbarStore.showSnackbar('Login successful!', 'success');
+      router.push('/');
     }
   } catch (error: any) {
-    loginError.value = error.message || 'Login failed. Please check your credentials.'
+    loginError.value = error.message || 'Login failed. Please check your credentials.';
   }
 }
 
 function presetLogin(presetEmail: string) {
-  formData.email = presetEmail
-  formData.password = 'password'
-  login()
+  formData.email = presetEmail;
+  formData.password = 'password';
+  login();
 }
 </script>

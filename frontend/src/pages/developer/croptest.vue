@@ -20,9 +20,9 @@
 <script setup lang="ts">
 function onCropped(p: { blob: Blob; dataUrl: string; width: number; height: number }) {
   // direkt hochladen oder weiterverarbeiten
-  console.log(p.width, p.height, p.blob)
+  console.log(p.width, p.height, p.blob);
 }
 function onError(p: { message: string }) {
-  console.warn('Fehler:', p.message)
+  console.warn('Fehler:', p.message);
 }
 </script>

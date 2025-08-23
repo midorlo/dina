@@ -5,17 +5,13 @@
         <v-skeleton-loader v-if="loading" type="image, article, actions" />
         <template v-else-if="post">
           <div class="mb-10 d-flex justify-space-between">
-            <v-btn
-              prepend-icon="mdi-arrow-left"
-              :to="`/blogs/${blogId}-${slugify(post.blogName)}`"
-              variant="text"
-            >
+            <v-btn prepend-icon="mdi-arrow-left" :to="`/blogs/${blogId}/${slugify(post.blogName)}`" variant="text">
               Zurück zu {{ post.blogName }}
             </v-btn>
             <v-btn
               v-if="canEdit"
               prepend-icon="mdi-pencil"
-              :to="`/blogs/${blogId}-${slugify(post.blogName)}/posts/${postId}-${slugify(post.title)}/edit`"
+              :to="`/blogs/${blogId}/${slugify(post.blogName)}/posts/${postId}/${slugify(post.title)}/edit`"
               variant="text"
             >
               Bearbeiten
@@ -63,40 +59,40 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { fetchBlogPost } from '@/services/blogs'
-import { useAuthStore } from '@/stores/auth'
-import { type Post, Role } from '@/types'
-import { slugify } from '@/utils/slug'
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { fetchBlogPost } from '@/services/blogs';
+import { useAuthStore } from '@/stores/auth';
+import { type Post, Role } from '@/types';
+import { slugify } from '@/utils/slug';
 
-const route = useRoute()
-const blogId = computed(() => (route.params as any).id as string)
-const postId = computed(() => (route.params as any).postId as string)
+const route = useRoute();
+const blogId = computed(() => route.params.id as string);
+const postId = computed(() => route.params.postId as string);
 
 definePage({
-  meta: { roles: [Role.Any], layout: 'default' },
-})
+  meta: { roles: [Role.Any], layout: 'default' }
+});
 
-const post = ref<Post | null>(null)
-const loading = ref(true)
-const authStore = useAuthStore()
-const { currentUser } = storeToRefs(authStore)
+const post = ref<Post | null>(null);
+const loading = ref(true);
+const authStore = useAuthStore();
+const { currentUser } = storeToRefs(authStore);
 
 onMounted(async () => {
   try {
-    post.value = (await fetchBlogPost(blogId.value, postId.value)) || null
+    post.value = (await fetchBlogPost(blogId.value, postId.value)) || null;
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-})
+});
 
 const canEdit = computed(
-  () => currentUser.value?.username?.toLowerCase() === post.value?.author.toLowerCase()
-)
+  () => !!post.value && currentUser.value?.username?.toLowerCase() === post.value.author.toLowerCase()
+);
 </script>
 
 <route lang="yaml">
-path: /blogs/:id-:slug?/posts/:postId-:postSlug?
+path: /blogs/:id/:slug?/posts/:postId/:postSlug?
 </route>

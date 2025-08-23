@@ -1,6 +1,6 @@
 export interface GalleryItem {
-  id: number
-  src: string
-  lazySrc: string
-  aspectRatio: number
+  id: number;
+  src: string;
+  lazySrc: string;
+  aspectRatio: number;
 }

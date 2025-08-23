@@ -41,26 +41,26 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { useAuthStore } from '@/stores/auth'
-import { useNotificationsStore } from '@/stores/notifications'
-import { Role } from '@/types'
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
+import { useNotificationsStore } from '@/stores/notifications';
+import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.Developer], layout: 'default' },
-})
+  meta: { roles: [Role.Developer], layout: 'default' }
+});
 
-const authStore = useAuthStore()
-const notificationsStore = useNotificationsStore()
-const { currentUser, userProfile, tokens } = storeToRefs(authStore)
-const { items, unreadCount } = storeToRefs(notificationsStore)
+const authStore = useAuthStore();
+const notificationsStore = useNotificationsStore();
+const { currentUser, userProfile, tokens } = storeToRefs(authStore);
+const { items, unreadCount } = storeToRefs(notificationsStore);
 
 function resetAuth() {
-  authStore.reset()
+  authStore.reset();
 }
 
 function resetNotifications() {
-  notificationsStore.reset()
+  notificationsStore.reset();
 }
 </script>
 

@@ -3,9 +3,7 @@
     <v-row align="center" justify="center">
       <v-col cols="12" lg="4" md="6" sm="8">
         <v-card class="pa-6" flat rounded="xl">
-          <v-card-title class="text-h4 font-weight-bold text-center mb-4"
-            >Create Account</v-card-title
-          >
+          <v-card-title class="text-h4 font-weight-bold text-center mb-4">Create Account</v-card-title>
           <v-card-subtitle class="text-center mb-6">Join us today!</v-card-subtitle>
 
           <v-form ref="form" @submit.prevent="register">
@@ -55,9 +53,7 @@
               variant="outlined"
             />
 
-            <v-btn block class="mb-4" color="primary" rounded="pill" size="large" type="submit">
-              Register
-            </v-btn>
+            <v-btn block class="mb-4" color="primary" rounded="pill" size="large" type="submit"> Register </v-btn>
           </v-form>
 
           <v-divider class="my-4" />
@@ -82,9 +78,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { useFormValidation } from '@/composables/useFormValidation'
-import { Role } from '@/types'
+import { ref } from 'vue';
+import { useFormValidation } from '@/composables/useFormValidation';
+import { Role } from '@/types';
 
 definePage({
   alias: '/auth/register',
@@ -92,33 +88,27 @@ definePage({
     roles: [Role.Guest],
     layout: 'empty',
     requiresGuest: true,
-    breadcrumb: 'Register',
-  },
-})
+    breadcrumb: 'Register'
+  }
+});
 
-const form = ref()
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
+const form = ref();
+const name = ref('');
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
 
-const { required, email: emailRule } = useFormValidation()
+const { required, email: emailRule } = useFormValidation();
 
-const nameRules = [required]
-const emailRules = [required, emailRule]
-const passwordRules = [required]
-const confirmPasswordRules = [required]
+const nameRules = [required];
+const emailRules = [required, emailRule];
+const passwordRules = [required];
+const confirmPasswordRules = [required];
 
 async function register() {
-  const isValid = await form.value?.validate()
-  if (!isValid) return
+  const isValid = await form.value?.validate();
+  if (!isValid) return;
   // Handle registration logic here
-  console.log(
-    'Registration attempt:',
-    name.value,
-    email.value,
-    password.value,
-    confirmPassword.value
-  )
+  console.log('Registration attempt:', name.value, email.value, password.value, confirmPassword.value);
 }
 </script>

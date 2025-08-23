@@ -28,35 +28,35 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { fetchBlogPosts } from '@/services/blogs'
-import { Role } from '@/types'
-import { slugify } from '@/utils/slug'
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { fetchBlogPosts } from '@/services/blogs';
+import { Role } from '@/types';
+import { slugify } from '@/utils/slug';
 
 definePage({
-  meta: { roles: [Role.Any], layout: 'default' },
-})
+  meta: { roles: [Role.Any], layout: 'default' }
+});
 
-const route = useRoute()
-const blogId = computed(() => (route.params as any).id as string)
-const blogSlug = computed(() => (route.params as any).slug as string | undefined)
-const posts = ref<any[]>([])
-const page = ref(1)
-const pageSize = 5
-const loading = ref(true)
+const route = useRoute();
+const blogId = computed(() => (route.params as any).id as string);
+const blogSlug = computed(() => (route.params as any).slug as string | undefined);
+const posts = ref<any[]>([]);
+const page = ref(1);
+const pageSize = 5;
+const loading = ref(true);
 
 const pagedPosts = computed(() => {
-  const start = (page.value - 1) * pageSize
-  return posts.value.slice(start, start + pageSize)
-})
+  const start = (page.value - 1) * pageSize;
+  return posts.value.slice(start, start + pageSize);
+});
 
-const pageCount = computed(() => Math.ceil(posts.value.length / pageSize))
+const pageCount = computed(() => Math.ceil(posts.value.length / pageSize));
 
 onMounted(async () => {
-  posts.value = await fetchBlogPosts(blogId.value)
-  loading.value = false
-})
+  posts.value = await fetchBlogPosts(blogId.value);
+  loading.value = false;
+});
 </script>
 
 <route lang="yaml">

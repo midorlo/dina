@@ -5,24 +5,24 @@
  */
 
 // Composables
-import { createApp } from 'vue'
+import { createApp } from 'vue';
 
 // Plugins
-import { registerPlugins } from '@/plugins'
-import { useAuthStore } from '@/stores/auth'
+import { registerPlugins } from '@/plugins';
+import { useAuthStore } from '@/stores/auth';
 
 // Components
-import App from './App.vue'
+import App from './App.vue';
 
 // Styles
-import 'unfonts.css'
-import '@/css/transitions.scss'
+import 'unfonts.css';
+import '@/css/transitions.scss';
 
-const app = createApp(App)
+const app = createApp(App);
 
-registerPlugins(app)
+registerPlugins(app);
 
-const auth = useAuthStore()
-if (!auth.currentUser) auth.init()
+const auth = useAuthStore();
+if (!auth.currentUser) auth.init();
 
-app.mount('#app')
+app.mount('#app');

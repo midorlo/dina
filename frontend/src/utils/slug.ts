@@ -4,5 +4,5 @@ export function slugify(text: string): string {
     .normalize('NFD')
     .replace(/[\u0300-\u036F]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)+/g, '')
+    .replace(/(^-|-$)+/g, '');
 }

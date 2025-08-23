@@ -1,50 +1,48 @@
-import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 export function useBreadcrumbs() {
-  const route = useRoute()
-  const router = useRouter()
+  const route = useRoute();
+  const router = useRouter();
 
   const breadcrumbItems = computed(() => {
-    if (route.matched.length <= 1) return []
+    if (route.matched.length <= 1) return [];
 
     const items: Array<{ title: string; disabled: boolean; to?: string }> = [
-      { title: 'Dina', disabled: false, to: '/' },
-    ]
+      { title: 'Dina', disabled: false, to: '/' }
+    ];
 
-    const records = route.matched.slice(1)
+    const records = route.matched.slice(1);
 
     for (let index = 0; index < records.length; index++) {
-      const record = records[index]
-      const segment = (record.path.split('/').findLast(Boolean) ?? '').trim()
+      const record = records[index];
+      const segment = (record.path.split('/').findLast(Boolean) ?? '').trim();
 
-      const paramMatches = [...segment.matchAll(/:([^/-]+)/g)].map((m) => m[1])
-      const slugParam = paramMatches.at(-1)
+      const paramMatches = [...segment.matchAll(/:([^/-]+)/g)].map(m => m[1]);
+      const slugParam = paramMatches.at(-1);
 
       let title: string =
         (typeof record.meta?.breadcrumb === 'function'
           ? record.meta.breadcrumb(route)
           : (record.meta?.breadcrumb as string | undefined)) ??
-        (slugParam && typeof route.params[slugParam] === 'string'
-          ? (route.params[slugParam] as string)
-          : segment)
+        (slugParam && typeof route.params[slugParam] === 'string' ? (route.params[slugParam] as string) : segment);
 
       title = title
         .replace(/[:()*]/g, '')
         .replace(/-/g, ' ')
-        .replace(/^\w/u, (c) => c.toUpperCase())
+        .replace(/^\w/u, c => c.toUpperCase());
 
-      const to = router.resolve({ name: record.name as string, params: route.params }).path
+      const to = router.resolve({ name: record.name as string, params: route.params }).path;
 
       items.push({
         title,
         disabled: index === records.length - 1,
-        to,
-      })
+        to
+      });
     }
 
-    return items
-  })
+    return items;
+  });
 
-  return { breadcrumbItems }
+  return { breadcrumbItems };
 }

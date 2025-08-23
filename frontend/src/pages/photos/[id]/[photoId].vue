@@ -24,33 +24,33 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { fetchPhoto } from '@/services/photos'
-import { useAuthStore } from '@/stores/auth'
-import { type GalleryItem, Role } from '@/types'
+import { computed, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { fetchPhoto } from '@/services/photos';
+import { useAuthStore } from '@/stores/auth';
+import { type GalleryItem, Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' },
-})
+  meta: { roles: [Role.User], layout: 'default' }
+});
 
-const authStore = useAuthStore()
-const route = useRoute()
-const router = useRouter()
-const galleryId = computed(() => (route.params as any).id as string)
-const photoId = computed(() => (route.params as any).photoId as string)
-const loading = ref(true)
-const photo = ref<GalleryItem | null>(null)
+const authStore = useAuthStore();
+const route = useRoute();
+const router = useRouter();
+const galleryId = computed(() => (route.params as any).id as string);
+const photoId = computed(() => (route.params as any).photoId as string);
+const loading = ref(true);
+const photo = ref<GalleryItem | null>(null);
 
 onMounted(async () => {
   if (galleryId.value !== authStore.currentUser?.id) {
-    router.replace('/error/403')
-    return
+    router.replace('/error/403');
+    return;
   }
   try {
-    photo.value = (await fetchPhoto(Number(photoId.value))) || null
+    photo.value = (await fetchPhoto(Number(photoId.value))) || null;
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-})
+});
 </script>

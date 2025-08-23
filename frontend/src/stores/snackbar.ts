@@ -1,17 +1,17 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export const useSnackbarStore = defineStore('snackbar', () => {
-  const message = ref('')
-  const color = ref('success')
-  const visible = ref(false)
-  const timeout = ref(3000)
+  const message = ref('');
+  const color = ref('success');
+  const visible = ref(false);
+  const timeout = ref(3000);
 
   function showSnackbar(msg: string, clr = 'success', tmt = 3000) {
-    message.value = msg
-    color.value = clr
-    timeout.value = tmt
-    visible.value = true
+    message.value = msg;
+    color.value = clr;
+    timeout.value = tmt;
+    visible.value = true;
   }
 
   function showError(
@@ -19,15 +19,15 @@ export const useSnackbarStore = defineStore('snackbar', () => {
     msg = 'An unexpected error occurred. Please check the console for details.'
   ) {
     if (typeof errorOrMessage === 'string') {
-      msg = errorOrMessage
+      msg = errorOrMessage;
     } else if (errorOrMessage != null) {
-      console.error(errorOrMessage)
+      console.error(errorOrMessage);
     }
-    showSnackbar(msg, 'error')
+    showSnackbar(msg, 'error');
   }
 
   function hideSnackbar() {
-    visible.value = false
+    visible.value = false;
   }
 
   return {
@@ -37,6 +37,6 @@ export const useSnackbarStore = defineStore('snackbar', () => {
     timeout,
     showSnackbar,
     showError,
-    hideSnackbar,
-  }
-})
+    hideSnackbar
+  };
+});

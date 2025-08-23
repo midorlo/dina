@@ -20,22 +20,22 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { fetchConversation } from '@/services/messages'
-import { type Conversation, type ConversationId, Role } from '@/types'
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { fetchConversation } from '@/services/messages';
+import { type Conversation, type ConversationId, Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' },
-})
+  meta: { roles: [Role.User], layout: 'default' }
+});
 
-const route = useRoute()
-const conversationId = computed(() => (route.params as any).conversationId as ConversationId)
-const conversation = ref<Conversation | null>(null)
-const loading = ref(true)
+const route = useRoute();
+const conversationId = computed(() => (route.params as any).conversationId as ConversationId);
+const conversation = ref<Conversation | null>(null);
+const loading = ref(true);
 
 onMounted(async () => {
-  conversation.value = (await fetchConversation(conversationId.value)) || null
-  loading.value = false
-})
+  conversation.value = (await fetchConversation(conversationId.value)) || null;
+  loading.value = false;
+});
 </script>

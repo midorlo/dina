@@ -23,13 +23,7 @@
     </v-navigation-drawer>
 
     <v-app-bar flat height="56">
-      <v-progress-linear
-        absolute
-        :active="loading"
-        bottom
-        color="primary"
-        :indeterminate="loading"
-      />
+      <v-progress-linear absolute :active="loading" bottom color="primary" :indeterminate="loading" />
       <v-app-bar-nav-icon
         v-if="showAppBarNavIcon"
         aria-label="Menü öffnen/schließen"
@@ -64,12 +58,7 @@
           title="Benachrichtigungen"
           to="/notifications"
         >
-          <v-badge
-            color="error"
-            :content="unreadCount"
-            :model-value="unreadCount > 0"
-            rounded="pill"
-          >
+          <v-badge color="error" :content="unreadCount" :model-value="unreadCount > 0" rounded="pill">
             <v-icon>mdi-bell-outline</v-icon>
           </v-badge>
         </v-btn>
@@ -133,84 +122,78 @@
 
     <app-footer />
 
-    <v-snackbar
-      v-model="visible"
-      :color="color"
-      location="bottom right"
-      rounded="pill"
-      :timeout="timeout"
-    >
+    <v-snackbar v-model="visible" :color="color" location="bottom right" rounded="pill" :timeout="timeout">
       {{ message }}
     </v-snackbar>
   </v-layout>
 </template>
 
 <script setup lang="ts">
-import type { MenuItem } from '@/types/menuData.ts'
-import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, watch } from 'vue'
-import { useDisplay, useTheme } from 'vuetify'
-import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
-import { loading } from '@/router/index.ts'
-import { getMenuItems } from '@/services/menu'
-import { useAuthStore } from '@/stores/auth'
-import { useNotificationsStore } from '@/stores/notifications'
-import { useSnackbarStore } from '@/stores/snackbar'
-import { Role } from '@/types'
+import type { MenuItem } from '@/types/menuData.ts';
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useDisplay, useTheme } from 'vuetify';
+import { useBreadcrumbs } from '@/composables/useBreadcrumbs';
+import { loading } from '@/router/index.ts';
+import { getMenuItems } from '@/services/menu';
+import { useAuthStore } from '@/stores/auth';
+import { useNotificationsStore } from '@/stores/notifications';
+import { useSnackbarStore } from '@/stores/snackbar';
+import { Role } from '@/types';
 
-const snackbarStore = useSnackbarStore()
-const { message, color, visible, timeout } = storeToRefs(snackbarStore)
+const snackbarStore = useSnackbarStore();
+const { message, color, visible, timeout } = storeToRefs(snackbarStore);
 
-const drawer = ref<boolean>(true)
-const theme = useTheme()
-const route = useRoute()
+const drawer = ref<boolean>(true);
+const theme = useTheme();
+const route = useRoute();
 
 // --- Breadcrumbs ---
-const { breadcrumbItems } = useBreadcrumbs()
+const { breadcrumbItems } = useBreadcrumbs();
 
 // --- Display / Drawer Behavior ---
-const { mdAndUp } = useDisplay()
-const showAppBarNavIcon = computed(() => !mdAndUp.value)
+const { mdAndUp } = useDisplay();
+const showAppBarNavIcon = computed(() => !mdAndUp.value);
 
 // Initialzustand abhängig von Breakpoint
 onMounted(() => {
-  drawer.value = mdAndUp.value
-})
+  drawer.value = mdAndUp.value;
+});
 
 // Drawer-Status bei Breakpoint-Wechsel anpassen
 watch(
   () => mdAndUp.value,
-  (isMdUp) => {
+  isMdUp => {
     // auf großen Screens offen halten, auf kleinen schließen
-    drawer.value = isMdUp
+    drawer.value = isMdUp;
   }
-)
+);
 
 // Bei Navigation auf kleinen Screens den Drawer schließen (Focus/UX)
 watch(
   () => route.fullPath,
   () => {
-    if (!mdAndUp.value) drawer.value = false
+    if (!mdAndUp.value) drawer.value = false;
   }
-)
+);
 
 // --- Notifications ---
-const notificationsStore = useNotificationsStore()
-const { unreadCount } = storeToRefs(notificationsStore)
+const notificationsStore = useNotificationsStore();
+const { unreadCount } = storeToRefs(notificationsStore);
 
 // --- Theme Umschalten ---
 function toggleTheme(): void {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
 }
 
 // --- Auth ---
-const authStore = useAuthStore()
-const { currentUser } = storeToRefs(authStore)
+const authStore = useAuthStore();
+const { currentUser } = storeToRefs(authStore);
 
 // --- Menüfilterung & Keying ---
 const navigationMenuItems = computed<MenuItem[]>(() => {
-  return getMenuItems(currentUser.value?.role || Role.Guest, currentUser.value?.id)
-})
+  return getMenuItems(currentUser.value?.role || Role.Guest, currentUser.value?.id);
+});
 </script>
 
 <style scoped>

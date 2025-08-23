@@ -30,7 +30,7 @@
             class="mt-4"
             color="primary"
             prepend-icon="mdi-pencil"
-            :to="`/blogs/${currentBlog?.id}-${slugify(currentBlog?.name ?? '')}/edit`"
+            :to="`/blogs/${currentBlog?.id}/${slugify(currentBlog?.name ?? '')}/edit`"
             variant="text"
           >
             Blog bearbeiten
@@ -51,23 +51,21 @@
             class="mb-6 pa-2"
             flat
             rounded="xl"
-            :to="`/blogs/${currentBlog?.id}-${slugify(currentBlog?.name ?? '')}/posts/${post.id}-${slugify(post.title)}`"
+            :to="`/blogs/${currentBlog?.id}/${slugify(currentBlog?.name ?? '')}/posts/${post.id}-${slugify(post.title)}`"
           >
             <v-card-title>{{ post.title }}</v-card-title>
             <v-card-subtitle>{{ post.createdAt }}</v-card-subtitle>
             <v-card-text>{{ post.excerpt }}</v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn append-icon="mdi-arrow-right" color="primary" variant="text">
-                Beitrag lesen
-              </v-btn>
+              <v-btn append-icon="mdi-arrow-right" color="primary" variant="text"> Beitrag lesen </v-btn>
             </v-card-actions>
           </v-card>
           <v-btn
             block
             class="mt-4"
             color="primary"
-            :to="`/blogs/${currentBlog?.id}-${slugify(currentBlog?.name ?? '')}/posts`"
+            :to="`/blogs/${currentBlog?.id}/${slugify(currentBlog?.name ?? '')}/posts`"
             variant="text"
           >
             Alle Beiträge anzeigen
@@ -79,38 +77,38 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { fetchBlog, fetchBlogPosts } from '@/services/blogs'
-import { useAuthStore } from '@/stores/auth'
-import { type Blog, type PostItem, Role } from '@/types'
-import { slugify } from '@/utils/slug'
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { fetchBlog, fetchBlogPosts } from '@/services/blogs';
+import { useAuthStore } from '@/stores/auth';
+import { type Blog, type PostItem, Role } from '@/types';
+import { slugify } from '@/utils/slug';
 
-const route = useRoute()
-const blogId = computed(() => (route.params as any).id as string)
+const route = useRoute();
+const blogId = computed(() => route.params.id as string);
 
 definePage({
-  meta: { roles: [Role.Any], layout: 'default' },
-})
+  meta: { roles: [Role.Any], layout: 'default' }
+});
 
-const blog = ref<Blog | null>(null)
-const posts = ref<PostItem[]>([])
-const loading = ref(true)
-const authStore = useAuthStore()
-const { currentUser } = storeToRefs(authStore)
+const blog = ref<Blog | null>(null);
+const posts = ref<PostItem[]>([]);
+const loading = ref(true);
+const authStore = useAuthStore();
+const { currentUser } = storeToRefs(authStore);
 
 onMounted(async () => {
-  blog.value = (await fetchBlog(blogId.value)) || null
-  posts.value = (await fetchBlogPosts(blogId.value)).slice(0, 3)
-  loading.value = false
-})
+  blog.value = (await fetchBlog(blogId.value)) || null;
+  posts.value = (await fetchBlogPosts(blogId.value)).slice(0, 3);
+  loading.value = false;
+});
 
-const currentBlog = computed(() => blog.value)
+const currentBlog = computed(() => blog.value);
 
-const canEdit = computed(() => currentUser.value?.username === currentBlog.value?.authorHandle)
+const canEdit = computed(() => !!currentBlog.value && currentUser.value?.username === currentBlog.value?.authorHandle);
 </script>
 
 <route lang="yaml">
-path: /blogs/:id-:slug?
+path: /blogs/:id/:slug?
 </route>

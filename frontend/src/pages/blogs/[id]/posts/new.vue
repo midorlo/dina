@@ -9,29 +9,29 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { Role } from '@/types'
+import { computed, reactive } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' },
-})
+  meta: { roles: [Role.User], layout: 'default' }
+});
 
-const auth = useAuthStore()
-const route = useRoute()
-const router = useRouter()
-const blogId = computed(() => (route.params as any).id as string)
-const blogSlug = computed(() => (route.params as any).slug as string | undefined)
-const post = reactive({ title: '', excerpt: '' })
+const auth = useAuthStore();
+const route = useRoute();
+const router = useRouter();
+const blogId = computed(() => (route.params as any).id as string);
+const blogSlug = computed(() => (route.params as any).slug as string | undefined);
+const post = reactive({ title: '', excerpt: '' });
 
 function create() {
   if (blogId.value !== auth.currentUser?.id) {
-    router.replace('/error/403')
-    return
+    router.replace('/error/403');
+    return;
   }
-  console.log('Creating post', post)
-  router.push(`/blogs/${blogId.value}${blogSlug.value ? `-${blogSlug.value}` : ''}/posts`)
+  console.log('Creating post', post);
+  router.push(`/blogs/${blogId.value}${blogSlug.value ? `-${blogSlug.value}` : ''}/posts`);
 }
 </script>
 

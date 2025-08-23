@@ -2,24 +2,14 @@
   <v-container class="fill-height" fluid>
     <v-row align="center" justify="center">
       <v-col cols="12" lg="8" md="10">
-        <v-card
-          class="pa-6 d-flex flex-column"
-          flat
-          rounded="xl"
-          style="height: calc(100vh - 96px)"
-        >
+        <v-card class="pa-6 d-flex flex-column" flat rounded="xl" style="height: calc(100vh - 96px)">
           <v-card-title class="text-h4 font-weight-bold mb-4">Messages</v-card-title>
           <v-card-subtitle class="mb-6">Your private conversations</v-card-subtitle>
 
           <template v-if="loading">
             <v-row class="flex-grow-1">
               <v-col cols="12" md="4">
-                <v-skeleton-loader
-                  v-for="n in 5"
-                  :key="n"
-                  class="mb-2"
-                  type="list-item-avatar-two-line"
-                />
+                <v-skeleton-loader v-for="n in 5" :key="n" class="mb-2" type="list-item-avatar-two-line" />
               </v-col>
               <v-col class="d-flex flex-column" cols="12" md="8">
                 <v-skeleton-loader class="mb-4" type="heading" />
@@ -68,33 +58,22 @@
                     <v-avatar class="mr-2" size="40">
                       <v-img src="https://cdn.vuetifyjs.com/images/john-smirk.png" />
                     </v-avatar>
-                    {{
-                      selectedConversation ? selectedConversation.partner : 'Select a conversation'
-                    }}
+                    {{ selectedConversation ? selectedConversation.partner : 'Select a conversation' }}
                   </v-card-title>
 
                   <div
                     ref="messageArea"
                     class="message-area flex-grow-1"
-                    style="
-                      border: 1px solid #eee;
-                      padding: 16px;
-                      border-radius: 8px;
-                      overflow-y: auto;
-                    "
+                    style="border: 1px solid #eee; padding: 16px; border-radius: 8px; overflow-y: auto"
                   >
                     <div v-if="selectedConversation">
-                      <div
-                        v-for="message in selectedConversation.messages"
-                        :key="message.id"
-                        class="mb-2"
-                      >
+                      <div v-for="message in selectedConversation.messages" :key="message.id" class="mb-2">
                         <div :class="{ 'text-right': message.sender === 'You' }">
                           <span
                             class="pa-2 rounded-lg d-inline-block"
                             :class="{
                               'bg-primary text-white': message.sender === 'You',
-                              'bg-grey-lighten-2': message.sender !== 'You',
+                              'bg-grey-lighten-2': message.sender !== 'You'
                             }"
                           >
                             {{ message.text }}
@@ -112,9 +91,7 @@
                         </div>
                       </div>
                     </div>
-                    <div v-else class="text-center text-medium-emphasis">
-                      No conversation selected.
-                    </div>
+                    <div v-else class="text-center text-medium-emphasis">No conversation selected.</div>
                   </div>
 
                   <v-text-field
@@ -140,47 +117,47 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref } from 'vue'
-import { useAutoScroll } from '@/composables/useAutoScroll'
-import { fetchConversations } from '@/services/messages'
-import { type Conversation, type Message, Role } from '@/types'
+import { nextTick, onMounted, ref } from 'vue';
+import { useAutoScroll } from '@/composables/useAutoScroll';
+import { fetchConversations } from '@/services/messages';
+import { type Conversation, type Message, Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' },
-})
+  meta: { roles: [Role.User], layout: 'default' }
+});
 
-const conversations = ref<Conversation[]>([])
-const selectedConversation = ref<Conversation | null>(null)
-const newMessage = ref('')
-const messageArea = ref<HTMLElement | null>(null)
-const { scrollToBottom } = useAutoScroll(messageArea)
-const loading = ref(true)
+const conversations = ref<Conversation[]>([]);
+const selectedConversation = ref<Conversation | null>(null);
+const newMessage = ref('');
+const messageArea = ref<HTMLElement | null>(null);
+const { scrollToBottom } = useAutoScroll(messageArea);
+const loading = ref(true);
 
 onMounted(async () => {
-  conversations.value = await fetchConversations()
-  selectedConversation.value = conversations.value[0] ?? null
-  loading.value = false
-})
+  conversations.value = await fetchConversations();
+  selectedConversation.value = conversations.value[0] ?? null;
+  loading.value = false;
+});
 
 function selectConversation(conversation: Conversation) {
-  selectedConversation.value = conversation
-  conversation.unreadCount = 0
+  selectedConversation.value = conversation;
+  conversation.unreadCount = 0;
 }
 
 function sendMessage() {
-  if (newMessage.value.trim() === '' || !selectedConversation.value) return
+  if (newMessage.value.trim() === '' || !selectedConversation.value) return;
 
   const message: Message = {
     id: selectedConversation.value.messages.length + 1,
     sender: 'You',
     text: newMessage.value,
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    read: false,
-  }
-  selectedConversation.value.messages.push(message)
-  selectedConversation.value.lastMessage = newMessage.value
-  newMessage.value = ''
-  nextTick(scrollToBottom)
+    read: false
+  };
+  selectedConversation.value.messages.push(message);
+  selectedConversation.value.lastMessage = newMessage.value;
+  newMessage.value = '';
+  nextTick(scrollToBottom);
 }
 </script>
 

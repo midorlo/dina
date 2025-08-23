@@ -10,38 +10,38 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { fetchBlog } from '@/services/blogs'
-import { useAuthStore } from '@/stores/auth'
-import { Role } from '@/types'
-import { slugify } from '@/utils/slug'
+import { computed, onMounted, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { fetchBlog } from '@/services/blogs';
+import { useAuthStore } from '@/stores/auth';
+import { Role } from '@/types';
+import { slugify } from '@/utils/slug';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' },
-})
+  meta: { roles: [Role.User], layout: 'default' }
+});
 
-const auth = useAuthStore()
-const route = useRoute()
-const router = useRouter()
-const blogId = computed(() => (route.params as any).id as string)
-const loading = ref(true)
-const blog = reactive({ name: '', description: '' })
+const auth = useAuthStore();
+const route = useRoute();
+const router = useRouter();
+const blogId = computed(() => (route.params as any).id as string);
+const loading = ref(true);
+const blog = reactive({ name: '', description: '' });
 
 onMounted(async () => {
   if (blogId.value !== auth.currentUser?.id) {
-    router.replace('/error/403')
-    return
+    router.replace('/error/403');
+    return;
   }
-  const data = await fetchBlog(blogId.value)
-  if (data) Object.assign(blog, data)
-  loading.value = false
-})
+  const data = await fetchBlog(blogId.value);
+  if (data) Object.assign(blog, data);
+  loading.value = false;
+});
 
 async function save() {
   // placeholder save
-  console.log('Saving blog', blog)
-  router.push(`/blogs/${blogId.value}-${slugify(blog.name)}`)
+  console.log('Saving blog', blog);
+  router.push(`/blogs/${blogId.value}-${slugify(blog.name)}`);
 }
 </script>
 

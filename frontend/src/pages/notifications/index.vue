@@ -23,17 +23,17 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { useNotificationsStore } from '@/stores/notifications'
-import { Role } from '@/types'
+import { storeToRefs } from 'pinia';
+import { useNotificationsStore } from '@/stores/notifications';
+import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' },
-})
+  meta: { roles: [Role.User], layout: 'default' }
+});
 
-const notificationsStore = useNotificationsStore()
-const { items, error } = storeToRefs(notificationsStore)
-const { handleNotificationClick } = notificationsStore
+const notificationsStore = useNotificationsStore();
+const { items, error } = storeToRefs(notificationsStore);
+const { handleNotificationClick } = notificationsStore;
 </script>
 
 <style scoped>

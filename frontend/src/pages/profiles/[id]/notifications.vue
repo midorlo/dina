@@ -22,21 +22,21 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useNotificationsStore } from '@/stores/notifications'
-import { Role } from '@/types'
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { useNotificationsStore } from '@/stores/notifications';
+import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.Administrator], layout: 'default' },
-})
+  meta: { roles: [Role.Administrator], layout: 'default' }
+});
 
-const route = useRoute()
-const profileId = computed(() => (route.params as any).id as string)
-const notificationsStore = useNotificationsStore()
-const { items } = storeToRefs(notificationsStore)
-const { handleNotificationClick } = notificationsStore
+const route = useRoute();
+const profileId = computed(() => (route.params as any).id as string);
+const notificationsStore = useNotificationsStore();
+const { items } = storeToRefs(notificationsStore);
+const { handleNotificationClick } = notificationsStore;
 </script>
 
 <style scoped>

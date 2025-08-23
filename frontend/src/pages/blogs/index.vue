@@ -24,7 +24,7 @@
             flat
             height="100%"
             rounded="xl"
-            @click="router.push(`/blogs/${blog.id}-${slugify(blog.name)}`)"
+            @click="router.push(`/blogs/${blog.id}/${slugify(blog.name)}`)"
           >
             <div class="d-flex align-center mb-3">
               <v-avatar>
@@ -42,7 +42,7 @@
 
             <v-card-actions>
               <v-spacer />
-              <v-btn color="primary" :to="`/blogs/${blog.id}-${slugify(blog.name)}`" variant="text">
+              <v-btn color="primary" :to="`/blogs/${blog.id}/${slugify(blog.name)}`" variant="text">
                 Blog ansehen
               </v-btn>
             </v-card-actions>
@@ -54,28 +54,28 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { fetchBlogs } from '@/services/blogs'
-import { type Blog, Role } from '@/types'
-import { slugify } from '@/utils/slug'
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { fetchBlogs } from '@/services/blogs';
+import { type Blog, Role } from '@/types';
+import { slugify } from '@/utils/slug';
 
 definePage({
   meta: {
     roles: [Role.Any],
     layout: 'default',
-    breadcrumb: 'Übersicht',
-  },
-})
+    breadcrumb: 'Übersicht'
+  }
+});
 
-const blogs = ref<Blog[]>([])
-const loading = ref(true)
-const router = useRouter()
+const blogs = ref<Blog[]>([]);
+const loading = ref(true);
+const router = useRouter();
 
 onMounted(async () => {
-  blogs.value = await fetchBlogs()
-  loading.value = false
-})
+  blogs.value = await fetchBlogs();
+  loading.value = false;
+});
 </script>
 
 <style scoped>

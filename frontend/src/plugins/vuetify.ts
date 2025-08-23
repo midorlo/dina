@@ -5,13 +5,13 @@
  */
 
 // Composables
-import { createVuetify } from 'vuetify'
-import { md1 } from 'vuetify/blueprints'
+import { createVuetify } from 'vuetify';
+import { md1 } from 'vuetify/blueprints';
 
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
+import '@mdi/font/css/materialdesignicons.css';
 
-import 'vuetify/styles'
+import 'vuetify/styles';
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -29,8 +29,8 @@ export default createVuetify({
           success: '#4CAF50',
           warning: '#FFC107',
           background: '#FFFFFF',
-          surface: '#FFFFFF',
-        },
+          surface: '#FFFFFF'
+        }
       },
       dark: {
         colors: {
@@ -42,9 +42,9 @@ export default createVuetify({
           success: '#4CAF50',
           warning: '#FB8C00',
           background: '#121212',
-          surface: '#121212',
-        },
-      },
-    },
-  },
-})
+          surface: '#121212'
+        }
+      }
+    }
+  }
+});
