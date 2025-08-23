@@ -8,7 +8,22 @@
         <h1 class="text-h2 font-weight-bold">Dina</h1>
       </div>
 
-      <v-row> Bitte einloggen oder registrieren </v-row>
+      <v-row>
+        <v-col class="text-center" cols="12">
+          <template v-if="authStore.isLoggedIn">
+            <h2 class="text-h5 font-weight-bold mb-4">Willkommen zurück, {{ authStore.currentUser?.name }}!</h2>
+            <p class="text-body-1">Schön, dich wiederzusehen.</p>
+          </template>
+          <template v-else>
+            <h2 class="text-h5 font-weight-bold mb-4">Willkommen bei Dina!</h2>
+            <p class="text-body-1 mb-4">
+              Bitte <router-link class="text-decoration-none text-primary" to="/login">logge dich ein</router-link> oder
+              <router-link class="text-decoration-none text-primary" to="/register">registriere dich</router-link>, um
+              alle Funktionen zu nutzen.
+            </p>
+          </template>
+        </v-col>
+      </v-row>
 
       <v-row>
         <v-col v-for="link in links" :key="link.href" cols="6">
@@ -32,7 +47,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useAuthStore } from '@/stores/auth';
 import { Role } from '@/types';
+
+const authStore = useAuthStore();
 
 definePage({
   meta: { roles: [Role.Any], layout: 'default', breadcrumb: 'Home' }

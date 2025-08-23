@@ -15,7 +15,7 @@
         </v-list-item>
         <v-divider />
         <v-list-item
-          v-if="currentUser"
+          v-if="authStore.isLoggedIn"
           link
           prepend-icon="mdi-account"
           title="Profil bearbeiten"

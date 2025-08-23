@@ -49,7 +49,7 @@
         </v-btn>
 
         <v-btn
-          v-if="currentUser"
+          v-if="authStore.isLoggedIn"
           aria-label="Benachrichtigungen"
           class="app-bar-icon-btn text-none me-2"
           height="48"
@@ -64,7 +64,7 @@
         </v-btn>
 
         <v-btn
-          v-if="currentUser"
+          v-if="authStore.isLoggedIn"
           aria-label="Benutzerkonto"
           class="app-bar-icon-btn text-none me-2"
           height="48"
@@ -98,7 +98,7 @@
         </v-btn>
 
         <v-btn
-          v-else
+          v-else-if="authStore.isGuest"
           aria-label="Login"
           class="app-bar-icon-btn text-none me-2"
           height="48"
@@ -139,7 +139,7 @@ import { getMenuItems } from '@/services/menu';
 import { useAuthStore } from '@/stores/auth';
 import { useNotificationsStore } from '@/stores/notifications';
 import { useSnackbarStore } from '@/stores/snackbar';
-import { Role } from '@/types';
+import { Role } from '@/data/mock-data.ts';
 
 const snackbarStore = useSnackbarStore();
 const { message, color, visible, timeout } = storeToRefs(snackbarStore);
@@ -192,7 +192,7 @@ const { currentUser } = storeToRefs(authStore);
 
 // --- Menüfilterung & Keying ---
 const navigationMenuItems = computed<MenuItem[]>(() => {
-  return getMenuItems(currentUser.value?.role || Role.Guest, currentUser.value?.id);
+  return getMenuItems(authStore.currentUser?.role || Role.Guest, authStore.currentUser?.id);
 });
 </script>
 

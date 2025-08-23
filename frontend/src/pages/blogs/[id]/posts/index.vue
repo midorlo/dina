@@ -28,15 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { fetchBlogPosts } from '@/services/blogs';
-import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
-
-definePage({
-  meta: { roles: [Role.Any], layout: 'default' }
-});
+import { fetchBlogPosts } from '@/services/blogs.ts';
 
 const route = useRoute();
 const blogId = computed(() => (route.params as any).id as string);
@@ -58,7 +51,3 @@ onMounted(async () => {
   loading.value = false;
 });
 </script>
-
-<route lang="yaml">
-path: /blogs/:id-:slug?/posts
-</route>

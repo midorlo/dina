@@ -4,12 +4,11 @@ import { type Permission, Role } from '@/data/mock-data';
 import { hasPermission as checkPermission, guestUser, roleAtLeast } from '@/data/mock-data';
 import router from '@/router';
 
-export function hasRole(role: Role, required: Role) {
-  if (required === Role.Guest) {
-    return role === Role.Guest;
-  }
-  return roleAtLeast(role, required);
-}
+import { useSnackbarStore } from '@/stores/snackbar';
+
+import { computed } from 'vue';
+
+
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -18,6 +17,19 @@ export const useAuthStore = defineStore('auth', {
     tokens: null as AuthTokens | null
   }),
   persist: true,
+  getters: {
+    isLoggedIn: state => state.currentUser !== null && state.currentUser.role !== Role.Guest,
+    isGuest: state => state.currentUser !== null && state.currentUser.role === Role.Guest,
+    hasRole: state => (requiredRole: Role) => {
+      if (requiredRole === Role.Any) {
+        return true; // Any role is allowed
+      }
+      if (state.currentUser === null) {
+        return false;
+      }
+      return roleAtLeast(state.currentUser.role, requiredRole);
+    }
+  },
   actions: {
     setUser(user: User) {
       this.currentUser = user;
@@ -44,7 +56,9 @@ export const useAuthStore = defineStore('auth', {
     },
     logout() {
       this.reset();
-      router.push('/login');
+      router.push('/');
+      const snackbarStore = useSnackbarStore();
+      snackbarStore.showSnackbar('Erfolgreich abgemeldet!', 'success');
     },
     hasPermission(role: Role, permission: Permission) {
       return checkPermission(role, permission);
@@ -53,7 +67,7 @@ export const useAuthStore = defineStore('auth', {
 });
 
 export function filterMenuByRole<T extends { roles?: Role[] }>(menu: readonly T[], role: Role) {
-  return menu.filter(item => !item.roles || item.roles.some(r => hasRole(role, r)));
+  return menu.filter(item => !item.roles || item.roles.some(r => roleAtLeast(role, r)));
 }
 
 export { rolePermissions } from '@/data/mock-data';

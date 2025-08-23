@@ -71,10 +71,6 @@ const route = useRoute();
 const blogId = computed(() => route.params.id as string);
 const postId = computed(() => route.params.postId as string);
 
-definePage({
-  meta: { roles: [Role.Any], layout: 'default' }
-});
-
 const post = ref<Post | null>(null);
 const loading = ref(true);
 const authStore = useAuthStore();
@@ -95,4 +91,7 @@ const canEdit = computed(
 
 <route lang="yaml">
 path: /blogs/:id/:slug?/posts/:postId/:postSlug?
+meta:
+  roles: [Any]
+  layout: default
 </route>
