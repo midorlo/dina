@@ -40,7 +40,7 @@ export default defineConfig({
 
     // 4) Auto-Components (falls du globale Komponenten willst)
     Components({
-      dts: 'src/components.d.ts'
+      dts: 'src/generated/components.d.ts'
     }),
 
     // 5) Vue – wichtig: Cropper v2 als Custom Elements durchlassen

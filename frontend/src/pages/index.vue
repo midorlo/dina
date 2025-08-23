@@ -8,6 +8,8 @@
         <h1 class="text-h2 font-weight-bold">Dina</h1>
       </div>
 
+      <v-row> Bitte einloggen oder registrieren </v-row>
+
       <v-row>
         <v-col v-for="link in links" :key="link.href" cols="6">
           <v-card
