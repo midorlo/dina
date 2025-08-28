@@ -31,7 +31,7 @@
         @click="drawer = !drawer"
       />
 
-      <v-breadcrumbs class="ms-2" :items="breadcrumbItems" />
+      <app-breadcrumbs class="ms-2" />
 
       <v-spacer />
 
@@ -138,7 +138,6 @@ import type { MenuItem } from '@/types/menuData.ts';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useDisplay, useTheme } from 'vuetify';
-import { useBreadcrumbs } from '@/composables/useBreadcrumbs';
 import { loading } from '@/router/index.ts';
 import { getMenuItems } from '@/services/menu';
 import { useAuthStore } from '@/stores/auth';
@@ -153,8 +152,7 @@ const drawer = ref<boolean>(true);
 const theme = useTheme();
 const route = useRoute();
 
-// --- Breadcrumbs ---
-const { breadcrumbItems } = useBreadcrumbs();
+// --- Breadcrumbs --- handled by <app-breadcrumbs /> component
 
 // --- Display / Drawer Behavior ---
 const { mdAndUp } = useDisplay();

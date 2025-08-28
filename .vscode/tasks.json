@@ -12,11 +12,10 @@
         {
           "owner": "vite",
           "pattern": [
-            { "regexp": ".*" }
+            { "regexp": "^(?!.*)$", "file": 1, "message": 0 }
           ],
           "background": {
             "activeOnStart": true,
-            "beginsPattern": ".*Local:\\shttp://",
             "endsPattern": ".*ready in .*"
           }
         }
@@ -52,4 +51,3 @@
     }
   ]
 }
-
