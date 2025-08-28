@@ -24,6 +24,13 @@
                 inline
                 :model-value="unreadConversationsCount > 0"
               />
+              <v-badge
+                v-if="isNotificationsItem(item)"
+                color="error"
+                :content="unreadNotificationsCount"
+                inline
+                :model-value="unreadNotificationsCount > 0"
+              />
             </template>
           </v-list-item>
         </template>
@@ -197,6 +204,7 @@ watch(
 const notificationsStore = useNotificationsStore();
 const conversationsStore = useConversationsStore();
 const { unreadCount: unreadConversationsCount } = storeToRefs(conversationsStore);
+const { unreadCount: unreadNotificationsCount } = storeToRefs(notificationsStore);
 const uiStore = useUiStore();
 
 onMounted(() => {
@@ -232,6 +240,7 @@ const navigationMenuItems = computed<ResolvedMenuItem[]>(() => {
 
 const isRail = computed(() => mdAndUp.value && !uiStore.sidebarPinned);
 const isConversationsItem = (item: ResolvedMenuItem) => item.to === '/conversations';
+const isNotificationsItem = (item: ResolvedMenuItem) => item.to === '/notifications';
 </script>
 
 <style scoped>
