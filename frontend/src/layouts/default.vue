@@ -35,6 +35,14 @@
           <v-list-item
             link
             rounded="lg"
+            aria-label="Theme umschalten"
+            prepend-icon="mdi-theme-light-dark"
+            :title="'Theme umschalten'"
+            @click="toggleTheme"
+          />
+          <v-list-item
+            link
+            rounded="lg"
             aria-label="Sidebar anheften/lösen"
             :prepend-icon="!uiStore.sidebarPinned ? 'mdi-pin-outline' : undefined"
             :title="uiStore.sidebarPinned ? 'Sidebar gepinnt' : 'Sidebar anheften'"
@@ -62,17 +70,7 @@
       <v-spacer />
 
       <template #append>
-        <v-btn
-          aria-label="Theme umschalten"
-          class="app-bar-icon-btn text-none me-2"
-          height="48"
-          icon
-          slim
-          title="Theme umschalten"
-          @click="toggleTheme"
-        >
-          <v-icon>mdi-theme-light-dark</v-icon>
-        </v-btn>
+        
 
         <NotificationsList />
 

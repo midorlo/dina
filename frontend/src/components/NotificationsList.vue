@@ -8,12 +8,12 @@
     slim
     title="Benachrichtigungen"
   >
-    <v-badge :content="unreadCount" :model-value="unreadCount > 0" color="error" rounded="pill">
+    <v-badge color="error" :content="unreadCount" :model-value="unreadCount > 0" rounded="pill">
       <v-icon icon="mdi-bell-outline" />
     </v-badge>
 
-    <v-menu activator="parent" location="bottom end" :close-on-content-click="false" transition="slide-y-transition">
-      <v-card class="notifications-menu" min-width="340" max-width="420" elevation="8">
+    <v-menu activator="parent" :close-on-content-click="false" location="bottom end" transition="slide-y-transition">
+      <v-card class="notifications-menu" elevation="8" max-width="420" min-width="340">
         <v-card-title class="py-3 d-flex align-center justify-space-between">
           <span class="text-subtitle-1">Benachrichtigungen</span>
           <v-chip v-if="unreadCount > 0" color="error" label size="small">{{ unreadCount }}</v-chip>
@@ -21,7 +21,7 @@
         <v-divider />
 
         <div class="notifications-scroll">
-          <v-list v-if="items.length > 0" lines="three" density="comfortable" nav>
+          <v-list v-if="items.length > 0" density="comfortable" lines="three" nav>
             <v-list-item
               v-for="item in items"
               :key="item.id"
@@ -34,7 +34,7 @@
               <template #title>
                 <div class="d-flex align-center gap-2">
                   <span class="text-body-1">{{ item.title }}</span>
-                  <v-icon v-if="!item.read" size="10" color="primary" icon="mdi-circle" class="ms-1" />
+                  <v-icon v-if="!item.read" class="ms-1" color="primary" icon="mdi-circle" size="10" />
                 </div>
               </template>
               <template #subtitle>
@@ -47,25 +47,23 @@
           </v-list>
 
           <div v-else class="d-flex flex-column align-center justify-center py-8">
-            <v-icon size="36" class="mb-2" icon="mdi-bell-off-outline" />
+            <v-icon class="mb-2" icon="mdi-bell-off-outline" size="36" />
             <div class="text-medium-emphasis">Keine Benachrichtigungen</div>
           </div>
         </div>
 
         <v-divider />
         <v-card-actions class="notifications-actions">
-          <v-btn variant="text" color="primary" :disabled="unreadCount === 0" @click="markAllRead">
+          <v-btn color="primary" :disabled="unreadCount === 0" variant="text" @click="markAllRead">
             Alle gelesen
           </v-btn>
           <div class="d-flex align-center gap-2">
-            <v-btn variant="text" color="primary" :to="{ path: '/notifications' }">
-              Alle ansehen
-            </v-btn>
+            <v-btn color="primary" :to="{ path: '/notifications' }" variant="text">Alle ansehen</v-btn>
             <v-btn
               v-if="currentUser?.id"
-              variant="text"
               color="primary"
               :to="{ path: `/profiles/${currentUser.id}/notifications` }"
+              variant="text"
             >
               Einstellungen
             </v-btn>
@@ -77,10 +75,10 @@
 </template>
 
 <script setup lang="ts">
+import type { NotificationItem } from '@/types';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { useNotificationsStore } from '@/stores/notifications';
-import type { NotificationItem } from '@/types';
 import { sanitize } from '@/utils/sanitize';
 
 const authStore = useAuthStore();
@@ -120,4 +118,3 @@ function markAllRead() {
   opacity: 0.7;
 }
 </style>
-
