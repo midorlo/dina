@@ -8,7 +8,7 @@ export async function fetchConversations(): Promise<Conversation[]> {
     const res = await apiFetch('/api/conversations');
     return res.json();
   }
-  return delay(mockConversations, 500);
+  return delay([...mockConversations], 500);
 }
 
 export async function fetchConversation(id: string | number): Promise<Conversation | undefined> {

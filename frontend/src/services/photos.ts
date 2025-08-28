@@ -8,7 +8,7 @@ export async function fetchPhotos(): Promise<GalleryItem[]> {
     const res = await apiFetch('/api/photos');
     return res.json();
   }
-  return delay(mockGalleryItems, 500);
+  return delay([...mockGalleryItems], 500);
 }
 
 export async function fetchPhoto(id: number): Promise<GalleryItem | undefined> {

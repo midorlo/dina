@@ -28,12 +28,12 @@
 </template>
 
 <script lang="ts" setup>
-import { slugify } from '@/utils/slug';
 import { fetchBlogPosts } from '@/services/blogs.ts';
+import { slugify } from '@/utils/slug';
 
 const route = useRoute();
-const blogId = computed(() => (route.params as any).id as string);
-const blogSlug = computed(() => (route.params as any).slug as string | undefined);
+const blogId = computed(() => (route.params as Record<string, string>).id);
+const blogSlug = computed(() => (route.params as Record<string, string>).slug as string | undefined);
 const posts = ref<any[]>([]);
 const page = ref(1);
 const pageSize = 5;

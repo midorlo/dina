@@ -139,7 +139,7 @@ import { getMenuItems } from '@/services/menu';
 import { useAuthStore } from '@/stores/auth';
 import { useNotificationsStore } from '@/stores/notifications';
 import { useSnackbarStore } from '@/stores/snackbar';
-import { Role } from '@/data/mock-data.ts';
+import { Role } from '@/types';
 
 const snackbarStore = useSnackbarStore();
 const { message, color, visible, timeout } = storeToRefs(snackbarStore);
