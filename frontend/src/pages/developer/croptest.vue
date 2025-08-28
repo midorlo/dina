@@ -18,6 +18,12 @@
 </template>
 
 <script setup lang="ts">
+import { Role } from '@/types';
+
+definePage({
+  meta: { roles: [Role.Developer], layout: 'default' }
+});
+
 function onCropped(p: { blob: Blob; dataUrl: string; width: number; height: number }) {
   // direkt hochladen oder weiterverarbeiten
   console.log(p.width, p.height, p.blob);

@@ -1,6 +1,11 @@
 <template>
   <v-btn aria-label="Benutzerkonto" class="app-bar-icon-btn text-none me-2" height="48" icon slim title="Benutzerkonto">
-    <v-avatar v-if="currentUser?.avatarUrl" :image="currentUser.avatarUrl" size="32" />
+    <v-avatar
+      v-if="currentUser?.avatarUrl"
+      :alt="currentUser?.name || 'Avatar'"
+      :image="currentUser.avatarUrl"
+      size="32"
+    />
     <v-avatar v-else color="surface-light" size="32">
       <v-icon>mdi-account-circle</v-icon>
     </v-avatar>
@@ -19,9 +24,9 @@
           link
           prepend-icon="mdi-account"
           title="Profil bearbeiten"
-          :to="`/profiles/${currentUser.id}/edit`"
+          :to="currentUser ? `/profiles/${currentUser.id}/edit` : undefined"
         />
-        <v-list-item prepend-icon="{{ ICON_LOGOUT }}" title="Logout" @click="authStore.logout()" />
+        <v-list-item prepend-icon="mdi-logout" title="Logout" @click="authStore.logout()" />
       </v-list>
     </v-menu>
   </v-btn>

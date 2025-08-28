@@ -1,17 +1,23 @@
-/* z.B. src/styles/transitions.css, global importieren */
+/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .fade-transition-enter-active,
-  .fade-transition-leave-active {
+  .fade-transition-leave-active,
+  .v-fade-transition-enter-active,
+  .v-fade-transition-leave-active {
     transition: none !important;
   }
 }
 
-/* Beispiel: eigene Fade-Dauer */
+/* Custom fade duration for both native and Vuetify fade transitions */
 .fade-transition-enter-active,
-.fade-transition-leave-active {
+.fade-transition-leave-active,
+.v-fade-transition-enter-active,
+.v-fade-transition-leave-active {
   transition: opacity 0.25s ease;
 }
 .fade-transition-enter-from,
-.fade-transition-leave-to {
+.fade-transition-leave-to,
+.v-fade-transition-enter-from,
+.v-fade-transition-leave-to {
   opacity: 0;
 }

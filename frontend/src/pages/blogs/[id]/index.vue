@@ -14,7 +14,7 @@
         <v-col class="text-center" cols="12" lg="8" md="10">
           <router-link :to="`/profiles/${currentBlog?.authorHandle}`">
             <v-avatar class="mb-4 elevation-4" size="120">
-              <v-img :src="currentBlog?.authorAvatarUrl" />
+              <v-img :alt="currentBlog?.name || 'Avatar'" :src="currentBlog?.authorAvatarUrl" />
             </v-avatar>
           </router-link>
           <h1 class="text-h3 font-weight-bold">{{ currentBlog?.name }}</h1>
@@ -86,7 +86,7 @@ import { type Blog, type PostItem, Role } from '@/types';
 import { slugify } from '@/utils/slug';
 
 const route = useRoute();
-const blogId = computed(() => route.params.id as string);
+const blogId = computed(() => (route.params as any).id as string);
 
 definePage({
   meta: { roles: [Role.Any], layout: 'default' }

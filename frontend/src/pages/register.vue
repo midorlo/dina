@@ -106,8 +106,9 @@ const passwordRules = [required];
 const confirmPasswordRules = [required];
 
 async function register() {
-  const isValid = await form.value?.validate();
-  if (!isValid) return;
+  const result = await form.value?.validate();
+  const valid = typeof result === 'object' ? (result as any).valid : !!result;
+  if (!valid) return;
   // Handle registration logic here
   console.log('Registration attempt:', name.value, email.value, password.value, confirmPassword.value);
 }

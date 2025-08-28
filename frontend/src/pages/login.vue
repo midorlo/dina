@@ -12,7 +12,7 @@
               class="mb-4"
               color="error"
               icon="mdi-alert-circle-outline"
-              text="{{ loginError }}"
+              :text="loginError"
               variant="tonal"
             />
             <v-text-field
@@ -142,8 +142,9 @@ const router = useRouter();
 const snackbarStore = useSnackbarStore();
 
 async function login() {
-  const isValid = await form.value?.validate();
-  if (!isValid) return;
+  const result = await form.value?.validate();
+  const valid = typeof result === 'object' ? (result as any).valid : !!result;
+  if (!valid) return;
   loginError.value = '';
   try {
     const { login } = await import('@/services/auth');

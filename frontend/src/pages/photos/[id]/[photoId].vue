@@ -4,7 +4,13 @@
       <v-col>
         <v-skeleton-loader v-if="loading" type="image, article, actions" />
         <v-card v-else-if="photo">
-          <v-img :aspect-ratio="photo.aspectRatio" cover :lazy-src="photo.lazySrc" :src="photo.src">
+          <v-img
+            :alt="`Photo ${photo.id}`"
+            :aspect-ratio="photo.aspectRatio"
+            cover
+            :lazy-src="photo.lazySrc"
+            :src="photo.src"
+          >
             <template #placeholder>
               <v-row align="center" class="fill-height ma-0" justify="center">
                 <v-progress-circular indeterminate />
