@@ -110,7 +110,7 @@
               <v-list-item
                 append-icon="mdi-account"
                 link
-                title="Profile"
+                title="My Account"
                 :to="currentUser ? `/profiles/${currentUser.id}/edit` : undefined"
               />
               <v-list-item append-icon="mdi-logout" title="Logout" @click="authStore.logout()" />
@@ -127,6 +127,7 @@
           slim
           title="Login"
           to="/login"
+          @mouseenter="prefetchLogin"
         >
           <v-icon>mdi-login</v-icon>
         </v-btn>
@@ -135,9 +136,7 @@
 
     <v-main class="overflow-y-auto">
       <router-view v-slot="{ Component }">
-        <v-fade-transition mode="out-in">
-          <component :is="Component" />
-        </v-fade-transition>
+        <component :is="Component" />
       </router-view>
     </v-main>
 
@@ -153,6 +152,7 @@
 import type { MenuItem } from '@/types/menuData.ts';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useDisplay, useTheme } from 'vuetify';
 import { loading } from '@/router/index.ts';
 import { getMenuItems } from '@/services/menu';
@@ -241,6 +241,26 @@ const navigationMenuItems = computed<ResolvedMenuItem[]>(() => {
 const isRail = computed(() => mdAndUp.value && !uiStore.sidebarPinned);
 const isConversationsItem = (item: ResolvedMenuItem) => item.to === '/conversations';
 const isNotificationsItem = (item: ResolvedMenuItem) => item.to === '/notifications';
+
+// Preload Login page chunk for faster first navigation
+let loginPrefetched = false;
+async function prefetchLogin() {
+  if (loginPrefetched || !authStore.isGuest) return;
+  loginPrefetched = true;
+  try {
+    await import('@/pages/login.vue');
+  } catch {
+    // ignore prefetch errors
+  }
+}
+
+onMounted(() => {
+  if (authStore.isGuest) {
+    // prefetch at idle to speed up navigation to /login
+    const idle = (self as any).requestIdleCallback || ((cb: Function) => setTimeout(cb, 200));
+    idle(() => prefetchLogin());
+  }
+});
 </script>
 
 <style scoped>
