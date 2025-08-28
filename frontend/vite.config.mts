@@ -85,8 +85,7 @@ export default defineConfig({
     ]
   },
 
-  // Hinweis: mittelfristig auf import.meta.env wechseln
-  define: { 'process.env': {} },
+  // Use import.meta.env (no process.env shim)
 
   resolve: {
     alias: {

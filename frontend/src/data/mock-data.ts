@@ -43,14 +43,16 @@ export const rolePermissions: Readonly<Record<Role, readonly Permission[]>> = {
   [Role.Banned]: []
 } as const;
 
-export const hasPermission = (role: Role, permission: Permission): boolean =>
-  rolePermissions[role].includes(permission);
+export function hasPermission(role: Role, permission: Permission): boolean {
+  return rolePermissions[role].includes(permission);
+}
 
 /** ---------- Helpers (Mock utils) ---------- */
 
 const avatar = (n: number) => `https://i.pravatar.cc/150?img=${n}`;
-const unsplash = (id: string, w = 2070) =>
-  `https://images.unsplash.com/photo-${id}?ixlib=rb-4.0.3&auto=format&fit=crop&w=${w}&q=80`;
+function unsplash(id: string, w = 2070) {
+  return `https://images.unsplash.com/photo-${id}?ixlib=rb-4.0.3&auto=format&fit=crop&w=${w}&q=80`;
+}
 
 /** ISO-Dateien beibehalten – UI formatiert. */
 type ISODate = `${number}-${number}-${number}`;
@@ -442,10 +444,10 @@ export const menuData: Readonly<MenuItem[]> = [
 /** Sichtbarkeit: Standard = sichtbar, wenn kein roles-Array angegeben.
  *  Wenn vorhanden: role >= mindestens einer geforderten Rolle.
  */
-export const isMenuVisibleFor = (userRole: Role, item: MenuItem): boolean => {
+export function isMenuVisibleFor(userRole: Role, item: MenuItem): boolean {
   if (!('roles' in item) || !item.roles || item.roles.length === 0) return true;
   return item.roles.some(required => roleAtLeast(userRole, required));
-};
+}
 
 /** ---------- Conversations ---------- */
 export const mockConversations: Readonly<Conversation[]> = [

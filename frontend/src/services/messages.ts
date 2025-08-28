@@ -8,7 +8,7 @@ export async function fetchConversations(): Promise<Conversation[]> {
     const res = await apiFetch('/api/conversations');
     return res.json();
   }
-  return delay(mockConversations, 500);
+  return delay([...(mockConversations as Conversation[])], 500);
 }
 
 export async function fetchConversation(id: string | number): Promise<Conversation | undefined> {
@@ -17,7 +17,7 @@ export async function fetchConversation(id: string | number): Promise<Conversati
     return res.json();
   }
   return delay(
-    mockConversations.find(c => c.id === Number(id)),
+    (mockConversations as Conversation[]).find(c => c.id === Number(id)),
     500
   );
 }
@@ -27,7 +27,7 @@ export async function fetchMessage(conversationId: string | number, messageId: s
     const res = await apiFetch(`/api/conversations/${conversationId}/messages/${messageId}`);
     return res.json();
   }
-  const conv = mockConversations.find(c => c.id === Number(conversationId));
+  const conv = (mockConversations as Conversation[]).find(c => c.id === Number(conversationId));
   return delay(
     conv?.messages.find(m => m.id === Number(messageId)),
     500

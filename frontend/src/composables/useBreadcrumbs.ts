@@ -16,23 +16,26 @@ export function useBreadcrumbs() {
 
     for (let index = 0; index < records.length; index++) {
       const record = records[index];
-      const segment = (record.path.split('/').findLast(Boolean) ?? '').trim();
+      const parts = record.path.split('/').filter(Boolean);
+      const segment = (parts.at(-1) ?? '').trim();
 
       const paramMatches = [...segment.matchAll(/:([^/-]+)/g)].map(m => m[1]);
       const slugParam = paramMatches.at(-1);
 
+      const params = route.params as Record<string, unknown>;
+
       let title: string =
-        (typeof record.meta?.breadcrumb === 'function'
-          ? record.meta.breadcrumb(route)
-          : (record.meta?.breadcrumb as string | undefined)) ??
-        (slugParam && typeof route.params[slugParam] === 'string' ? (route.params[slugParam] as string) : segment);
+        (typeof (record.meta as any)?.breadcrumb === 'function'
+          ? (record.meta as any).breadcrumb(route)
+          : ((record.meta as any)?.breadcrumb as string | undefined)) ??
+        (slugParam && typeof params[slugParam] === 'string' ? (params[slugParam] as string) : segment);
 
       title = title
         .replace(/[:()*]/g, '')
         .replace(/-/g, ' ')
         .replace(/^\w/u, c => c.toUpperCase());
 
-      const to = router.resolve({ name: record.name as string, params: route.params }).path;
+      const to = router.resolve({ name: record.name as any, params } as any).path;
 
       items.push({
         title,

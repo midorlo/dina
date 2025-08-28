@@ -1,4 +1,5 @@
 import type { Profile } from './profile';
+import type { Role } from '@/data/mock-data';
 
 export interface User {
   id: string;

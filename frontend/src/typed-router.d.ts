@@ -24,7 +24,7 @@ declare module 'vue-router/auto-routes' {
     '/blogs/': RouteRecordInfo<'/blogs/', '/blogs', Record<never, never>, Record<never, never>>,
     '/blogs/[id]/edit': RouteRecordInfo<'/blogs/[id]/edit', '/blogs/:id-:slug?/edit', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/blogs/[id]/': RouteRecordInfo<'/blogs/[id]/', '/blogs/:id/:slug?', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/blogs/[id]/posts/': RouteRecordInfo<'/blogs/[id]/posts/', '/blogs/:id-:slug?/posts', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/blogs/[id]/posts/': RouteRecordInfo<'/blogs/[id]/posts/', '/blogs/:id/posts', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/blogs/[id]/posts/new': RouteRecordInfo<'/blogs/[id]/posts/new', '/blogs/:id-:slug?/posts/new', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/blogs/[id]/posts/[postId]': RouteRecordInfo<'/blogs/[id]/posts/[postId]', '/blogs/:id/:slug?/posts/:postId/:postSlug?', { id: ParamValue<true>, postId: ParamValue<true> }, { id: ParamValue<false>, postId: ParamValue<false> }, '/blogs/[id]/posts/[postId]/edit'>,
     '/blogs/[id]/posts/[postId]/edit': RouteRecordInfo<'/blogs/[id]/posts/[postId]/edit', '/blogs/:id-:slug?/posts/:postId-:postSlug?/edit', { id: ParamValue<true>, postId: ParamValue<true> }, { id: ParamValue<false>, postId: ParamValue<false> }>,

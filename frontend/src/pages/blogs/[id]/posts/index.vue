@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-import { slugify } from '@/utils/slug';
 import { fetchBlogPosts } from '@/services/blogs.ts';
+import { slugify } from '@/utils/slug';
 
 const route = useRoute();
 const blogId = computed(() => (route.params as any).id as string);
