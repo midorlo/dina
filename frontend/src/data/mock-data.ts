@@ -403,6 +403,12 @@ export const menuData: Readonly<MenuItemInput[]> = [
     to: '/conversations',
     roles: [Role.User]
   },
+  {
+    title: 'Notifications',
+    prependIcon: 'mdi-bell-outline',
+    to: '/notifications',
+    roles: [Role.User]
+  },
   // Guest-only entries
   { title: 'Login', prependIcon: 'mdi-login', to: '/login', roles: [Role.Guest] },
   { title: 'Register', prependIcon: 'mdi-account-plus', to: '/register', roles: [Role.Guest] },
