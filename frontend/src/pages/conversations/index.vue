@@ -23,7 +23,7 @@
               <!-- Conversation List (Left Pane) -->
               <v-col class="d-flex flex-column" cols="12" md="4">
                 <v-sheet class="pa-4 flex-grow-1 d-flex flex-column" rounded="lg">
-                  <v-card-title class="text-h6 font-weight-bold mb-4">Conversations</v-card-title>
+                  <v-card-title class="text-h6 font-weight-bold mb-4">Messages</v-card-title>
                   <v-list class="flex-grow-1" style="overflow-y: auto">
                     <v-list-item
                       v-for="conversation in conversations"

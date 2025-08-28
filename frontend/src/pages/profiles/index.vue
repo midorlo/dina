@@ -5,7 +5,7 @@
         <v-card flat rounded="xl">
           <v-card-title class="pa-6">
             <v-row align="center">
-              <v-col cols="12" md="8"> Profiles </v-col>
+              <v-col cols="12" md="8"> Community </v-col>
               <v-col cols="12" md="4">
                 <v-text-field
                   v-model="search"

@@ -398,7 +398,7 @@ export const menuData: Readonly<MenuItemInput[]> = [
   { type: 'divider' },
   // Conversations on top for logged-in users
   {
-    title: 'Conversations',
+    title: 'Messages',
     prependIcon: 'mdi-message-text-outline',
     to: '/conversations',
     roles: [Role.User]
@@ -413,7 +413,7 @@ export const menuData: Readonly<MenuItemInput[]> = [
   { title: 'Login', prependIcon: 'mdi-login', to: '/login', roles: [Role.Guest] },
   { title: 'Register', prependIcon: 'mdi-account-plus', to: '/register', roles: [Role.Guest] },
   // Public entries
-  { title: 'Profiles', prependIcon: 'mdi-account-group-outline', to: '/profiles' },
+  { title: 'Community', prependIcon: 'mdi-account-group-outline', to: '/profiles' },
   { title: 'Blogs', prependIcon: 'mdi-post-outline', to: '/blogs' },
   { type: 'divider' },
   {
