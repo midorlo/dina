@@ -394,20 +394,22 @@ export const blogPostsDetails: Readonly<Record<string, Post>> = {
 /** ---------- Menu & Visibility Guard ---------- */
 
 export const menuData: Readonly<MenuItemInput[]> = [
-  { prependAvatar: logo, to: '/' },
+  { prependAvatar: logo, title: 'Dina', to: '/' },
   { type: 'divider' },
-  { title: 'Login', prependIcon: 'mdi-login', to: '/login', roles: [Role.Guest] },
-  { title: 'Register', prependIcon: 'mdi-account-plus', to: '/register', roles: [Role.Guest] },
-  { type: 'divider' },
-  { title: 'Profiles', prependIcon: 'mdi-account-group-outline', to: '/profiles' },
-  { title: 'Blogs', prependIcon: 'mdi-post-outline', to: '/blogs' },
-  { type: 'divider' },
+  // Conversations on top for logged-in users
   {
     title: 'Conversations',
     prependIcon: 'mdi-message-text-outline',
     to: '/conversations',
     roles: [Role.User]
   },
+  // Guest-only entries
+  { title: 'Login', prependIcon: 'mdi-login', to: '/login', roles: [Role.Guest] },
+  { title: 'Register', prependIcon: 'mdi-account-plus', to: '/register', roles: [Role.Guest] },
+  // Public entries
+  { title: 'Profiles', prependIcon: 'mdi-account-group-outline', to: '/profiles' },
+  { title: 'Blogs', prependIcon: 'mdi-post-outline', to: '/blogs' },
+  { type: 'divider' },
   {
     title: 'Photos',
     prependIcon: 'mdi-image-multiple',

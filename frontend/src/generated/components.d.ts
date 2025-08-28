@@ -12,6 +12,7 @@ declare module 'vue' {
     AppFooter: typeof import('./../components/AppFooter.vue')['default']
     AvatarCropper: typeof import('./../components/AvatarCropper.vue')['default']
     NotificationsBadge: typeof import('./../components/NotificationsBadge.vue')['default']
+    NotificationsList: typeof import('./../components/NotificationsList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UserMenu: typeof import('./../components/UserMenu.vue')['default']

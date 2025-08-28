@@ -77,7 +77,23 @@ export const useAuthStore = defineStore('auth', {
 });
 
 export function filterMenuByRole<T extends { roles?: Role[] }>(menu: readonly T[], role: Role) {
-  return menu.filter(item => !item.roles || item.roles.some(r => roleAtLeast(role, r)));
+  return menu.filter(item => {
+    // Visible by default when no roles are specified
+    if (!item.roles || item.roles.length === 0) return true;
+
+    // Special-case Guest: items restricted to guests should only be visible to guests
+    if (item.roles.includes(Role.Guest)) {
+      return role === Role.Guest;
+    }
+
+    // Role.Any means visible to everyone
+    if (item.roles.includes(Role.Any)) {
+      return true;
+    }
+
+    // For all other roles use minimum-role semantics
+    return item.roles.some(r => roleAtLeast(role, r));
+  });
 }
 
 export { rolePermissions } from '@/data/mock-data';

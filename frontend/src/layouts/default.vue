@@ -3,10 +3,10 @@
     <v-navigation-drawer
       v-model="drawer"
       color="surface-variant"
-      :expand-on-hover="mdAndUp"
+      :expand-on-hover="mdAndUp && !uiStore.sidebarPinned"
       fixed
       mobile-breakpoint="md"
-      :rail="mdAndUp"
+      :rail="mdAndUp && !uiStore.sidebarPinned"
       width="256"
     >
       <v-list nav>
@@ -15,21 +15,47 @@
           :key="(item as any).to || (item as any).title || `it-${index}`"
         >
           <v-divider v-if="item.type === 'divider'" />
-          <v-list-item v-else v-bind="item" />
+          <v-list-item v-else v-bind="item">
+            <template #append>
+              <v-badge
+                v-if="isConversationsItem(item)"
+                color="error"
+                inline
+                :content="unreadConversationsCount"
+                :model-value="unreadConversationsCount > 0"
+              />
+            </template>
+          </v-list-item>
         </template>
       </v-list>
 
-      <template #append />
+      <template #append>
+        <v-divider v-if="mdAndUp" />
+        <v-list v-if="mdAndUp" nav>
+          <v-list-item
+            link
+            rounded="lg"
+            aria-label="Sidebar anheften/lösen"
+            :prepend-icon="!uiStore.sidebarPinned ? 'mdi-pin-outline' : undefined"
+            :title="uiStore.sidebarPinned ? 'Sidebar gepinnt' : 'Sidebar anheften'"
+            @click="uiStore.toggleSidebarPinned()"
+          >
+            <template v-if="uiStore.sidebarPinned" #prepend>
+              <v-avatar class="me-3" color="primary" size="28">
+                <v-icon color="white">mdi-pin</v-icon>
+              </v-avatar>
+            </template>
+            <template v-if="!isRail" #title>
+              <span>{{ uiStore.sidebarPinned ? 'Sidebar gepinnt' : 'Sidebar anheften' }}</span>
+            </template>
+          </v-list-item>
+        </v-list>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar flat height="56">
       <v-progress-linear absolute :active="loading" bottom color="primary" :indeterminate="loading" />
-      <v-app-bar-nav-icon
-        v-if="showAppBarNavIcon"
-        aria-label="Menü öffnen/schließen"
-        title="Menü"
-        @click="drawer = !drawer"
-      />
+      <v-app-bar-nav-icon aria-label="Menü öffnen/schließen" title="Menü" @click="onNavToggle" />
 
       <app-breadcrumbs class="ms-2" />
 
@@ -48,20 +74,7 @@
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
 
-        <v-btn
-          v-if="authStore.isLoggedIn"
-          aria-label="Benachrichtigungen"
-          class="app-bar-icon-btn text-none me-2"
-          height="48"
-          icon
-          slim
-          title="Benachrichtigungen"
-          to="/notifications"
-        >
-          <v-badge color="error" :content="unreadCount" :model-value="unreadCount > 0" rounded="pill">
-            <v-icon>mdi-bell-outline</v-icon>
-          </v-badge>
-        </v-btn>
+        <NotificationsList />
 
         <v-btn
           v-if="authStore.isLoggedIn"
@@ -103,7 +116,7 @@
         </v-btn>
 
         <v-btn
-          v-else-if="authStore.isGuest"
+          v-if="authStore.isGuest"
           aria-label="Login"
           class="app-bar-icon-btn text-none me-2"
           height="48"
@@ -141,8 +154,10 @@ import { useDisplay, useTheme } from 'vuetify';
 import { loading } from '@/router/index.ts';
 import { getMenuItems } from '@/services/menu';
 import { useAuthStore } from '@/stores/auth';
+import { useConversationsStore } from '@/stores/conversations';
 import { useNotificationsStore } from '@/stores/notifications';
 import { useSnackbarStore } from '@/stores/snackbar';
+import { useUiStore } from '@/stores/ui';
 import { Role } from '@/types';
 
 const snackbarStore = useSnackbarStore();
@@ -150,13 +165,15 @@ const { message, color, visible, timeout } = storeToRefs(snackbarStore);
 
 const drawer = ref<boolean>(true);
 const theme = useTheme();
+const isDark = computed(() => theme.global.current.value.dark);
 const route = useRoute();
 
 // --- Breadcrumbs --- handled by <app-breadcrumbs /> component
 
 // --- Display / Drawer Behavior ---
 const { mdAndUp } = useDisplay();
-const showAppBarNavIcon = computed(() => !mdAndUp.value);
+// On desktop show nav icon to toggle pin like YouTube; on mobile toggle drawer
+const showAppBarNavIcon = computed(() => true);
 
 // Initialzustand abhängig von Breakpoint
 onMounted(() => {
@@ -182,15 +199,26 @@ watch(
 
 // --- Notifications ---
 const notificationsStore = useNotificationsStore();
-const { unreadCount } = storeToRefs(notificationsStore);
+const conversationsStore = useConversationsStore();
+const { unreadCount: unreadConversationsCount } = storeToRefs(conversationsStore);
+const uiStore = useUiStore();
 
 onMounted(() => {
   notificationsStore.load?.();
+  conversationsStore.load?.();
 });
 
 // --- Theme Umschalten ---
 function toggleTheme(): void {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
+}
+
+function onNavToggle(): void {
+  if (mdAndUp.value) {
+    uiStore.toggleSidebarPinned();
+  } else {
+    drawer.value = !drawer.value;
+  }
 }
 
 // --- Auth ---
@@ -205,6 +233,9 @@ const navigationMenuItems = computed<ResolvedMenuItem[]>(() => {
     authStore.currentUser?.id
   ) as unknown as ResolvedMenuItem[];
 });
+
+const isRail = computed(() => mdAndUp.value && !uiStore.sidebarPinned);
+const isConversationsItem = (item: ResolvedMenuItem) => item.to === '/conversations';
 </script>
 
 <style scoped>
