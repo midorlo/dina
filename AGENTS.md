@@ -19,3 +19,7 @@ Beispiel
 Normale Antwortinhalte und ggf. kurze Aufzählungen zur Übersicht.
 
 **Letzter Satz in fett (mit Leerzeile davor), Farbe wenn von der Oberfläche unterstützt dunkelgrün.**
+
+## Synonyme Anweisungen
+
+- Wenn ich dich bitte zu comitten, dann sollst du: Den diff anschauen und überlegen, ob wir das in einem , oder mehreren commits absetzen sollten. Falls es sinn macht, mach mehrere commits.
