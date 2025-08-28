@@ -20,8 +20,8 @@
               <v-badge
                 v-if="isConversationsItem(item)"
                 color="error"
-                inline
                 :content="unreadConversationsCount"
+                inline
                 :model-value="unreadConversationsCount > 0"
               />
             </template>
@@ -33,18 +33,18 @@
         <v-divider v-if="mdAndUp" />
         <v-list v-if="mdAndUp" nav>
           <v-list-item
-            link
-            rounded="lg"
             aria-label="Theme umschalten"
+            link
             prepend-icon="mdi-theme-light-dark"
+            rounded="lg"
             :title="'Theme umschalten'"
             @click="toggleTheme"
           />
           <v-list-item
-            link
-            rounded="lg"
             aria-label="Sidebar anheften/lösen"
+            link
             :prepend-icon="!uiStore.sidebarPinned ? 'mdi-pin-outline' : undefined"
+            rounded="lg"
             :title="uiStore.sidebarPinned ? 'Sidebar gepinnt' : 'Sidebar anheften'"
             @click="uiStore.toggleSidebarPinned()"
           >
@@ -70,8 +70,6 @@
       <v-spacer />
 
       <template #append>
-        
-
         <NotificationsList />
 
         <v-btn
