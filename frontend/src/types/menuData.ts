@@ -1,13 +1,20 @@
 import type { Role } from '@/types/index.ts';
 
-export interface MenuItem {
+interface MenuItemBase {
   title?: string;
   prependIcon?: string;
   prependAvatar?: string;
   appendIcon?: string;
   disabled?: boolean;
   link?: boolean;
-  to?: string | ((id: string | undefined) => string);
   roles?: Role[];
   type?: 'divider';
+}
+
+export interface MenuItemInput extends MenuItemBase {
+  to?: string | ((id: string | undefined) => string);
+}
+
+export interface MenuItem extends MenuItemBase {
+  to?: string;
 }

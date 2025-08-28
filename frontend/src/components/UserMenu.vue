@@ -19,9 +19,9 @@
           link
           prepend-icon="mdi-account"
           title="Profil bearbeiten"
-          :to="`/profiles/${currentUser.id}/edit`"
+          :to="currentUser ? `/profiles/${currentUser.id}/edit` : undefined"
         />
-        <v-list-item prepend-icon="{{ ICON_LOGOUT }}" title="Logout" @click="authStore.logout()" />
+        <v-list-item prepend-icon="mdi-logout" title="Logout" @click="authStore.logout()" />
       </v-list>
     </v-menu>
   </v-btn>

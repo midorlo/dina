@@ -1,14 +1,12 @@
 import type { AuthTokens, Profile, User } from '@/types';
 import { defineStore } from 'pinia';
+import { computed } from 'vue';
 import { type Permission, Role } from '@/data/mock-data';
 import { hasPermission as checkPermission, guestUser, roleAtLeast } from '@/data/mock-data';
+
 import router from '@/router';
 
 import { useSnackbarStore } from '@/stores/snackbar';
-
-import { computed } from 'vue';
-
-
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({

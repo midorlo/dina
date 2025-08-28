@@ -8,5 +8,5 @@ export async function fetchNotifications(): Promise<NotificationItem[]> {
     const res = await apiFetch('/api/notifications');
     return res.json();
   }
-  return delay(mockNotifications, 300);
+  return delay([...mockNotifications], 300);
 }
