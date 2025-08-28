@@ -5,7 +5,7 @@
  */
 
 import type { Router } from 'vue-router';
-import type { Role } from '@/data/mock-data.ts';
+import type { Role } from '@/types';
 
 import { setupLayouts } from 'virtual:generated-layouts';
 import { ref } from 'vue';
@@ -35,11 +35,13 @@ setupRouterLoading(router);
 router.beforeEach(to => {
   const auth = useAuthStore();
 
-  console.log('Navigating to:', to.fullPath);
-  console.log('Route Meta Roles:', to.meta.roles);
-  console.log('Current User Role:', auth.currentUser?.role);
-  console.log('Is Logged In:', auth.isLoggedIn);
-  console.log('Is Guest:', auth.isGuest);
+  if (import.meta.env.DEV) {
+    console.log('Navigating to:', to.fullPath);
+    console.log('Route Meta Roles:', to.meta.roles);
+    console.log('Current User Role:', auth.currentUser?.role);
+    console.log('Is Logged In:', auth.isLoggedIn);
+    console.log('Is Guest:', auth.isGuest);
+  }
 
   if (to.meta.requiresGuest && !auth.isGuest) {
     console.log('Redirecting: requiresGuest and not guest');
@@ -49,11 +51,13 @@ router.beforeEach(to => {
   const allowedRoles = to.meta.roles as Role[] | undefined;
   if (allowedRoles && allowedRoles.length > 0) {
     const hasRequiredRole = allowedRoles.some(r => auth.hasRole(r));
-    console.log('Allowed Roles:', allowedRoles);
-    console.log('Has Required Role:', hasRequiredRole);
+    if (import.meta.env.DEV) {
+      console.log('Allowed Roles:', allowedRoles);
+      console.log('Has Required Role:', hasRequiredRole);
+    }
     if (!hasRequiredRole) {
-      console.log('Redirecting: does not have required role');
-      return '/error/403';
+      // Unauthenticated → Login; sonst Forbidden
+      return auth.isLoggedIn ? '/error/403' : '/login';
     }
   }
 });

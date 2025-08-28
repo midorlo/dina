@@ -13,7 +13,7 @@
         @click="handleNotificationClick(item)"
       >
         <template #title>{{ item.title }}</template>
-        <template #subtitle><div v-html="item.subtitle" /></template>
+        <template #subtitle><div v-html="sanitize(item.subtitle)" /></template>
         <template #append>
           <div class="text-caption">{{ item.time }}</div>
         </template>
@@ -24,8 +24,10 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 import { useNotificationsStore } from '@/stores/notifications';
 import { Role } from '@/types';
+import { sanitize } from '@/utils/sanitize';
 
 definePage({
   meta: { roles: [Role.User], layout: 'default' }
@@ -34,6 +36,11 @@ definePage({
 const notificationsStore = useNotificationsStore();
 const { items, error } = storeToRefs(notificationsStore);
 const { handleNotificationClick } = notificationsStore;
+
+onMounted(() => {
+  // Ensure notifications are loaded when page opens
+  notificationsStore.load?.();
+});
 </script>
 
 <style scoped>

@@ -12,7 +12,7 @@
         @click="handleNotificationClick(item)"
       >
         <template #title>{{ item.title }}</template>
-        <template #subtitle><div v-html="item.subtitle" /></template>
+        <template #subtitle><div v-html="sanitize(item.subtitle)" /></template>
         <template #append>
           <div class="text-caption">{{ item.time }}</div>
         </template>
@@ -23,10 +23,11 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useNotificationsStore } from '@/stores/notifications';
 import { Role } from '@/types';
+import { sanitize } from '@/utils/sanitize';
 
 definePage({
   meta: { roles: [Role.Administrator], layout: 'default' }
@@ -37,6 +38,10 @@ const profileId = computed(() => (route.params as any).id as string);
 const notificationsStore = useNotificationsStore();
 const { items } = storeToRefs(notificationsStore);
 const { handleNotificationClick } = notificationsStore;
+
+onMounted(() => {
+  notificationsStore.load?.();
+});
 </script>
 
 <style scoped>

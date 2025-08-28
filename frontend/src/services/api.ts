@@ -14,5 +14,14 @@ export async function apiFetch(input: RequestInfo | URL, init: RequestInit = {})
   const headers = new Headers(init.headers);
   const authHeaders = getAuthHeaders();
   for (const [key, value] of Object.entries(authHeaders)) headers.set(key, value as string);
-  return fetch(input, { ...init, headers });
+
+  const base = (import.meta as any).env?.VITE_API_BASE_URL ?? '';
+  const resolved: RequestInfo | URL =
+    typeof input === 'string' && !/^https?:\/\//i.test(input) ? (base as string) + input : input;
+
+  const res = await fetch(resolved, { ...init, headers });
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  return res;
 }

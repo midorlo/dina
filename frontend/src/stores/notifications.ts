@@ -21,8 +21,6 @@ export const useNotificationsStore = defineStore('notifications', () => {
     }
   }
 
-  load();
-
   const unreadCount = computed(() => items.value.filter(item => !item.read).length);
 
   function handleNotificationClick(item: NotificationItem) {
@@ -37,5 +35,5 @@ export const useNotificationsStore = defineStore('notifications', () => {
     load();
   }
 
-  return { items, unreadCount, handleNotificationClick, reset, error };
+  return { items, unreadCount, handleNotificationClick, reset, error, load };
 });

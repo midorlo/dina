@@ -1,14 +1,12 @@
 import type { AuthTokens, Profile, User } from '@/types';
 import { defineStore } from 'pinia';
+import { computed } from 'vue';
 import { type Permission, Role } from '@/data/mock-data';
 import { hasPermission as checkPermission, guestUser, roleAtLeast } from '@/data/mock-data';
+
 import router from '@/router';
 
 import { useSnackbarStore } from '@/stores/snackbar';
-
-import { computed } from 'vue';
-
-
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -16,10 +14,22 @@ export const useAuthStore = defineStore('auth', {
     userProfile: null as Profile | null,
     tokens: null as AuthTokens | null
   }),
-  persist: true,
+  persist: {
+    storage: typeof window === 'undefined' ? undefined : sessionStorage,
+    paths: ['currentUser', 'userProfile']
+  } as any,
   getters: {
-    isLoggedIn: state => state.currentUser !== null && state.currentUser.role !== Role.Guest,
-    isGuest: state => state.currentUser !== null && state.currentUser.role === Role.Guest,
+    hasValidToken: state => !!(state.tokens?.accessToken && state.tokens.accessTokenExpiresAt > Date.now()),
+    isLoggedIn: state =>
+      state.currentUser !== null &&
+      state.currentUser.role !== Role.Guest &&
+      !!(state.tokens?.accessToken && state.tokens.accessTokenExpiresAt > Date.now()),
+    isGuest: state =>
+      !(
+        state.currentUser !== null &&
+        state.currentUser.role !== Role.Guest &&
+        !!(state.tokens?.accessToken && state.tokens.accessTokenExpiresAt > Date.now())
+      ),
     hasRole: state => (requiredRole: Role) => {
       if (requiredRole === Role.Any) {
         return true; // Any role is allowed

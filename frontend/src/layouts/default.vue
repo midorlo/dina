@@ -72,7 +72,12 @@
           slim
           title="Benutzerkonto"
         >
-          <v-avatar v-if="currentUser?.avatarUrl" :image="currentUser.avatarUrl" size="32" />
+          <v-avatar
+            v-if="currentUser?.avatarUrl"
+            :alt="currentUser?.name || 'Avatar'"
+            :image="currentUser.avatarUrl"
+            size="32"
+          />
           <v-avatar v-else color="surface-light" size="32">
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
@@ -139,7 +144,7 @@ import { getMenuItems } from '@/services/menu';
 import { useAuthStore } from '@/stores/auth';
 import { useNotificationsStore } from '@/stores/notifications';
 import { useSnackbarStore } from '@/stores/snackbar';
-import { Role } from '@/data/mock-data.ts';
+import { Role } from '@/types';
 
 const snackbarStore = useSnackbarStore();
 const { message, color, visible, timeout } = storeToRefs(snackbarStore);
@@ -181,6 +186,10 @@ watch(
 const notificationsStore = useNotificationsStore();
 const { unreadCount } = storeToRefs(notificationsStore);
 
+onMounted(() => {
+  notificationsStore.load?.();
+});
+
 // --- Theme Umschalten ---
 function toggleTheme(): void {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
@@ -191,8 +200,12 @@ const authStore = useAuthStore();
 const { currentUser } = storeToRefs(authStore);
 
 // --- Menüfilterung & Keying ---
-const navigationMenuItems = computed<MenuItem[]>(() => {
-  return getMenuItems(authStore.currentUser?.role || Role.Guest, authStore.currentUser?.id);
+type ResolvedMenuItem = Omit<MenuItem, 'to'> & { to?: string };
+const navigationMenuItems = computed<ResolvedMenuItem[]>(() => {
+  return getMenuItems(
+    authStore.currentUser?.role || Role.Guest,
+    authStore.currentUser?.id
+  ) as unknown as ResolvedMenuItem[];
 });
 </script>
 
