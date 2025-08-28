@@ -1,9 +1,8 @@
 <template>
   <v-app>
-    <router-view v-slot="{ Component }">
-      <v-fade-transition mode="out-in">
-        <component :is="Component" />
-      </v-fade-transition>
+    <router-view v-slot="{ Component, route }">
+      <!-- Only re-render when the layout actually changes -->
+      <component :is="Component" :key="route.meta?.layout" />
     </router-view>
   </v-app>
 </template>
