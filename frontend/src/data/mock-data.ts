@@ -1,5 +1,5 @@
 import type { Blog, Conversation, GalleryItem, NotificationItem, Post, PostItem, Profile, User } from '@/types';
-import type { MenuItem } from '@/types/menuData.ts';
+import type { MenuItemInput } from '@/types/menuData.ts';
 import logo from '@/assets/logo.svg';
 
 /** ---------- Roles & Permissions ---------- */
@@ -393,7 +393,7 @@ export const blogPostsDetails: Readonly<Record<string, Post>> = {
 
 /** ---------- Menu & Visibility Guard ---------- */
 
-export const menuData: Readonly<MenuItem[]> = [
+export const menuData: Readonly<MenuItemInput[]> = [
   { prependAvatar: logo, to: '/' },
   { type: 'divider' },
   { title: 'Login', prependIcon: 'mdi-login', to: '/login', roles: [Role.Guest] },
@@ -444,7 +444,7 @@ export const menuData: Readonly<MenuItem[]> = [
 /** Sichtbarkeit: Standard = sichtbar, wenn kein roles-Array angegeben.
  *  Wenn vorhanden: role >= mindestens einer geforderten Rolle.
  */
-export function isMenuVisibleFor(userRole: Role, item: MenuItem): boolean {
+export function isMenuVisibleFor(userRole: Role, item: MenuItemInput): boolean {
   if (!('roles' in item) || !item.roles || item.roles.length === 0) return true;
   return item.roles.some(required => roleAtLeast(userRole, required));
 }

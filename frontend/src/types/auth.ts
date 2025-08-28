@@ -1,5 +1,5 @@
 import type { Profile } from './profile';
-import type { Role } from '@/data/mock-data';
+import { Role } from '@/data/mock-data';
 
 export interface User {
   id: string;
@@ -23,4 +23,6 @@ export interface LoginResponse {
   profile: Profile;
 }
 
-export { Permission, Role } from '@/data/mock-data';
+export type { Permission } from '@/data/mock-data';
+// eslint-disable-next-line unicorn/prefer-export-from
+export { Role };

@@ -68,8 +68,8 @@ import { type Post, Role } from '@/types';
 import { slugify } from '@/utils/slug';
 
 const route = useRoute();
-const blogId = computed(() => (route.params as any).id as string);
-const postId = computed(() => (route.params as any).postId as string);
+const blogId = computed(() => (route.params as Record<string, string>).id);
+const postId = computed(() => (route.params as Record<string, string>).postId);
 
 const post = ref<Post | null>(null);
 const loading = ref(true);

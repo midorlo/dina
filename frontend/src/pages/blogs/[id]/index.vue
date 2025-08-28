@@ -86,7 +86,7 @@ import { type Blog, type PostItem, Role } from '@/types';
 import { slugify } from '@/utils/slug';
 
 const route = useRoute();
-const blogId = computed(() => (route.params as any).id as string);
+const blogId = computed(() => (route.params as Record<string, string>).id);
 
 definePage({
   meta: { roles: [Role.Any], layout: 'default' }

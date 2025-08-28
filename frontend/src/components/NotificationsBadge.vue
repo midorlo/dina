@@ -9,7 +9,7 @@
     to="/notifications"
   >
     <v-badge color="error" :content="unreadCount" :model-value="unreadCount > 0" rounded="pill">
-      <v-icon>mdi-bell-outline</v-icon>
+      <v-icon icon="mdi-bell-outline" />
     </v-badge>
   </v-btn>
 </template>

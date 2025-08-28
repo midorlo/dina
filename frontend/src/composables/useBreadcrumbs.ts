@@ -22,13 +22,13 @@ export function useBreadcrumbs() {
       const paramMatches = [...segment.matchAll(/:([^/-]+)/g)].map(m => m[1]);
       const slugParam = paramMatches.at(-1);
 
-      const params = route.params as Record<string, unknown>;
+      const params = route.params as Record<string, string>;
 
       let title: string =
         (typeof (record.meta as any)?.breadcrumb === 'function'
           ? (record.meta as any).breadcrumb(route)
           : ((record.meta as any)?.breadcrumb as string | undefined)) ??
-        (slugParam && typeof params[slugParam] === 'string' ? (params[slugParam] as string) : segment);
+        (slugParam && typeof params[slugParam] === 'string' ? params[slugParam] : segment);
 
       title = title
         .replace(/[:()*]/g, '')
