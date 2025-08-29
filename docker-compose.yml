@@ -1,0 +1,38 @@
+version: "3.9"
+
+# Development-only Docker Compose for local PostgreSQL
+# Usage:
+#   docker compose up -d postgres
+#   docker compose logs -f postgres
+#   docker compose down
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: medina-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: medina
+      POSTGRES_USER: medina
+      POSTGRES_PASSWORD: medina
+      TZ: UTC
+    ports:
+      - "5432:5432"
+    volumes:
+      - medina-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks:
+      - medina-dev
+
+networks:
+  medina-dev:
+    driver: bridge
+
+volumes:
+  medina-pgdata:
+    driver: local
+
