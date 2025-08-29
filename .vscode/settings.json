@@ -1,5 +1,4 @@
 {
-  // Use workspace TypeScript and ESLint (Flat Config)
   "typescript.tsdk": "frontend/node_modules/typescript/lib",
   "eslint.useFlatConfig": true,
   "eslint.packageManager": "npm",
@@ -15,18 +14,12 @@
     "json",
     "jsonc"
   ],
-
-  // Format with Prettier and also run ESLint fixes on save
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-
-  // Avoid conflicting formatters
   "vue.format.enable": false,
-
-  // Keep noise low
   "files.exclude": {
     "**/node_modules": true,
     "**/dist": true,
@@ -37,12 +30,9 @@
     "**/dist": true,
     "**/.vite": true
   },
-
-  // Align with project style
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
 
-  // Prefer Volar (Vue 3)
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

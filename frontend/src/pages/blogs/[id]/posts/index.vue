@@ -28,26 +28,25 @@
 </template>
 
 <script lang="ts" setup>
-import { fetchBlogPosts } from '@/services/blogs.ts';
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useBlogPosts } from '@/services/blogs.ts';
 import { slugify } from '@/utils/slug';
 
 const route = useRoute();
 const blogId = computed(() => (route.params as Record<string, string>).id);
 const blogSlug = computed(() => (route.params as Record<string, string>).slug as string | undefined);
-const posts = ref<any[]>([]);
+
+const { data: posts, isLoading: loading } = useBlogPosts(blogId.value);
+
 const page = ref(1);
 const pageSize = 5;
-const loading = ref(true);
 
 const pagedPosts = computed(() => {
+  const allPosts = posts.value || []; // Guard against undefined initial value
   const start = (page.value - 1) * pageSize;
-  return posts.value.slice(start, start + pageSize);
+  return allPosts.slice(start, start + pageSize);
 });
 
-const pageCount = computed(() => Math.ceil(posts.value.length / pageSize));
-
-onMounted(async () => {
-  posts.value = await fetchBlogPosts(blogId.value);
-  loading.value = false;
-});
+const pageCount = computed(() => Math.ceil((posts.value?.length || 0) / pageSize));
 </script>

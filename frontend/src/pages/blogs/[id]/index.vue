@@ -78,11 +78,11 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { fetchBlog, fetchBlogPosts } from '@/services/blogs';
+import { useBlog, useBlogPosts } from '@/services/blogs';
 import { useAuthStore } from '@/stores/auth';
-import { type Blog, type PostItem, Role } from '@/types';
+import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
 
 const route = useRoute();
@@ -92,17 +92,13 @@ definePage({
   meta: { roles: [Role.Any], layout: 'default' }
 });
 
-const blog = ref<Blog | null>(null);
-const posts = ref<PostItem[]>([]);
-const loading = ref(true);
+const { data: blog, isLoading: loadingBlog } = useBlog(blogId.value);
+const { data: posts, isLoading: loadingPosts } = useBlogPosts(blogId.value);
+
+const loading = computed(() => loadingBlog.value || loadingPosts.value);
+
 const authStore = useAuthStore();
 const { currentUser } = storeToRefs(authStore);
-
-onMounted(async () => {
-  blog.value = (await fetchBlog(blogId.value)) || null;
-  posts.value = (await fetchBlogPosts(blogId.value)).slice(0, 3);
-  loading.value = false;
-});
 
 const currentBlog = computed(() => blog.value);
 

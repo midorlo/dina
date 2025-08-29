@@ -49,11 +49,11 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { fetchProfile } from '@/services/profiles';
-import { useAuthStore } from '@/stores/auth'; // New import
-import { type Profile, Role } from '@/types';
+import { useProfile } from '@/services/profiles';
+import { useAuthStore } from '@/stores/auth';
+import { Role } from '@/types';
 
 interface ProfileRouteParams {
   id: string;
@@ -66,14 +66,8 @@ definePage({
 const route = useRoute();
 const profileId = computed(() => (route.params as unknown as ProfileRouteParams).id);
 
-const profile = ref<Profile | null>(null);
-const loading = ref(true);
+const { data: profile, isLoading: loading } = useProfile(profileId.value);
 
-const authStore = useAuthStore(); // New
-const { currentUser } = storeToRefs(authStore); // New
-
-onMounted(async () => {
-  profile.value = (await fetchProfile(profileId.value)) || null;
-  loading.value = false;
-});
+const authStore = useAuthStore();
+const { currentUser } = storeToRefs(authStore);
 </script>

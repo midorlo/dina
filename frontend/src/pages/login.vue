@@ -100,7 +100,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { useFormValidation } from '@/composables/useFormValidation';
-import { mockUsers } from '@/data/mock-data.ts';
+import { db } from '@/data/normalized-mock-data';
 import { useAuthStore } from '@/stores/auth';
 import { useSnackbarStore } from '@/stores/snackbar';
 
@@ -130,10 +130,10 @@ const { required, email: emailRule } = useFormValidation();
 const emailRules = [required, emailRule];
 const passwordRules = [required];
 
-const presets = mockUsers.map(mockUser => ({
-  label: mockUser.user.role,
-  email: mockUser.user.email,
-  id: mockUser.user.id
+const presets = db.users.map(user => ({
+  label: user.role,
+  email: user.email,
+  id: user.id
 }));
 
 const authStore = useAuthStore();

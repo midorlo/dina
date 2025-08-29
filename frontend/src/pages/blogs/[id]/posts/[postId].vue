@@ -60,29 +60,21 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { fetchBlogPost } from '@/services/blogs';
+import { useBlogPost } from '@/services/blogs';
 import { useAuthStore } from '@/stores/auth';
-import { type Post, Role } from '@/types';
+import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
 
 const route = useRoute();
 const blogId = computed(() => (route.params as Record<string, string>).id);
 const postId = computed(() => (route.params as Record<string, string>).postId);
 
-const post = ref<Post | null>(null);
-const loading = ref(true);
+const { data: post, isLoading: loading } = useBlogPost(blogId.value, postId.value);
+
 const authStore = useAuthStore();
 const { currentUser } = storeToRefs(authStore);
-
-onMounted(async () => {
-  try {
-    post.value = (await fetchBlogPost(blogId.value, postId.value)) || null;
-  } finally {
-    loading.value = false;
-  }
-});
 
 const canEdit = computed(
   () => !!post.value && currentUser.value?.username?.toLowerCase() === post.value.author.toLowerCase()

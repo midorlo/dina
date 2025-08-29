@@ -17,12 +17,14 @@
     "lint:check": "eslint . --quiet",
     "format:prettier": "prettier --write . --log-level warn",
     "format": "run-s -s format:prettier lint",
-    "build:ci": "run-s -s lint:check build"
+    "build:ci": "run-s -s lint:check build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.6",
     "@mdi/font": "7.4.47",
     "@sentry/vue": "^10.5.0",
+    "@tanstack/vue-query": "^5.85.5",
     "cropperjs": "^2.0.1",
     "dompurify": "^3.1.7",
     "pinia": "^3.0.3",
@@ -41,9 +43,11 @@
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-vue": "^10.4.0",
     "eslint-plugin-vue-scoped-css": "^2.11.0",
+    "husky": "^9.1.7",
     "npm-run-all2": "^7.0.2",
     "prettier": "^3.6.2",
     "rimraf": "^5.0.0",
+    "rollup-plugin-visualizer": "^6.0.3",
     "sass-embedded": "^1.89.2",
     "typescript": "~5.8.3",
     "unplugin-auto-import": "^19.3.0",

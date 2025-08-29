@@ -1,39 +1,109 @@
 import type { Blog, Post, PostItem } from '@/types';
-import { blogPostsDetails, mockBlogsData as blogsData, mockBlogPostsData } from '@/data/mock-data.ts';
+import { useQuery } from '@tanstack/vue-query';
+import { db } from '@/data/normalized-mock-data';
 import { apiFetch } from '@/services/api';
 import { delay, useMocks } from '@/utils/mock.ts';
 
-export async function fetchBlogs(): Promise<Blog[]> {
-  if (!useMocks) {
-    const res = await apiFetch('/api/blogs');
-    return res.json();
-  }
-  return delay([...blogsData], 500);
+// =================================================================
+// Data Assembly Helpers
+// =================================================================
+
+function assembleBlog(blogData: (typeof db.blogs)[0]): Blog {
+  const author = db.users.find(u => u.id === blogData.authorId);
+  const postCount = db.posts.filter(p => p.blogId === blogData.id).length;
+  return {
+    id: blogData.id,
+    name: blogData.name,
+    description: blogData.description,
+    authorId: blogData.authorId,
+    authorHandle: author?.name ?? 'Unknown',
+    authorAvatarUrl: author?.avatarUrl,
+    postCount,
+    createdAt: blogData.createdAt
+  };
 }
 
-export async function fetchBlog(id: string): Promise<Blog | undefined> {
-  if (!useMocks) {
-    const res = await apiFetch(`/api/blogs/${id}`);
-    return res.json();
-  }
+function assemblePost(postData: (typeof db.posts)[0]): Post {
+  const blog = db.blogs.find(b => b.id === postData.blogId);
+  const author = db.users.find(u => u.id === blog?.authorId);
+  return {
+    id: postData.id,
+    blogId: postData.blogId,
+    blogName: blog?.name ?? 'Unknown Blog',
+    title: postData.title,
+    author: author?.name ?? 'Unknown Author',
+    authorAvatarUrl: author?.avatarUrl,
+    date: postData.createdAt,
+    category: postData.category,
+    imageUrl: postData.imageUrl,
+    content: postData.content
+  };
+}
+
+// =================================================================
+// Vue Query Composables
+// =================================================================
+
+// --- MOCK IMPLEMENTATIONS ---
+
+function mockFetchBlogs() {
   return delay(
-    blogsData.find(b => b.id === id),
+    db.blogs.map(blog => assembleBlog(blog)),
     500
   );
 }
-
-export async function fetchBlogPosts(blogId: string): Promise<PostItem[]> {
-  if (!useMocks) {
-    const res = await apiFetch(`/api/blogs/${blogId}/posts`);
-    return res.json();
-  }
-  return delay([...(mockBlogPostsData[blogId] || [])], 500);
+function mockFetchBlog(id: string) {
+  const blogData = db.blogs.find(b => b.id === id);
+  if (!blogData) return delay(undefined, 500);
+  return delay(assembleBlog(blogData), 500);
+}
+function mockFetchBlogPosts(blogId: string) {
+  const posts = db.posts
+    .filter(p => p.blogId === blogId)
+    .map(p => ({ id: p.id, title: p.title, createdAt: p.createdAt, excerpt: p.excerpt }));
+  return delay(posts, 500);
+}
+function mockFetchBlogPost(blogId: string, postId: string) {
+  const postData = db.posts.find(p => p.id === postId && p.blogId === blogId);
+  if (!postData) return delay(undefined, 500);
+  return delay(assemblePost(postData), 500);
 }
 
-export async function fetchBlogPost(blogId: string, postId: string): Promise<Post | undefined> {
-  if (!useMocks) {
-    const res = await apiFetch(`/api/blogs/${blogId}/posts/${postId}`);
-    return res.json();
-  }
-  return delay(blogPostsDetails[`${blogId}:${postId}`], 500);
+// --- API IMPLEMENTATIONS ---
+
+const apiFetchBlogs = () => apiFetch('/api/blogs').then(res => res.json());
+const apiFetchBlog = (id: string) => apiFetch(`/api/blogs/${id}`).then(res => res.json());
+const apiFetchBlogPosts = (blogId: string) => apiFetch(`/api/blogs/${blogId}/posts`).then(res => res.json());
+function apiFetchBlogPost(blogId: string, postId: string) {
+  return apiFetch(`/api/blogs/${blogId}/posts/${postId}`).then(res => res.json());
+}
+
+// --- COMPOSABLES ---
+
+export function useBlogs() {
+  return useQuery<Blog[]>({
+    queryKey: ['blogs'],
+    queryFn: useMocks ? mockFetchBlogs : apiFetchBlogs
+  });
+}
+
+export function useBlog(id: string) {
+  return useQuery<Blog | undefined>({
+    queryKey: ['blogs', id],
+    queryFn: () => (useMocks ? mockFetchBlog(id) : apiFetchBlog(id))
+  });
+}
+
+export function useBlogPosts(blogId: string) {
+  return useQuery<PostItem[]>({
+    queryKey: ['blogs', blogId, 'posts'],
+    queryFn: () => (useMocks ? mockFetchBlogPosts(blogId) : apiFetchBlogPosts(blogId))
+  });
+}
+
+export function useBlogPost(blogId: string, postId: string) {
+  return useQuery<Post | undefined>({
+    queryKey: ['blogs', blogId, 'posts', postId],
+    queryFn: () => (useMocks ? mockFetchBlogPost(blogId, postId) : apiFetchBlogPost(blogId, postId))
+  });
 }

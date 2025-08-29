@@ -68,31 +68,29 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
-import { fetchProfiles } from '@/services/profiles';
+import { computed, ref } from 'vue';
+import { useProfiles } from '@/services/profiles';
 import { type Profile, Role } from '@/types';
 
 definePage({
   meta: { roles: [Role.Any], layout: 'default' }
 });
 
+// --- State ---
 const search = ref('');
 const page = ref(1);
 const itemsPerPage = 10;
 
-const profiles = ref<Profile[]>([]);
-const loading = ref(true);
+// --- Data Fetching with Vue Query ---
+const { data: profiles, isLoading: loading } = useProfiles();
 
-onMounted(async () => {
-  profiles.value = await fetchProfiles();
-  loading.value = false;
-});
-
+// --- Computed Properties for Search and Pagination ---
 const filteredProfiles = computed(() => {
+  const allProfiles = profiles.value || []; // Guard against undefined initial value
   if (!search.value) {
-    return profiles.value;
+    return allProfiles;
   }
-  return profiles.value.filter(profile => profile.username.toLowerCase().includes(search.value.toLowerCase()));
+  return allProfiles.filter(profile => profile.username.toLowerCase().includes(search.value.toLowerCase()));
 });
 
 const totalPages = computed(() => {
@@ -106,9 +104,11 @@ const paginatedProfiles = computed(() => {
 });
 
 const paginationInfo = computed(() => {
+  const total = filteredProfiles.value.length;
+  if (total === 0) return 'No profiles found';
   const start = (page.value - 1) * itemsPerPage + 1;
-  const end = Math.min(page.value * itemsPerPage, filteredProfiles.value.length);
-  return `Showing ${start}-${end} of ${filteredProfiles.value.length}`;
+  const end = Math.min(page.value * itemsPerPage, total);
+  return `Showing ${start}-${end} of ${total}`;
 });
 </script>
 

@@ -1,8 +1,8 @@
 export interface NotificationItem {
-  id: number;
+  id: string;
   title: string;
   subtitle: string;
-  avatar: string;
+  avatar?: string;
   time: string;
   link: string;
   read: boolean;

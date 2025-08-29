@@ -1,8 +1,8 @@
-export type ConversationId = number | string;
-export type MessageId = number | string;
+export type ConversationId = string;
+export type MessageId = string;
 
 export interface Message {
-  id: number;
+  id: string;
   sender: string;
   text: string;
   time: string;
@@ -10,8 +10,9 @@ export interface Message {
 }
 
 export interface Conversation {
-  id: number;
+  id: string;
   partner: string;
+  avatar?: string;
   lastMessage: string;
   time: string;
   unreadCount: number;

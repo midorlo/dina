@@ -1,13 +1,14 @@
 // vite.config.mts
 import { fileURLToPath, URL } from 'node:url';
 import Vue from '@vitejs/plugin-vue';
+// Utilities
+import { visualizer } from 'rollup-plugin-visualizer';
 // Plugins
 import AutoImport from 'unplugin-auto-import/vite';
 import Fonts from 'unplugin-fonts/vite';
 import Components from 'unplugin-vue-components/vite';
 import { VueRouterAutoImports } from 'unplugin-vue-router';
 import VueRouter from 'unplugin-vue-router/vite';
-// Utilities
 import { defineConfig } from 'vite';
 
 import Layouts from 'vite-plugin-vue-layouts-next';
@@ -71,6 +72,12 @@ export default defineConfig({
           }
         ]
       }
+    }),
+
+    // 8) Bundle Visualizer (optional, zur Analyse)
+    visualizer({
+      open: true, // Report nach dem Build automatisch öffnen
+      filename: 'stats.html' // Report-Dateiname
     })
   ],
 
