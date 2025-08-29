@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration name="Backend (local)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="dina" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.midorlo.medina.BackendApplication" />
+    <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=local" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend" />
+    <envs>
+      <env name="SPRING_PROFILES_ACTIVE" value="local" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
+
