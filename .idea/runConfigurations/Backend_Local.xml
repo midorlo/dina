@@ -1,7 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Backend (local)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="Dev">
     <option name="ACTIVE_PROFILES" value="local" />
-    <module name="dina" />
+    <option name="ALTERNATIVE_JRE_PATH" value="java-21" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.midorlo.medina.BackendApplication" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/backend" />
     <method v="2">
