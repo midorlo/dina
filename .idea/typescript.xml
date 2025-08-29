@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="TypeScriptCompilerConfiguration">
-    <option name="useService" value="true" />
-    <option name="versionType" value="PACKAGE" />
-    <option name="packageDirPath" value="$PROJECT_DIR$/frontend/node_modules/typescript" />
-  </component>
-</project>
-
