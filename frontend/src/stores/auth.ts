@@ -1,11 +1,10 @@
 import type { Profile } from '@/types';
 import type { AuthTokens, Permission, User } from '@/types/auth';
-import { Role, roleAtLeast, rolePermissions, hasPermission as checkPermission } from '@/types/auth';
 import { defineStore } from 'pinia';
-import { computed } from 'vue';
 import router from '@/router';
-
 import { useSnackbarStore } from '@/stores/snackbar';
+
+import { hasPermission as checkPermission, Role, roleAtLeast } from '@/types/auth';
 
 // The guest user is a constant, so we can define it here.
 const guestUser: User = {
