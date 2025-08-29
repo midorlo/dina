@@ -1,4 +1,4 @@
-package com.midorlo.dina;
+package com.midorlo.medina;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

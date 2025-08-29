@@ -1,4 +1,4 @@
-package com.midorlo.dina.domain.entity;
+package com.midorlo.medina.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
