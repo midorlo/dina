@@ -32,5 +32,6 @@ public class RoleEntity {
      * Gibt an, ob die Rolle für reguläre Anwender sichtbar sein sollte.
      */
     @Column(nullable = false)
+    @Builder.Default
     private Boolean visible = true;
 }

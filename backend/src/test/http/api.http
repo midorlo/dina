@@ -1,0 +1,79 @@
+### Users list
+GET {{baseUrl}}/api/users?page=0&size=10
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### User by id
+GET {{baseUrl}}/api/users/1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Blogs list
+GET {{baseUrl}}/api/blogs?page=0&size=10
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Blog posts
+GET {{baseUrl}}/api/blogs/1/posts?page=0&size=10
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Conversations for user (requires X-User-Id)
+GET {{baseUrl}}/api/conversations?page=0&size=10
+X-User-Id: {{userId}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Conversation detail (requires X-User-Id)
+GET {{baseUrl}}/api/conversations/1?page=0&size=20
+X-User-Id: {{userId}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Single message (requires X-User-Id)
+GET {{baseUrl}}/api/conversations/1/messages/1
+X-User-Id: {{userId}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Notifications (requires X-User-Id)
+GET {{baseUrl}}/api/notifications?page=0&size=10
+X-User-Id: {{userId}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Photos list
+GET {{baseUrl}}/api/photos?page=0&size=12
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Photo by id
+GET {{baseUrl}}/api/photos/1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Profiles list
+GET {{baseUrl}}/api/profiles?page=0&size=10
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Profile by user id
+GET {{baseUrl}}/api/profiles/1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### (Placeholder) Login to obtain token
+# Example only — backend auth endpoint not implemented yet
+# POST {{baseUrl}}/api/auth/login
+# Content-Type: application/json
+#
+# {
+#   "username": "admin",
+#   "password": "password"
+# }
+#
+# > {%
+#   // Example: extract token from JSON response
+#   // const resp = JSON.parse(response.body);
+#   // client.global.set("token", resp.token);
+# %}

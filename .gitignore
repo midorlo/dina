@@ -1,13 +1,36 @@
 # Frontend
 frontend/node_modules
 frontend/dist
+frontend/.types
+frontend/.vite
+.nyc_output
+frontend/coverage
+.eslintcache
 .DS_Store
 node_modules
 /dist
 
-# IDE config
-.idea
+# IDE config (IntelliJ tracked selectively; VS Code tracked below)
 .vscode
+
+# IntelliJ IDEA: track selected project configs, ignore user/sensitive state
+.idea/*
+!.idea/modules.xml
+!.idea/misc.xml
+!.idea/compiler.xml
+!.idea/prettier.xml
+!.idea/nodejs.xml
+!.idea/typescript.xml
+!.idea/jsLinters/**
+!.idea/runConfigurations/**
+!.idea/backend.iml
+!.idea/frontend.iml
+# Keep user-specific or sensitive files ignored
+.idea/workspace.xml
+.idea/shelf/**
+.idea/dataSources/**
+.idea/dataSources.local.xml
+.idea/httpRequests/**
 
 # local env files
 .env.local
@@ -20,7 +43,6 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
-.idea
 ### Allow versioning of selected VS Code workspace files
 !.vscode
 !.vscode/settings.json
@@ -32,3 +54,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# IntelliJ build output
+out/
