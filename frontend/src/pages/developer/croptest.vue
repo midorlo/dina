@@ -21,7 +21,7 @@
 import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.Developer], layout: 'default' }
+  meta: { roles: [Role.Developer], layout: 'default', breadcrumb: 'Cropper' }
 });
 
 function onCropped(p: { blob: Blob; dataUrl: string; width: number; height: number }) {

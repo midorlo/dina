@@ -18,7 +18,7 @@ import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' }
+  meta: { roles: [Role.User], layout: 'default', breadcrumb: 'Blog bearbeiten' }
 });
 
 const auth = useAuthStore();

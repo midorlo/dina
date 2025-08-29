@@ -73,7 +73,7 @@ import { useProfiles } from '@/services/profiles';
 import { type Profile, Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.Any], layout: 'default' }
+  meta: { roles: [Role.Any], layout: 'default', breadcrumb: 'Community' }
 });
 
 // --- State ---

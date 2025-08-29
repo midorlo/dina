@@ -10,7 +10,10 @@ export function useBreadcrumbs() {
   // --- Reactive Data Fetching with Vue Query ---
 
   const profileId = computed<string | undefined>(() => {
-    if (route.path.includes('/profiles/') && typeof (route.params as any).id === 'string') {
+    if (
+      (route.path.includes('/profiles/') || route.path.includes('/photos/')) &&
+      typeof (route.params as any).id === 'string'
+    ) {
       return (route.params as any).id as string;
     }
     return undefined;
@@ -61,6 +64,10 @@ export function useBreadcrumbs() {
       { title: 'Dina', disabled: false, to: '/' }
     ];
 
+    if (route.path.startsWith('/photos/')) {
+      items.push({ title: 'Fotos', disabled: false });
+    }
+
     for (const record of route.matched) {
       if (record.path === '/') continue;
 
@@ -81,12 +88,7 @@ export function useBreadcrumbs() {
 
       // Simple title case for non-dynamic segments
       if (!titleMeta && !record.path.includes(':')) {
-        title = record.path
-          .split('/')
-          .filter(Boolean)
-          .at(-1)
-          ?.replace(/-/g, ' ')
-          ?? '';
+        title = record.path.split('/').findLast(Boolean)?.replace(/-/g, ' ') ?? '';
         title = title.charAt(0).toUpperCase() + title.slice(1);
       }
 

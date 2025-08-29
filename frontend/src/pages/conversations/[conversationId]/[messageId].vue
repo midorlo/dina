@@ -19,7 +19,7 @@ import { useMessage } from '@/services/messages';
 import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' }
+  meta: { roles: [Role.User], layout: 'default', breadcrumb: 'Message' }
 });
 
 const route = useRoute();

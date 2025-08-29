@@ -15,6 +15,6 @@
 
 <script setup lang="ts">
 definePage({
-  meta: { layout: 'empty' }
+  meta: { layout: 'empty', breadcrumb: '404' }
 });
 </script>
