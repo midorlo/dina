@@ -81,12 +81,7 @@ export function useBreadcrumbs() {
 
       // Simple title case for non-dynamic segments
       if (!titleMeta && !record.path.includes(':')) {
-        title = record.path
-          .split('/')
-          .filter(Boolean)
-          .at(-1)
-          ?.replace(/-/g, ' ')
-          ?? '';
+        title = record.path.split('/').findLast(Boolean)?.replace(/-/g, ' ') ?? '';
         title = title.charAt(0).toUpperCase() + title.slice(1);
       }
 
