@@ -14,3 +14,17 @@
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <content url="file://$PROJECT_DIR$/backend">
+      <sourceFolder url="file://$PROJECT_DIR$/backend/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$PROJECT_DIR$/backend/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$PROJECT_DIR$/backend/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$PROJECT_DIR$/backend/src/test/resources" type="java-test-resource" />
+      <excludeFolder url="file://$PROJECT_DIR$/backend/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
