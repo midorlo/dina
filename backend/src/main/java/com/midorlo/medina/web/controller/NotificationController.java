@@ -8,6 +8,8 @@ import com.midorlo.medina.web.dto.NotificationDtos;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.datetime.standard.DateTimeFormatterFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +36,7 @@ public class NotificationController {
     @GetMapping
     public ResponseEntity<Page<NotificationDtos.NotificationItem>> list(
             @RequestHeader(name = "X-User-Id", required = false) Long currentUserId,
-            Pageable pageable
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         if (currentUserId == null) {
             return ResponseEntity.ok(Page.empty(pageable));

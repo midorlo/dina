@@ -9,6 +9,8 @@ import com.midorlo.medina.web.dto.BlogDtos;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +33,9 @@ public class BlogController {
     }
 
     @GetMapping
-    public Page<BlogDtos.BlogListItem> list(Pageable pageable) {
+    public Page<BlogDtos.BlogListItem> list(
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         var page = blogRepository.findAll(pageable);
         var content = page.getContent().stream().map(this::toListItem).toList();
         return new PageImpl<>(content, pageable, page.getTotalElements());
@@ -46,7 +50,10 @@ public class BlogController {
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<Page<BlogDtos.PostItem>> posts(@PathVariable Long id, Pageable pageable) {
+    public ResponseEntity<Page<BlogDtos.PostItem>> posts(
+            @PathVariable Long id,
+            @PageableDefault(size = 20, sort = "publishedAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         Optional<BlogEntity> blog = blogRepository.findById(id);
         if (blog.isEmpty()) return ResponseEntity.notFound().build();
         var page = postRepository.findByBlog_Id(id, pageable);
