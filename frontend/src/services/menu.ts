@@ -1,5 +1,5 @@
 import type { MenuItem, MenuItemInput } from '@/types/menuData';
-import logo from '@/assets/logo.svg';
+import logo from '@/assets/medina-logo.webp';
 import { filterMenuByRole } from '@/stores/auth';
 import { Role } from '@/types/auth';
 

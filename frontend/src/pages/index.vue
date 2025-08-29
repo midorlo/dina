@@ -1,11 +1,9 @@
 <template>
   <v-container class="fill-height" max-width="900">
     <div>
-      <v-img alt="Dina Logo" class="mb-4" height="150" src="@/assets/logo.png" />
-
       <div class="mb-8 text-center">
         <div class="text-body-2 font-weight-light mb-n1">This is</div>
-        <h1 class="text-h2 font-weight-bold">Dina</h1>
+        <v-img class="mb-4" cover height="200" src="@/assets/medina-text-logo.webp" />
       </div>
 
       <v-row>
@@ -15,7 +13,7 @@
             <p class="text-body-1">Schön, dich wiederzusehen.</p>
           </template>
           <template v-else>
-            <h2 class="text-h5 font-weight-bold mb-4">Willkommen bei Dina!</h2>
+            <h2 class="text-h5 font-weight-bold mb-4">Willkommen !</h2>
             <p class="text-body-1 mb-4">
               Bitte <router-link class="text-decoration-none text-primary" to="/login">logge dich ein</router-link> oder
               <router-link class="text-decoration-none text-primary" to="/register">registriere dich</router-link>, um
