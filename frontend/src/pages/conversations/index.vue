@@ -227,7 +227,7 @@ import { useConversations } from '@/services/messages';
 import { type Conversation, type Message, Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' }
+  meta: { roles: [Role.User], layout: 'default', breadcrumb: 'Messages' }
 });
 
 const { mdAndUp } = useDisplay();

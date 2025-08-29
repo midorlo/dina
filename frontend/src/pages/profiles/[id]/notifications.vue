@@ -30,7 +30,7 @@ import { Role } from '@/types';
 import { sanitize } from '@/utils/sanitize';
 
 definePage({
-  meta: { roles: [Role.Administrator], layout: 'default' }
+  meta: { roles: [Role.Administrator], layout: 'default', breadcrumb: 'Benachrichtigungen' }
 });
 
 const route = useRoute();

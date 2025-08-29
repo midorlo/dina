@@ -47,7 +47,7 @@ import { useNotificationsStore } from '@/stores/notifications';
 import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.Developer], layout: 'default' }
+  meta: { roles: [Role.Developer], layout: 'default', breadcrumb: 'Store' }
 });
 
 const authStore = useAuthStore();

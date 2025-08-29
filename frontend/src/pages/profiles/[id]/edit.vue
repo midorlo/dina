@@ -112,7 +112,7 @@ import { useAuthStore } from '@/stores/auth';
 import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' }
+  meta: { roles: [Role.User], layout: 'default', breadcrumb: 'Profil bearbeiten' }
 });
 
 const authStore = useAuthStore();

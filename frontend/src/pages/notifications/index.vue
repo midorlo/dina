@@ -30,7 +30,7 @@ import { Role } from '@/types';
 import { sanitize } from '@/utils/sanitize';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' }
+  meta: { roles: [Role.User], layout: 'default', breadcrumb: 'Benachrichtigungen' }
 });
 
 const notificationsStore = useNotificationsStore();

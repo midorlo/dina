@@ -31,11 +31,16 @@
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useBlogPosts } from '@/services/blogs.ts';
+import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
 
 const route = useRoute();
 const blogId = computed(() => (route.params as Record<string, string>).id);
 const blogSlug = computed(() => (route.params as Record<string, string>).slug as string | undefined);
+
+definePage({
+  meta: { roles: [Role.Any], layout: 'default', breadcrumb: 'Beiträge' }
+});
 
 const { data: posts, isLoading: loading } = useBlogPosts(blogId.value);
 

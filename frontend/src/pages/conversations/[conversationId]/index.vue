@@ -26,7 +26,7 @@ import { useConversation } from '@/services/messages';
 import { type ConversationId, Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' }
+  meta: { roles: [Role.User], layout: 'default', breadcrumb: 'Conversation' }
 });
 
 const route = useRoute();
