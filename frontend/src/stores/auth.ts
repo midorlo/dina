@@ -1,12 +1,21 @@
-import type { AuthTokens, Profile, User } from '@/types';
+import type { Profile } from '@/types';
+import type { AuthTokens, Permission, User } from '@/types/auth';
+import { Role, roleAtLeast, rolePermissions, hasPermission as checkPermission } from '@/types/auth';
 import { defineStore } from 'pinia';
 import { computed } from 'vue';
-import { type Permission, Role } from '@/data/mock-data';
-import { hasPermission as checkPermission, guestUser, roleAtLeast } from '@/data/mock-data';
-
 import router from '@/router';
 
 import { useSnackbarStore } from '@/stores/snackbar';
+
+// The guest user is a constant, so we can define it here.
+const guestUser: User = {
+  id: 'guest',
+  email: '',
+  name: 'Guest',
+  role: Role.Guest,
+  username: 'guest',
+  avatarUrl: ''
+};
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -95,5 +104,3 @@ export function filterMenuByRole<T extends { roles?: Role[] }>(menu: readonly T[
     return item.roles.some(r => roleAtLeast(role, r));
   });
 }
-
-export { rolePermissions } from '@/data/mock-data';
