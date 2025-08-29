@@ -4,6 +4,9 @@ import com.midorlo.medina.domain.entity.ProfileEntity;
 import com.midorlo.medina.domain.entity.UserEntity;
 import com.midorlo.medina.domain.repository.ProfileRepository;
 import com.midorlo.medina.web.dto.ProfileDtos;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +23,10 @@ public class ProfileController {
     }
 
     @GetMapping
-    public List<ProfileDtos.Profile> list() {
-        return profileRepository.findAll().stream().map(this::toDto).toList();
+    public Page<ProfileDtos.Profile> list(Pageable pageable) {
+        var page = profileRepository.findAll(pageable);
+        var content = page.getContent().stream().map(this::toDto).toList();
+        return new PageImpl<>(content, pageable, page.getTotalElements());
     }
 
     @GetMapping("/{userId}")
@@ -48,4 +53,3 @@ public class ProfileController {
         );
     }
 }
-

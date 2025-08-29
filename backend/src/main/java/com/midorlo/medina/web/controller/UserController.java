@@ -4,6 +4,9 @@ import com.midorlo.medina.domain.entity.RoleEntity;
 import com.midorlo.medina.domain.entity.UserEntity;
 import com.midorlo.medina.domain.repository.UserRepository;
 import com.midorlo.medina.web.dto.AuthDtos;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +27,10 @@ public class UserController {
     }
 
     @GetMapping
-    public List<AuthDtos.User> list() {
-        return userRepository.findAll().stream().map(this::toDto).toList();
+    public Page<AuthDtos.User> list(Pageable pageable) {
+        var page = userRepository.findAll(pageable);
+        var content = page.getContent().stream().map(this::toDto).toList();
+        return new PageImpl<>(content, pageable, page.getTotalElements());
     }
 
     @GetMapping("/{id}")
@@ -44,4 +49,3 @@ public class UserController {
         return new AuthDtos.User(String.valueOf(u.getId()), u.getEmail(), name, u.getUsername(), role.toLowerCase(), u.getAvatarUrl());
     }
 }
-

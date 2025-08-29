@@ -3,6 +3,9 @@ package com.midorlo.medina.web.controller;
 import com.midorlo.medina.domain.entity.PhotoEntity;
 import com.midorlo.medina.domain.repository.PhotoRepository;
 import com.midorlo.medina.web.dto.PhotoDtos;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +25,10 @@ public class PhotoController {
     }
 
     @GetMapping
-    public List<PhotoDtos.GalleryItem> list() {
-        return photoRepository.findAll().stream().map(this::toDto).toList();
+    public Page<PhotoDtos.GalleryItem> list(Pageable pageable) {
+        var page = photoRepository.findAll(pageable);
+        var content = page.getContent().stream().map(this::toDto).toList();
+        return new PageImpl<>(content, pageable, page.getTotalElements());
     }
 
     @GetMapping("/{id}")
@@ -41,4 +46,3 @@ public class PhotoController {
         return new PhotoDtos.GalleryItem(String.valueOf(p.getId()), p.getUrl(), lazy, ratio);
     }
 }
-

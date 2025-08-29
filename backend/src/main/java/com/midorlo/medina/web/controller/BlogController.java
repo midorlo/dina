@@ -6,6 +6,9 @@ import com.midorlo.medina.domain.entity.UserEntity;
 import com.midorlo.medina.domain.repository.BlogRepository;
 import com.midorlo.medina.domain.repository.PostRepository;
 import com.midorlo.medina.web.dto.BlogDtos;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +31,10 @@ public class BlogController {
     }
 
     @GetMapping
-    public List<BlogDtos.BlogListItem> list() {
-        return blogRepository.findAll().stream().map(this::toListItem).toList();
+    public Page<BlogDtos.BlogListItem> list(Pageable pageable) {
+        var page = blogRepository.findAll(pageable);
+        var content = page.getContent().stream().map(this::toListItem).toList();
+        return new PageImpl<>(content, pageable, page.getTotalElements());
     }
 
     @GetMapping("/{id}")
@@ -41,13 +46,12 @@ public class BlogController {
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<List<BlogDtos.PostItem>> posts(@PathVariable Long id) {
+    public ResponseEntity<Page<BlogDtos.PostItem>> posts(@PathVariable Long id, Pageable pageable) {
         Optional<BlogEntity> blog = blogRepository.findById(id);
         if (blog.isEmpty()) return ResponseEntity.notFound().build();
-        List<BlogDtos.PostItem> items = postRepository.findByBlog_IdOrderByPublishedAtDesc(id).stream()
-                .map(this::toPostItem)
-                .toList();
-        return ResponseEntity.ok(items);
+        var page = postRepository.findByBlog_Id(id, pageable);
+        var content = page.getContent().stream().map(this::toPostItem).toList();
+        return ResponseEntity.ok(new PageImpl<>(content, pageable, page.getTotalElements()));
     }
 
     @GetMapping("/{id}/posts/{postId}")
@@ -100,4 +104,3 @@ public class BlogController {
         );
     }
 }
-

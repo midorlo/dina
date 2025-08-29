@@ -5,6 +5,9 @@ import com.midorlo.medina.domain.entity.PostEntity;
 import com.midorlo.medina.domain.repository.NotificationRepository;
 import com.midorlo.medina.domain.repository.PostRepository;
 import com.midorlo.medina.web.dto.NotificationDtos;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.datetime.standard.DateTimeFormatterFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,17 +32,17 @@ public class NotificationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NotificationDtos.NotificationItem>> list(
-            @RequestHeader(name = "X-User-Id", required = false) Long currentUserId
+    public ResponseEntity<Page<NotificationDtos.NotificationItem>> list(
+            @RequestHeader(name = "X-User-Id", required = false) Long currentUserId,
+            Pageable pageable
     ) {
         if (currentUserId == null) {
-            return ResponseEntity.ok(List.of());
+            return ResponseEntity.ok(Page.empty(pageable));
         }
         DateTimeFormatter timeFmt = new DateTimeFormatterFactory("HH:mm").createDateTimeFormatter().withZone(ZoneId.systemDefault());
-        var items = notificationRepository.findByRecipient_IdOrderByCreatedAtDesc(currentUserId).stream()
-                .map(n -> toDto(n, timeFmt))
-                .toList();
-        return ResponseEntity.ok(items);
+        var page = notificationRepository.findByRecipient_Id(currentUserId, pageable);
+        var content = page.getContent().stream().map(n -> toDto(n, timeFmt)).toList();
+        return ResponseEntity.ok(new PageImpl<>(content, pageable, page.getTotalElements()));
     }
 
     private NotificationDtos.NotificationItem toDto(NotificationEntity n, DateTimeFormatter timeFmt) {
@@ -83,4 +86,3 @@ public class NotificationController {
         return new NotificationDtos.NotificationItem(String.valueOf(n.getId()), title, subtitle, avatar, time, link, read);
     }
 }
-
