@@ -1,3 +1,26 @@
+# Globale Verhaltensvorschriften
+
+- Bitte führe den folgenden Befehl aus, wenn du auf die Interaktion des Anwenders angewiesen bist, um diesen darauf
+  Aufmerksam zu machen:
+  ``powershell -c "[System.Media.SystemSounds]::Asterisk.Play()"``
+- Bitte weise zu Beginn jedes Gespräches darauf hin, das du diese Datei AGENTS.md gelesen hast, und nenne das Datum
+  ihrer letzten Änderung.
+
+## Synonyme Anweisungen
+
+- "Committen": Wenn ich dich bitte zu comitten, dann sollst du: Den Diff prüfen und überlegen, ob wir ihn in einem oder
+  mehreren
+  Commits absetzen sollten. Falls sinnvoll, mehrere Commits machen.
+
+- "Vorschlagen": Wenn ich dich bitte, etwas vorzuschlagen, dann meine ich damit immer, dass du eine Analyse wie
+  gefordert erstellst,
+  einen Vorgehensvorschlag ausarbeitest und diesen als Markdown-Dokument an geeigneter Stelle ablegst. Lege diese unter
+  .docs mit einem angemessenen Dateinamen ab.
+
+- "todos abarbeiten": Wenn ich dich bitte, "die todos abzuarbeiten", dann meine ich damit das du unter .docs/todo.md
+  nachschaust, ob irgendwas in der file steht. Falls ja, bearbeite was dort gefordert wird, und entferne das todo
+  anschliessend aus der datei.
+
 # Repository-Richtlinien
 
 Nutze diesen Leitfaden, um effizient in diesem Repository zu arbeiten. Halte Änderungen klein, fokussiert und konsistent
@@ -61,11 +84,6 @@ zu bestehenden Mustern.
 - Farbe: Bevorzugt dunkelgrün. Da die CLI keine Farbcodes erzwingt und ANSI-Codes nicht genutzt werden sollen, bleibt
   die Farbwahl dem Renderer überlassen.
 
-# Globale Verhaltensvorschriften
-
-- Bitte führe den folgenden Befehl aus, wenn du auf die Interaktion des Anwenders angewiesen bist, um diesen darauf
-  Aufmerksam zu machen:
-  ``powershell -c "[System.Media.SystemSounds]::Asterisk.Play()"``
 
 # Hinweise zur Umgebung
 
@@ -74,13 +92,3 @@ zu bestehenden Mustern.
 - Letzter Satz in fett (mit Leerzeile davor), Farbe wenn von der Oberfläche unterstützt dunkelgrün. Damit soll sie
   Lesbarkeit erhöht werden, und erkennbarer sein, das deine Interaktion abgeschlossen ist.
 
-## Synonyme Anweisungen
-
-- "Committen": Wenn ich dich bitte zu comitten, dann sollst du: Den Diff prüfen und überlegen, ob wir ihn in einem oder
-  mehreren
-  Commits absetzen sollten. Falls sinnvoll, mehrere Commits machen.
-
-- "Vorschlagen": Wenn ich dich bitte, etwas vorzuschlagen, dann meine ich damit immer, dass du eine Analyse wie
-  gefordert erstellst,
-  einen Vorgehensvorschlag ausarbeitest und diesen als Markdown-Dokument an geeigneter Stelle ablegst. Lege diese unter
-  .docs mit einem angemessenen Dateinamen ab.
