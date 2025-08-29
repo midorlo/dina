@@ -9,5 +9,9 @@ public class AuthDtos {
             String role,
             String avatarUrl
     ) {}
+
+    public record LoginRequest(String username, String password) {}
+
+    public record LoginResponse(String token) {}
 }
 
