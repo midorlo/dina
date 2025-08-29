@@ -75,9 +75,10 @@ export default defineConfig({
     }),
 
     // 8) Bundle Visualizer (optional, zur Analyse)
+    // Öffnet den Report nicht mehr automatisch, um den Build-Fluss nicht zu stören.
     visualizer({
-      open: true, // Report nach dem Build automatisch öffnen
-      filename: 'stats.html' // Report-Dateiname
+      open: false,
+      filename: 'stats.html'
     })
   ],
 
