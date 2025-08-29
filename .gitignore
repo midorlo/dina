@@ -31,6 +31,7 @@ node_modules
 .idea/dataSources/**
 .idea/dataSources.local.xml
 .idea/httpRequests/**
+frontend/.idea/
 
 # local env files
 .env.local
