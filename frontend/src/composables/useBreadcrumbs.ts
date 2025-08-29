@@ -1,125 +1,107 @@
-import { computed, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { fetchBlog, fetchBlogPost } from '@/services/blogs';
-import { fetchProfile } from '@/services/profiles';
+import { computed, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useBlog, useBlogPost } from '@/services/blogs';
+import { useProfile } from '@/services/profiles';
 
 export function useBreadcrumbs() {
   const route = useRoute();
-  const router = useRouter();
   const nameCache = ref<Record<string, string>>({});
-  const inflight = new Set<string>();
 
-  function resolveProfileName(id: string): string {
-    const key = `profile:${id}`;
-    const cached = nameCache.value[key];
-    if (cached) return cached;
-    if (!inflight.has(key)) {
-      inflight.add(key);
-      fetchProfile(id)
-        .then(p => {
-          nameCache.value = { ...nameCache.value, [key]: p?.username || id };
-        })
-        .finally(() => inflight.delete(key));
-    }
-    return id;
-  }
+  // --- Reactive Data Fetching with Vue Query ---
 
-  function resolveBlogName(id: string): string {
-    const key = `blog:${id}`;
-    const cached = nameCache.value[key];
-    if (cached) return cached;
-    if (!inflight.has(key)) {
-      inflight.add(key);
-      fetchBlog(id)
-        .then(b => {
-          nameCache.value = { ...nameCache.value, [key]: b?.name || id };
-        })
-        .finally(() => inflight.delete(key));
+  const profileId = computed<string | undefined>(() => {
+    if (route.path.includes('/profiles/') && typeof (route.params as any).id === 'string') {
+      return (route.params as any).id as string;
     }
-    return id;
-  }
+    return undefined;
+  });
 
-  function resolvePostTitle(blogId: string, postId: string): string {
-    const key = `post:${blogId}:${postId}`;
-    const cached = nameCache.value[key];
-    if (cached) return cached;
-    if (!inflight.has(key)) {
-      inflight.add(key);
-      fetchBlogPost(blogId, postId)
-        .then(p => {
-          nameCache.value = { ...nameCache.value, [key]: p?.title || postId };
-        })
-        .finally(() => inflight.delete(key));
+  const blogId = computed<string | undefined>(() => {
+    if (route.path.includes('/blogs/') && typeof (route.params as any).id === 'string') {
+      return (route.params as any).id as string;
     }
-    return postId;
-  }
+    return undefined;
+  });
+
+  const postId = computed<string | undefined>(() => {
+    if (typeof blogId.value === 'string' && typeof (route.params as any).postId === 'string') {
+      return (route.params as any).postId as string;
+    }
+    return undefined;
+  });
+
+  const { data: profileData } = useProfile(profileId.value || '');
+  const { data: blogData } = useBlog(blogId.value || '');
+  const { data: postData } = useBlogPost(blogId.value || '', postId.value || '');
+
+  // --- Caching Logic ---
+
+  watch(profileData, profile => {
+    if (profile?.userId) {
+      nameCache.value[`profile:${profile.userId}`] = profile.username;
+    }
+  });
+
+  watch(blogData, blog => {
+    if (blog?.id) {
+      nameCache.value[`blog:${blog.id}`] = blog.name;
+    }
+  });
+
+  watch(postData, post => {
+    if (post?.id && post.blogId) {
+      nameCache.value[`post:${post.blogId}:${post.id}`] = post.title;
+    }
+  });
+
+  // --- Breadcrumb Assembly ---
 
   const breadcrumbItems = computed(() => {
-    if (route.matched.length <= 1) return [];
-
     const items: Array<{ title: string; disabled: boolean; to?: string }> = [
       { title: 'Dina', disabled: false, to: '/' }
     ];
 
-    const records = route.matched.slice(1);
+    for (const record of route.matched) {
+      if (record.path === '/') continue;
 
-    for (let index = 0; index < records.length; index++) {
-      const record = records[index];
-      const parts = record.path.split('/').filter(Boolean);
-      const segment = (parts.at(-1) ?? '').trim();
+      const titleMeta = (record.meta as any)?.breadcrumb as string | undefined;
+      let title = titleMeta ?? record.name?.toString() ?? '';
 
-      const paramMatches = [...segment.matchAll(/:([^/-]+)/g)].map(m => m[1]);
-      // Prefer last meaningful param (skip optional slug params)
-      const slugParam = paramMatches.toReversed().find(p => !/slug$/i.test(p));
+      // Safely access route.params properties
+      const currentId = typeof (route.params as any).id === 'string' ? ((route.params as any).id as string) : undefined;
+      const currentPostId =
+        typeof (route.params as any).postId === 'string' ? ((route.params as any).postId as string) : undefined;
 
-      const params = route.params as Record<string, string>;
-
-      const titleMeta =
-        typeof (record.meta as any)?.breadcrumb === 'function'
-          ? (record.meta as any).breadcrumb(route)
-          : ((record.meta as any)?.breadcrumb as string | undefined);
-
-      let fallbackTitle = segment;
-      if (slugParam && typeof params[slugParam] === 'string') {
-        if (record.path.includes('/profiles') && slugParam === 'id') {
-          fallbackTitle = resolveProfileName(params[slugParam]);
-        } else if (record.path.includes('/blogs') && slugParam === 'id') {
-          fallbackTitle = resolveBlogName(params[slugParam]);
-        } else if (record.path.includes('/blogs') && slugParam?.toLowerCase() === 'postid') {
-          fallbackTitle = resolvePostTitle(params.id, params[slugParam]);
-        } else {
-          fallbackTitle = params[slugParam];
-        }
+      if (record.path.includes(':id') && currentId) {
+        title = nameCache.value[`profile:${currentId}`] || nameCache.value[`blog:${currentId}`] || title;
+      }
+      if (record.path.includes(':postId') && currentPostId && currentId) {
+        title = nameCache.value[`post:${currentId}:${currentPostId}`] || title;
       }
 
-      let title: string = titleMeta ?? fallbackTitle;
-
-      title = title
-        .replace(/[:()*]/g, '')
-        .replace(/-/g, ' ')
-        .replace(/^\w/u, c => c.toUpperCase());
-
-      const to = router.resolve({ name: record.name as any, params } as any).path;
+      // Simple title case for non-dynamic segments
+      if (!titleMeta && !record.path.includes(':')) {
+        title = record.path
+          .split('/')
+          .filter(Boolean)
+          .at(-1)
+          ?.replace(/-/g, ' ')
+          ?? '';
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+      }
 
       items.push({
         title,
-        disabled: index === records.length - 1,
-        to
+        disabled: false, // Logic for disabling last item can be added here
+        to: record.path
       });
     }
 
-    // Remove consecutive duplicates (e.g., "Profiles / Profiles")
-    const dedupConsecutive = items.filter((item, idx, arr) => idx === 0 || item.title !== arr[idx - 1].title);
-    // Remove global duplicates by title (e.g., ":id / :id / :id")
-    const seen = new Set<string>();
-    const dedupGlobal: typeof dedupConsecutive = [];
-    for (const it of dedupConsecutive) {
-      if (!seen.has(it.title)) {
-        dedupGlobal.push(it);
-        seen.add(it.title);
-      }
-    }
-    return dedupGlobal;
+    // Disable the last item
+    const last = items.at(-1);
+    if (last) last.disabled = true;
+
+    return items;
   });
 
   return { breadcrumbItems };
