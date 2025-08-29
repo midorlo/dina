@@ -30,33 +30,32 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { fetchPhoto } from '@/services/photos';
+import { usePhoto } from '@/services/photos';
 import { useAuthStore } from '@/stores/auth';
-import { type GalleryItem, Role } from '@/types';
+import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' }
+  meta: { roles: [Role.User] }
 });
 
 const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
-const galleryId = computed(() => (route.params as any).id as string);
-const photoId = computed(() => (route.params as any).photoId as string);
-const loading = ref(true);
-const photo = ref<GalleryItem | null>(null);
+const galleryId = computed(() => (route.params as any).id as string | undefined);
+const photoId = computed(() => (route.params as any).photoId as string | undefined);
 
-onMounted(async () => {
-  if (galleryId.value !== authStore.currentUser?.id) {
-    router.replace('/error/403');
-    return;
-  }
-  try {
-    photo.value = (await fetchPhoto(Number(photoId.value))) || null;
-  } finally {
-    loading.value = false;
-  }
-});
+const { data: photo, isLoading: loading } = usePhoto(photoId.value || '');
+
+// Authorization check
+watch(
+  galleryId,
+  id => {
+    if (id && id !== authStore.currentUser?.id) {
+      router.replace('/error/403');
+    }
+  },
+  { immediate: true }
+);
 </script>

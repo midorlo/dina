@@ -54,10 +54,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { fetchBlogs } from '@/services/blogs';
-import { type Blog, Role } from '@/types';
+import { useBlogs } from '@/services/blogs';
+import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
 
 definePage({
@@ -68,14 +68,9 @@ definePage({
   }
 });
 
-const blogs = ref<Blog[]>([]);
-const loading = ref(true);
 const router = useRouter();
-
-onMounted(async () => {
-  blogs.value = await fetchBlogs();
-  loading.value = false;
-});
+const { data, isLoading: loading } = useBlogs();
+const blogs = computed(() => data.value ?? []);
 </script>
 
 <style scoped>

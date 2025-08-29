@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { fetchBlog } from '@/services/blogs';
+import { useBlog } from '@/services/blogs';
 import { useAuthStore } from '@/stores/auth';
 import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
@@ -25,23 +25,28 @@ const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const blogId = computed(() => (route.params as any).id as string);
-const loading = ref(true);
+
+// Use the query hook
+const { data: blogData, isLoading: loading } = useBlog(blogId.value);
+
 const blog = reactive({ name: '', description: '' });
 
-onMounted(async () => {
-  if (blogId.value !== auth.currentUser?.id) {
-    router.replace('/error/403');
-    return;
+// Watch for the data to come in from the query
+watch(blogData, newData => {
+  if (newData) {
+    // Check for authorization before updating the form
+    if (newData.authorId !== auth.currentUser?.id) {
+      router.replace('/error/403');
+      return;
+    }
+    Object.assign(blog, { name: newData.name, description: newData.description });
   }
-  const data = await fetchBlog(blogId.value);
-  if (data) Object.assign(blog, data);
-  loading.value = false;
 });
 
 async function save() {
   // placeholder save
   console.log('Saving blog', blog);
-  router.push(`/blogs/${blogId.value}-${slugify(blog.name)}`);
+  router.push(`/blogs/${blogId.value}/${slugify(blog.name)}`);
 }
 </script>
 

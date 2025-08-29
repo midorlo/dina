@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { fetchBlogPost } from '@/services/blogs';
+import { useBlogPost } from '@/services/blogs';
 import { useAuthStore } from '@/stores/auth';
 import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
@@ -27,17 +27,25 @@ const router = useRouter();
 const blogId = computed(() => (route.params as any).id as string);
 const blogSlug = computed(() => (route.params as any).slug as string | undefined);
 const postId = computed(() => (route.params as any).postId as string);
-const loading = ref(true);
+
+const { data: postData, isLoading: loading } = useBlogPost(blogId.value, postId.value);
+
 const post = reactive({ title: '', excerpt: '' });
 
-onMounted(async () => {
-  if (blogId.value !== auth.currentUser?.id) {
-    router.replace('/error/403');
-    return;
+watch(postData, newData => {
+  if (newData) {
+    // Authorization check
+    // This assumes the blog's authorId is available in the post data
+    // If not, you'd need to fetch the blog data separately or pass authorId
+    // from the parent route/component.
+    const blogAuthor = newData.author; // Use 'author' property
+    if (blogAuthor !== auth.currentUser?.username) {
+      // Compare with username
+      router.replace('/error/403');
+      return;
+    }
+    Object.assign(post, { title: newData.title, excerpt: newData.content?.[0] || '' });
   }
-  const data = await fetchBlogPost(blogId.value, postId.value);
-  if (data) Object.assign(post, { title: data.title, excerpt: data.content?.[0] || '' });
-  loading.value = false;
 });
 
 async function save() {

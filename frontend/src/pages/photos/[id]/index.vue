@@ -38,24 +38,38 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
-import { fetchPhotos } from '@/services/photos';
+import { usePhotos } from '@/services/photos';
 import { useAuthStore } from '@/stores/auth';
-import { type GalleryItem, Role } from '@/types';
+import { Role } from '@/types';
 
 definePage({
-  meta: { roles: [Role.User], layout: 'default' }
+  meta: { roles: [Role.User] }
 });
 
 const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
-const galleryId = computed(() => (route.params as any).id as string);
+const galleryId = computed(() => (route.params as any).id as string | undefined);
 
 const { name } = useDisplay();
 const density = ref('medium'); // 'large', 'medium', 'small'
+
+const { data, isLoading: loading } = usePhotos();
+const items = computed(() => data.value ?? []);
+
+// Authorization check
+watch(
+  galleryId,
+  id => {
+    if (id && id !== authStore.currentUser?.id) {
+      router.replace('/error/403');
+    }
+  },
+  { immediate: true }
+);
 
 const columnCount = computed(() => {
   switch (name.value) {
@@ -72,21 +86,6 @@ const columnCount = computed(() => {
       if (density.value === 'medium') return 3;
       return 6;
     }
-  }
-});
-
-const items = ref<GalleryItem[]>([]);
-const loading = ref(true);
-
-onMounted(async () => {
-  if (galleryId.value !== authStore.currentUser?.id) {
-    router.replace('/error/403');
-    return;
-  }
-  try {
-    items.value = await fetchPhotos();
-  } finally {
-    loading.value = false;
   }
 });
 </script>
