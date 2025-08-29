@@ -1,10 +1,14 @@
-name: Frontend CI
+name: Frontend & Backend CI + Auto-Merge
 
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   build:
@@ -37,3 +41,36 @@ jobs:
       - name: Build
         run: npm run build:ci
 
+  backend:
+    name: Tests (backend)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Run tests
+        run: ./mvnw -B test
+        working-directory: backend
+
+  automerge:
+    name: Enable auto-merge on green PR
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    needs: [build, backend]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Enable PR auto-merge (squash)
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: squash
