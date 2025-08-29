@@ -1,9 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/medina
-    username: medina
-    password: medina
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    show-sql: false
-
