@@ -34,8 +34,8 @@ function mockFetchProfiles() {
   return delay(profiles, 200);
 }
 
-function mockFetchProfile(userId: string) {
-  const profileData = db.profiles.find(p => p.userId === userId);
+function mockFetchProfile(profileId: string) {
+  const profileData = db.profiles.find(p => p.id === profileId);
   if (!profileData) return delay(undefined, 200);
   return delay(assembleProfile(profileData), 200);
 }
@@ -43,7 +43,7 @@ function mockFetchProfile(userId: string) {
 // --- API IMPLEMENTATIONS ---
 
 const apiFetchProfiles = () => apiFetch('/api/v1/profiles').then(res => res.json());
-const apiFetchProfile = (userId: string) => apiFetch(`/api/v1/profiles/${userId}`).then(res => res.json());
+const apiFetchProfile = (profileId: string) => apiFetch(`/api/v1/profiles/${profileId}`).then(res => res.json());
 
 // --- COMPOSABLES ---
 
@@ -54,10 +54,10 @@ export function useProfiles() {
   });
 }
 
-export function useProfile(userId: string) {
+export function useProfile(profileId: string) {
   return useQuery<Profile | undefined>({
-    queryKey: ['profiles', userId],
-    queryFn: () => (useMocks ? mockFetchProfile(userId) : apiFetchProfile(userId)),
-    enabled: !!userId
+    queryKey: ['profiles', profileId],
+    queryFn: () => (useMocks ? mockFetchProfile(profileId) : apiFetchProfile(profileId)),
+    enabled: !!profileId
   });
 }
