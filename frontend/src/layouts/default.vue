@@ -15,7 +15,7 @@
           :key="(item as any).to || (item as any).title || `it-${index}`"
         >
           <v-divider v-if="item.type === 'divider'" />
-          <v-list-item v-else v-bind="item">
+          <v-list-item v-else v-bind="item" :class="index === 0 && (item as any).prependAvatar ? 'sidebar-logo' : ''">
             <template #append>
               <v-badge
                 v-if="isConversationsItem(item)"
@@ -268,5 +268,15 @@ onMounted(() => {
 <style scoped>
 .v-navigation-drawer--rail .v-list-subheader span {
   display: none;
+}
+
+.sidebar-logo .v-avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.v-navigation-drawer--rail .sidebar-logo .v-avatar {
+  width: 32px;
+  height: 32px;
 }
 </style>
