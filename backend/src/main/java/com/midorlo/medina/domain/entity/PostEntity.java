@@ -48,10 +48,9 @@ public class PostEntity {
     @Column(length = 1000)
     private String imageUrl;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String content;
 
     @Column(name = "published_at")
     private Instant publishedAt;
 }
-
