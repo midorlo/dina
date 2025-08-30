@@ -7,12 +7,19 @@
     icon
     slim
     title="Benachrichtigungen"
+    @click="onButtonClick"
   >
     <v-badge color="error" :content="unreadCount" :model-value="unreadCount > 0" rounded="pill">
       <v-icon icon="mdi-bell-outline" />
     </v-badge>
 
-    <v-menu activator="parent" :close-on-content-click="false" location="bottom end" transition="slide-y-transition">
+    <v-menu
+      v-if="mdAndUp"
+      activator="parent"
+      :close-on-content-click="false"
+      location="bottom end"
+      transition="slide-y-transition"
+    >
       <v-card class="notifications-menu" elevation="8" max-width="420" min-width="340">
         <v-card-title class="py-3 d-flex align-center justify-space-between">
           <span class="text-subtitle-1">Benachrichtigungen</span>
@@ -77,6 +84,8 @@
 <script setup lang="ts">
 import type { NotificationItem } from '@/types';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+import { useDisplay } from 'vuetify';
 import { useAuthStore } from '@/stores/auth';
 import { useNotificationsStore } from '@/stores/notifications';
 import { sanitize } from '@/utils/sanitize';
@@ -87,6 +96,8 @@ const { currentUser, isLoggedIn } = storeToRefs(authStore);
 const notificationsStore = useNotificationsStore();
 const { items, unreadCount } = storeToRefs(notificationsStore);
 const { handleNotificationClick } = notificationsStore;
+const router = useRouter();
+const { mdAndUp } = useDisplay();
 
 function onClick(item: NotificationItem) {
   handleNotificationClick(item);
@@ -94,6 +105,10 @@ function onClick(item: NotificationItem) {
 
 function markAllRead() {
   for (const n of items.value) n.read = true;
+}
+
+function onButtonClick() {
+  if (!mdAndUp.value) router.push('/notifications');
 }
 </script>
 

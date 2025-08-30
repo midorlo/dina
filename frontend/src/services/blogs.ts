@@ -10,7 +10,12 @@ import { delay, useMocks } from '@/utils/mock.ts';
 
 function assembleBlog(blogData: (typeof db.blogs)[0]): Blog {
   const author = db.users.find(u => u.id === blogData.authorId);
-  const postCount = db.posts.filter(p => p.blogId === blogData.id).length;
+  const posts = db.posts.filter(p => p.blogId === blogData.id);
+  const postCount = posts.length;
+  const lastPostAt = posts.reduce<string | undefined>(
+    (latest, p) => (!latest || p.createdAt > latest ? p.createdAt : latest),
+    undefined
+  );
   return {
     id: blogData.id,
     name: blogData.name,
@@ -19,6 +24,7 @@ function assembleBlog(blogData: (typeof db.blogs)[0]): Blog {
     authorHandle: author?.name ?? 'Unknown',
     authorAvatarUrl: author?.avatarUrl,
     postCount,
+    lastPostAt,
     createdAt: blogData.createdAt
   };
 }
