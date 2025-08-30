@@ -20,27 +20,37 @@
         <v-col v-for="blog in blogs" v-else :key="blog.id" cols="12" lg="4" md="6">
           <v-card
             border
-            class="pa-3"
-            flat
+            class="d-flex flex-column"
             height="100%"
+            hover
             rounded="xl"
             @click="router.push(`/blogs/${blog.id}/${slugify(blog.name)}`)"
           >
-            <div class="d-flex align-center mb-3">
-              <v-avatar>
-                <v-img :src="blog.authorAvatarUrl" />
-              </v-avatar>
-              <div class="ml-4">
-                <div class="v-card-title pa-0">{{ blog.name }}</div>
-                <div class="v-card-subtitle pa-0">@{{ blog.authorHandle }}</div>
-              </div>
-            </div>
+            <v-card-item>
+              <template #prepend>
+                <v-avatar>
+                  <v-img :src="blog.authorAvatarUrl" />
+                </v-avatar>
+              </template>
+              <v-card-title>{{ blog.name }}</v-card-title>
+              <v-card-subtitle>@{{ blog.authorHandle }}</v-card-subtitle>
+            </v-card-item>
 
-            <v-card-text class="pb-0">
+            <v-card-text class="text-body-2 flex-grow-1">
               {{ blog.description }}
             </v-card-text>
 
-            <v-card-actions>
+            <v-divider class="my-2" />
+
+            <v-card-actions class="pt-0">
+              <v-chip size="small" variant="tonal">
+                <v-icon icon="mdi-post-outline" start />
+                {{ blog.postCount }} Beiträge
+              </v-chip>
+              <v-chip v-if="blog.lastPostAt" size="small" variant="tonal">
+                <v-icon icon="mdi-clock-outline" start />
+                Letzter Beitrag {{ timeAgo(blog.lastPostAt) }}
+              </v-chip>
               <v-spacer />
               <v-btn color="primary" :to="`/blogs/${blog.id}/${slugify(blog.name)}`" variant="text">
                 Blog ansehen
@@ -59,6 +69,7 @@ import { useRouter } from 'vue-router';
 import { useBlogs } from '@/services/blogs';
 import { Role } from '@/types';
 import { slugify } from '@/utils/slug';
+import { timeAgo } from '@/utils/time';
 
 definePage({
   meta: {

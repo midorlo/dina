@@ -6,6 +6,7 @@ export interface Blog {
   authorHandle: string;
   authorAvatarUrl?: string;
   postCount: number;
+  lastPostAt?: string;
   createdAt: string;
 }
 
