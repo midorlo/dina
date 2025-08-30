@@ -58,3 +58,6 @@ pnpm-debug.log*
 
 # IntelliJ build output
 out/
+
+# Root build output (should not exist; safeguard)
+/target/
