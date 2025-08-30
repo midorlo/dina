@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.midorlo</groupId>
-    <artifactId>dina</artifactId>
+    <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>backend</name>
     <description>backend</description>
@@ -26,7 +26,6 @@
         <developer>
             <id>midorlo</id>
             <name>Midorlo</name>
-            <email>midorlo@example.com</email>
             <url>https://github.com/midorlo</url>
         </developer>
     </developers>
