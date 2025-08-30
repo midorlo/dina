@@ -15,7 +15,14 @@
           :key="(item as any).to || (item as any).title || `it-${index}`"
         >
           <v-divider v-if="item.type === 'divider'" />
+#<<<<<<< llm/check-router-configuration-and-clean-up
+          <v-list-item v-else-if="(item as any).logo" :to="item.to">
+            <img alt="Dina" class="drawer-text-logo" :src="(item as any).logo" />
+          </v-list-item>
+          <v-list-item v-else v-bind="item">
+#=======
           <v-list-item v-else v-bind="item" :class="index === 0 && (item as any).prependAvatar ? 'sidebar-logo' : ''">
+#>>>>>>> master
             <template #append>
               <v-badge
                 v-if="isConversationsItem(item)"
@@ -269,6 +276,10 @@ onMounted(() => {
 .v-navigation-drawer--rail .v-list-subheader span {
   display: none;
 }
+#<<<<<<< llm/check-router-configuration-and-clean-up
+.drawer-text-logo {
+  height: 24px;
+#=======
 
 .sidebar-logo .v-avatar {
   width: 40px;
@@ -278,5 +289,6 @@ onMounted(() => {
 .v-navigation-drawer--rail .sidebar-logo .v-avatar {
   width: 32px;
   height: 32px;
+#>>>>>>> master
 }
 </style>
