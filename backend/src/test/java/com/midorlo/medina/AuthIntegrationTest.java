@@ -48,21 +48,21 @@ class AuthIntegrationTest {
 
     @Test
     void accessWithoutTokenIsUnauthorized() throws Exception {
-        mvc.perform(get("/api/users")).andExpect(status().isForbidden());
+        mvc.perform(get("/api/v1/users")).andExpect(status().isForbidden());
     }
 
     @Test
     void loginAndAccessProtectedEndpoint() throws Exception {
         MvcResult result =
                 mvc.perform(
-                                post("/api/auth/login")
+                                post("/api/v1/auth/login")
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content("{\"username\":\"alice\",\"password\":\"password\"}"))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.token").exists())
                         .andReturn();
         String token = objectMapper.readTree(result.getResponse().getContentAsString()).get("token").asText();
-        mvc.perform(get("/api/users").header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+        mvc.perform(get("/api/v1/users").header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk());
     }
 }
