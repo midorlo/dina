@@ -51,7 +51,7 @@
             class="mb-6 pa-2"
             flat
             rounded="xl"
-            :to="`/blogs/${currentBlog?.id}/${slugify(currentBlog?.name ?? '')}/posts/${post.id}-${slugify(post.title)}`"
+            :to="`/blogs/${currentBlog?.id}/${slugify(currentBlog?.name ?? '')}/posts/${post.id}/${slugify(post.title)}`"
           >
             <v-card-title>{{ post.title }}</v-card-title>
             <v-card-subtitle>{{ post.createdAt }}</v-card-subtitle>

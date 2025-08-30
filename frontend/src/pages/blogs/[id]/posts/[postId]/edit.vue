@@ -51,11 +51,11 @@ watch(postData, newData => {
 async function save() {
   console.log('Saving post', post);
   router.push(
-    `/blogs/${blogId.value}${blogSlug.value ? `-${blogSlug.value}` : ''}/posts/${postId.value}-${slugify(post.title)}`
+    `/blogs/${blogId.value}${blogSlug.value ? `/${blogSlug.value}` : ''}/posts/${postId.value}/${slugify(post.title)}`
   );
 }
 </script>
 
 <route lang="yaml">
-path: /blogs/:id-:slug?/posts/:postId-:postSlug?/edit
+path: /blogs/:id/:slug?/posts/:postId/:postSlug?/edit
 </route>
