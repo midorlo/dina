@@ -6,6 +6,7 @@ import { useProfile } from '@/services/profiles';
 export function useBreadcrumbs() {
   const route = useRoute();
   const nameCache = ref<Record<string, string>>({});
+  const labelMap: Record<string, string> = { photos: 'Fotos' };
 
   // --- Reactive Data Fetching with Vue Query ---
 
@@ -61,7 +62,7 @@ export function useBreadcrumbs() {
 
   const breadcrumbItems = computed(() => {
     const items: Array<{ title: string; disabled: boolean; to?: string }> = [
-      { title: 'Dina', disabled: false, to: '/' }
+      { title: 'Home', disabled: false, to: '/' }
     ];
 
     if (route.path.startsWith('/photos/')) {
@@ -92,18 +93,28 @@ export function useBreadcrumbs() {
         title = title.charAt(0).toUpperCase() + title.slice(1);
       }
 
+      const mapped = labelMap[title.toLowerCase()];
+      if (mapped) title = mapped;
+
       items.push({
         title,
-        disabled: false, // Logic for disabling last item can be added here
+        disabled: false,
         to: record.path
       });
     }
 
-    // Disable the last item
-    const last = items.at(-1);
+    const seen = new Set<string>();
+    const unique = items.filter(item => {
+      const key = `${item.title}|${item.to ?? ''}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    const last = unique.at(-1);
     if (last) last.disabled = true;
 
-    return items;
+    return unique;
   });
 
   return { breadcrumbItems };

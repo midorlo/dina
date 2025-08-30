@@ -9,6 +9,7 @@ interface MenuItemBase {
   link?: boolean;
   roles?: Role[];
   type?: 'divider';
+  logo?: string;
 }
 
 export interface MenuItemInput extends MenuItemBase {

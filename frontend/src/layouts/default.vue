@@ -15,6 +15,9 @@
           :key="(item as any).to || (item as any).title || `it-${index}`"
         >
           <v-divider v-if="item.type === 'divider'" />
+          <v-list-item v-else-if="(item as any).logo" :to="item.to">
+            <img alt="Dina" class="drawer-text-logo" :src="(item as any).logo" />
+          </v-list-item>
           <v-list-item v-else v-bind="item">
             <template #append>
               <v-badge
@@ -268,5 +271,8 @@ onMounted(() => {
 <style scoped>
 .v-navigation-drawer--rail .v-list-subheader span {
   display: none;
+}
+.drawer-text-logo {
+  height: 24px;
 }
 </style>

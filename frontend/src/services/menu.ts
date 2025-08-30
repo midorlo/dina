@@ -1,11 +1,11 @@
 import type { MenuItem, MenuItemInput } from '@/types/menuData';
-import logo from '@/assets/medina-logo.webp';
+import textLogo from '@/assets/medina-text-logo.webp';
 import { filterMenuByRole } from '@/stores/auth';
 import { Role } from '@/types/auth';
 
 // This is static application configuration, not mock data.
 export const menuData: Readonly<MenuItemInput[]> = [
-  { prependAvatar: logo, title: 'Dina', to: '/' },
+  { logo: textLogo, to: '/' },
   { type: 'divider' },
   { title: 'Messages', prependIcon: 'mdi-message-text-outline', to: '/conversations', roles: [Role.User] },
   { title: 'Notifications', prependIcon: 'mdi-bell-outline', to: '/notifications', roles: [Role.User] },
