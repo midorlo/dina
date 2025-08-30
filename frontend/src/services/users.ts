@@ -15,8 +15,8 @@ function mockFetchUser(id: string) {
 }
 
 // --- API IMPLEMENTATIONS ---
-const apiFetchUsers = () => apiFetch('/api/users').then(res => res.json());
-const apiFetchUser = (id: string) => apiFetch(`/api/users/${id}`).then(res => res.json());
+const apiFetchUsers = () => apiFetch('/api/v1/users').then(res => res.json());
+const apiFetchUser = (id: string) => apiFetch(`/api/v1/users/${id}`).then(res => res.json());
 
 // --- COMPOSABLES ---
 export function useUsers() {

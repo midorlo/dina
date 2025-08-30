@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/photos")
+@RequestMapping("/api/v1/photos")
 public class PhotoController {
 
     private final PhotoRepository photoRepository;

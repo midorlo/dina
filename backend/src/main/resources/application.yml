@@ -18,3 +18,7 @@ server:
   error:
     include-message: always
 
+security:
+  jwt:
+    secret: changemechangemechangemechangemechangemechangemechangemechangemechangemechangeme
+    expiration: 86400000

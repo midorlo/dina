@@ -5,7 +5,7 @@ import { useMocks } from '@/utils/mock.ts';
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
   if (!useMocks) {
-    const res = await apiFetch('/api/login', {
+    const res = await apiFetch('/api/v1/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

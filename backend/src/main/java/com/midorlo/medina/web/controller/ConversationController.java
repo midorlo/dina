@@ -22,7 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 
 @RestController
-@RequestMapping("/api/conversations")
+@RequestMapping("/api/v1/conversations")
 public class ConversationController {
 
     private final ConversationRepository conversationRepository;

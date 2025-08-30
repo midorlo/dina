@@ -60,7 +60,7 @@ function mockFetchNotifications(currentUserId: string) {
 }
 
 // --- API IMPLEMENTATION ---
-const apiFetchNotifications = () => apiFetch('/api/notifications').then(res => res.json());
+const apiFetchNotifications = () => apiFetch('/api/v1/notifications').then(res => res.json());
 
 // --- COMPOSABLE ---
 export function useNotifications() {

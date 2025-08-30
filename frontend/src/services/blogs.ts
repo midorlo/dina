@@ -71,11 +71,11 @@ function mockFetchBlogPost(blogId: string, postId: string) {
 
 // --- API IMPLEMENTATIONS ---
 
-const apiFetchBlogs = () => apiFetch('/api/blogs').then(res => res.json());
-const apiFetchBlog = (id: string) => apiFetch(`/api/blogs/${id}`).then(res => res.json());
-const apiFetchBlogPosts = (blogId: string) => apiFetch(`/api/blogs/${blogId}/posts`).then(res => res.json());
+const apiFetchBlogs = () => apiFetch('/api/v1/blogs').then(res => res.json());
+const apiFetchBlog = (id: string) => apiFetch(`/api/v1/blogs/${id}`).then(res => res.json());
+const apiFetchBlogPosts = (blogId: string) => apiFetch(`/api/v1/blogs/${blogId}/posts`).then(res => res.json());
 function apiFetchBlogPost(blogId: string, postId: string) {
-  return apiFetch(`/api/blogs/${blogId}/posts/${postId}`).then(res => res.json());
+  return apiFetch(`/api/v1/blogs/${blogId}/posts/${postId}`).then(res => res.json());
 }
 
 // --- COMPOSABLES ---

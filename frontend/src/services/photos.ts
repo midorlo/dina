@@ -28,8 +28,8 @@ function mockFetchPhoto(id: string) {
 }
 
 // --- API IMPLEMENTATIONS ---
-const apiFetchPhotos = () => apiFetch('/api/photos').then(res => res.json());
-const apiFetchPhoto = (id: string) => apiFetch(`/api/photos/${id}`).then(res => res.json());
+const apiFetchPhotos = () => apiFetch('/api/v1/photos').then(res => res.json());
+const apiFetchPhoto = (id: string) => apiFetch(`/api/v1/photos/${id}`).then(res => res.json());
 
 // --- COMPOSABLES ---
 export function usePhotos() {

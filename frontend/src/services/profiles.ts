@@ -42,8 +42,8 @@ function mockFetchProfile(userId: string) {
 
 // --- API IMPLEMENTATIONS ---
 
-const apiFetchProfiles = () => apiFetch('/api/profiles').then(res => res.json());
-const apiFetchProfile = (userId: string) => apiFetch(`/api/profiles/${userId}`).then(res => res.json());
+const apiFetchProfiles = () => apiFetch('/api/v1/profiles').then(res => res.json());
+const apiFetchProfile = (userId: string) => apiFetch(`/api/v1/profiles/${userId}`).then(res => res.json());
 
 // --- COMPOSABLES ---
 

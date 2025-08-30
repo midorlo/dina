@@ -80,10 +80,10 @@ function mockFetchMessage(conversationId: string, messageId: string, currentUser
 
 // --- API IMPLEMENTATIONS ---
 
-const apiFetchConversations = () => apiFetch('/api/conversations').then(res => res.json());
-const apiFetchConversation = (id: string) => apiFetch(`/api/conversations/${id}`).then(res => res.json());
+const apiFetchConversations = () => apiFetch('/api/v1/conversations').then(res => res.json());
+const apiFetchConversation = (id: string) => apiFetch(`/api/v1/conversations/${id}`).then(res => res.json());
 function apiFetchMessage(conversationId: string, messageId: string) {
-  return apiFetch(`/api/conversations/${conversationId}/messages/${messageId}`).then(res => res.json());
+  return apiFetch(`/api/v1/conversations/${conversationId}/messages/${messageId}`).then(res => res.json());
 }
 
 // --- COMPOSABLES ---
