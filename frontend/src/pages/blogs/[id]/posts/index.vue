@@ -10,7 +10,7 @@
             class="mb-4"
             flat
             rounded="xl"
-            :to="`/blogs/${blogId}${blogSlug ? `-${blogSlug}` : ''}/posts/${post.id}-${slugify(post.title)}`"
+            :to="`/blogs/${blogId}${blogSlug ? `/${blogSlug}` : ''}/posts/${post.id}/${slugify(post.title)}`"
           >
             <v-card-title>{{ post.title }}</v-card-title>
             <v-card-subtitle>{{ post.createdAt }}</v-card-subtitle>
@@ -55,3 +55,7 @@ const pagedPosts = computed(() => {
 
 const pageCount = computed(() => Math.ceil((posts.value?.length || 0) / pageSize));
 </script>
+
+<route lang="yaml">
+path: /blogs/:id/:slug?/posts
+</route>
